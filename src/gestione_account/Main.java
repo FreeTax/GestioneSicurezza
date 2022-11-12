@@ -1,10 +1,10 @@
 package gestione_account;
 import java.time.LocalDate;
 /*import luoghi.Dipartimento;
-import visite.schedaVisite;
+import visite.schedaVisite;*/
 import accessi.Accesso;
- */
-abstract class Utente{
+
+public abstract class Utente{
     public Utente(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita) {
         this.codice = codice;
         this.cfu_sostenuti = cfu_sostenuti;
