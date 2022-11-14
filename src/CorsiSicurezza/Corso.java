@@ -1,7 +1,10 @@
-package corsi_sicurezza;
-import rischi.Rischio;
+package CorsiSicurezza;
+import Rischi.Rischio;
+
+import java.time.LocalDate;
+
 public class Corso {
-    public Corso(String codice, String nome, String descrizione, CorsoType type, String inizio, String fine) {
+    public Corso(String codice, String nome, String descrizione, CorsoType type, LocalDate inizio, LocalDate fine) {
         this.codice = codice;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -10,7 +13,8 @@ public class Corso {
         this.fine = fine;
     }
 
-    private String codice,nome,descrizione,inizio, fine;
+    private String codice,nome,descrizione;
+    private LocalDate inizio, fine;
     private CorsoType type;
 }
 

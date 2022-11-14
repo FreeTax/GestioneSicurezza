@@ -1,26 +1,37 @@
-package gestione_account;
+package Account;
+
 import java.time.LocalDate;
-/*import luoghi.Dipartimento;
-import visite.schedaVisite;*/
-import accessi.Accesso;
+
+import Rischi.Rischio;
+import Visite.SchedaVisita;
+import Luoghi.Luogo;
+import Luoghi.Dipartimento;
 
 public abstract class Utente{
-    public Utente(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita) {
+
+    private int codice;
+    private CreditoFormativo cfuSostenuti;
+    private String nome,cognome,sesso,dipartimento;
+    private LocalDate dataNascita;
+    private SchedaVisita visite;
+
+    public Utente(int codice, CreditoFormativo cfuSstenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita, SchedaVisita visite) {
         this.codice = codice;
-        this.cfu_sostenuti = cfu_sostenuti;
+        this.cfuSostenuti = cfuSostenuti;
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
         this.dipartimento = dipartimento;
         this.dataNascita = dataNascita;
+        this.visite=visite;
     }
 
     public CreditoFormativo getCfu_sostenuti() {
-        return cfu_sostenuti;
+        return cfuSostenuti;
     }
 
     public void setCfu_sostenuti(CreditoFormativo cfu_sostenuti) {
-        this.cfu_sostenuti = cfu_sostenuti;
+        this.cfuSostenuti = cfuSostenuti;
     }
 
     public String getNome() {
@@ -50,16 +61,11 @@ public abstract class Utente{
     public LocalDate getDataNascita() {
         return dataNascita;
     }
-
-    private int codice;
-    private CreditoFormativo cfu_sostenuti;
-    private String nome,cognome,sesso,dipartimento;
-    private LocalDate dataNascita;
 }
 
 class UtenteEsterno extends Utente{
-    public UtenteEsterno(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita, int idEsterno) {
-        super(codice, cfu_sostenuti, nome, cognome, sesso, dipartimento, dataNascita);
+    public UtenteEsterno(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita, int idEsterno, SchedaVisita visite) {
+        super(codice, cfu_sostenuti, nome, cognome, sesso, dipartimento, dataNascita,visite);
         this.idEsterno = idEsterno;
     }
 
@@ -71,8 +77,8 @@ class UtenteEsterno extends Utente{
 }
 
 class UtenteInterno extends Utente{
-    public UtenteInterno(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita, int matricola, int type) {
-        super(codice, cfu_sostenuti, nome, cognome, sesso, dipartimento, dataNascita);
+    public UtenteInterno(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita, int matricola, int type, SchedaVisita visite) {
+        super(codice, cfu_sostenuti, nome, cognome, sesso, dipartimento, dataNascita, visite);
         this.matricola = matricola;
         this.type = type;
     }
@@ -93,48 +99,44 @@ class UtenteInterno extends Utente{
 }
 
 class CreditoFormativo{
-    public CreditoFormativo(int codice, int rischio, String certificaEsterna) {
+    public CreditoFormativo(int codice, Rischio rischio, String certificaEsterna) {
         this.codice = codice;
         this.rischio = rischio;
         this.certificaEsterna = certificaEsterna;
     }
 
-    private int codice,rischio;
+    private int codice;
+    private Rischio rischio;
     private String certificaEsterna;
 }
 
 abstract class Richiesta{
-    Richiesta(int utente, int statoRichiesta) {
+    Richiesta(Utente utente, int statoRichiesta) {
         this.utente = utente;
         this.statoRichiesta = statoRichiesta;
     }
-    private int utente, statoRichiesta;
+    private Utente utente;
+    private int statoRichiesta;
 }
 
 class RichiestaLuogo extends Richiesta{
-    public RichiestaLuogo(int utente, int statoRichiesta, String luogo) {
+    public RichiestaLuogo(Utente utente, int statoRichiesta, Luogo luogo) {
         super(utente, statoRichiesta);
-        idLuogo = luogo;
+        Luogo = luogo;
     }
 
-    private String idLuogo;
+    private Luogo Luogo;
 }
 
 class RichiestaDipartimento extends Richiesta{
-    public RichiestaDipartimento(int utente, int statoRichiesta, String idDipartimento) {
+    public RichiestaDipartimento(Utente utente, int statoRichiesta, Dipartimento dipartimento) {
         super(utente, statoRichiesta);
-        this.idDipartimento = idDipartimento;
+        this.dipartimento = dipartimento;
     }
 
     public void setIdDipartimento(String idDipartimento) {
-        this.idDipartimento = idDipartimento;
+        this.dipartimento = dipartimento;
     }
 
-    private String idDipartimento;
-}
-public class Main {
-
-    public static void main(String[] args) {
-	// write your code here
-    }
+    private Dipartimento dipartimento;
 }

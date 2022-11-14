@@ -1,8 +1,7 @@
-package accessi;
-import gestione_account.Main.utente;
-import gestione_account.Utente;
-import luoghi.Dipartimento;
-import luoghi.Luogo;
+package Accessi;
+import Account.Utente;
+import Luoghi.Dipartimento;
+import Luoghi.Luogo;
 public abstract class Accesso {
     private Utente utente;
 
