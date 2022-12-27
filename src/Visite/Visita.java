@@ -3,6 +3,13 @@ package Visite;
 import java.time.LocalDate;
 
 public class Visita {
+    private String id;
+    private String dottore;
+    private String descrizione;
+    private int stato;
+    private int esito;
+    private LocalDate data;
+    private VisitaType type;
     public Visita(String id, String dottore, String descrizione, LocalDate data, int stato, int esito, VisitaType type) {
         this.id = id;
         this.dottore = dottore;
@@ -12,20 +19,5 @@ public class Visita {
         this.esito = esito;
         this.type = type;
     }
-
-    private String id, dottore, descrizione;
-    private int stato, esito;
-    private LocalDate data;
-    private VisitaType type;
 }
 
-class VisitaType{
-    public VisitaType(String id, String nome, String descrizione, String frequenza) {
-        this.id = id;
-        this.nome = nome;
-        this.descrizione = descrizione;
-        this.frequenza = frequenza;
-    }
-
-    private String id,nome,descrizione,frequenza;
-}
