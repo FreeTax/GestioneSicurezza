@@ -1,23 +1,7 @@
-#version: "3"
-#services:
-#  my-web-app-db:
- #   image: mysql
-  #  ports:
-   #   - "3306:3306"
-   # environment:
-    #  - MYSQL_DATABASE=Prova
-     # - MYSQL_ROOT_PASSWORD=root
-  #my-web-app:
-   # build: .
-    #ports:
-     # - "8000:8000"
-    #depends_on:
-     # - my-web-app-db
-
 version: '3.8'
 services:
-  db:  # this is a service name
-    container_name: mysql_db # this is a container name
+  db:
+    container_name: mysql_db
     image: mysql:8
     restart: always
     ports:

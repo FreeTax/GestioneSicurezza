@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS Account;
-USE Account;
+CREATE DATABASE IF NOT EXISTS AccountDB;
+USE AccountDB;
 DROP TABLE IF EXISTS Utente;
 CREATE TABLE IF NOT EXISTS Utente(
     matricola int PRIMARY KEY AUTO_INCREMENT, nome varchar(30),
@@ -14,17 +14,17 @@ CREATE TABLE IF NOT EXISTS Visite(
     data date, ora time, luogo varchar(30)
 );
 
-CREATE DATABASE IF NOT EXISTS CorsiSicurezza;
-USE CorsiSicurezza;
+CREATE DATABASE IF NOT EXISTS CorsiSicurezzaDB;
+USE CorsiSicurezzaDB;
 DROP TABLE IF EXISTS Corsi;
 CREATE TABLE IF NOT EXISTS Corsi(
     id int PRIMARY KEY AUTO_INCREMENT, matricola int,
     data date, luogo varchar(30));
 
-CREATE DATABASE IF NOT EXISTS RishiDB;
-USE RishiDB;
-DROP TABLE IF EXISTS Rishi;
-CREATE TABLE IF NOT EXISTS Rishi(
+CREATE DATABASE IF NOT EXISTS RischiDB;
+USE RischiDB;
+DROP TABLE IF EXISTS Rischi;
+CREATE TABLE IF NOT EXISTS Rischi(
     id int PRIMARY KEY AUTO_INCREMENT, matricola int,
     data date, luogo varchar(30));
 
