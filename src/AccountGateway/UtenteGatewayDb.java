@@ -26,7 +26,7 @@ public class UtenteGatewayDb {
             stmt=con.createStatement();
             stmt.execute(tableSql);
         }*/
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Account", "root", "root")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root")) {
             stmt=con.createStatement();
             tableSql = "CREATE TABLE IF NOT EXISTS Utente"
                     + "(matricola int PRIMARY KEY AUTO_INCREMENT, nome varchar(30),"
@@ -37,7 +37,7 @@ public class UtenteGatewayDb {
         }
     }
     public void InsertSql(int m,String n, String c) throws SQLException {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Account", "root", "root")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root")) {
             stmt=con.createStatement();
             String insertSql = "INSERT INTO Utente(matricola, nome, cognome)"
                     + " VALUES("+m+", '"+n+"', '"+c+"')";
@@ -50,7 +50,7 @@ public class UtenteGatewayDb {
     public ArrayList<String> SelectSql() throws SQLException {
         ArrayList<String> risultati=new ArrayList<String>();
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Account", "root", "root")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root")) {
             stmt=con.createStatement();
             String selectSql = "SELECT * FROM Utente";
             try (ResultSet resultSet = stmt.executeQuery(selectSql)) {
