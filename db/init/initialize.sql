@@ -115,25 +115,23 @@ USE VisiteDB;
 DROP TABLE IF EXISTS SchedaVisita;
 
 CREATE TABLE IF NOT EXISTS SchedaVisita (
-  idSchedaVisita INT NOT NULL,
-  idUtente VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idSchedaVisita)
+  idSchedaVisita INT PRIMARY KEY AUTO_INCREMENT,
+  idUtente VARCHAR(45) NOT NULL
 );
 
 DROP TABLE IF EXISTS VisitaType;
 
 CREATE TABLE IF NOT EXISTS VisitaType (
-  idVisitaType INT NOT NULL,
+  idVisitaType INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
   descrizione VARCHAR(45) NOT NULL,
-  frequenza VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idVisitaType)
+  frequenza VARCHAR(45) NOT NULL
 );
 
 DROP TABLE IF EXISTS Visita;
 
 CREATE TABLE IF NOT EXISTS Visita (
-  idVisita INT NOT NULL,
+  idVisita INT PRIMARY KEY AUTO_INCREMENT,
   idMedico VARCHAR(45) NOT NULL,
   descrizione VARCHAR(45) NULL,
   data DATETIME NOT NULL,
@@ -141,7 +139,6 @@ CREATE TABLE IF NOT EXISTS Visita (
   esito VARCHAR(45) NOT NULL,
   idSchedaVisita INT NOT NULL,
   idVisitaType INT NOT NULL,
-  PRIMARY KEY (idVisita),
   INDEX fk_Visita_SchedaVisita1_idx (idSchedaVisita ASC) VISIBLE,
   INDEX fk_Visita_VisitaType1_idx (idVisitaType ASC) VISIBLE,
   CONSTRAINT fk_Visita_SchedaVisita1
@@ -159,9 +156,8 @@ CREATE TABLE IF NOT EXISTS Visita (
 DROP TABLE IF EXISTS Patologia;
 
 CREATE TABLE IF NOT EXISTS Patologia (
-  idPatologia INT NOT NULL,
-  descrizione VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idPatologia)
+  idPatologia INT PRIMARY KEY AUTO_INCREMENT,
+  descrizione VARCHAR(45) NOT NULL
 );
 
 DROP TABLE IF EXISTS SchedaVisita_has_Patologia;
@@ -191,22 +187,20 @@ USE CorsiSicurezzaDB;
 DROP TABLE IF EXISTS CorsoType;
 
 CREATE TABLE IF NOT EXISTS CorsoType (
-  idCorsoType INT NOT NULL,
+  idCorsoType INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
-  descrizione VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idCorsoType)
+  descrizione VARCHAR(45) NOT NULL
 );
 
 DROP TABLE IF EXISTS Corso;
 
 CREATE TABLE IF NOT EXISTS Corso (
-  idCorso INT NOT NULL,
+  idCorso INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
   descrizione VARCHAR(45) NOT NULL,
   inizio DATE NOT NULL,
   fine DATE NOT NULL,
   idCorsoType INT NOT NULL,
-  PRIMARY KEY (idCorso),
   INDEX fk_Corso_CorsoType_idx (idCorsoType ASC) VISIBLE,
   CONSTRAINT fk_Corso_CorsoType
     FOREIGN KEY (idCorsoType)
