@@ -1,3 +1,4 @@
+/*AccountDB*/
 CREATE DATABASE IF NOT EXISTS AccountDB;
 USE AccountDB;
 DROP TABLE IF EXISTS Utente;
@@ -108,6 +109,7 @@ CREATE TABLE IF NOT EXISTS RichiestaDipartimento (
     ON UPDATE CASCADE
 );
 
+/*VisiteDB*/
 CREATE DATABASE IF NOT EXISTS VisiteDB;
 USE VisiteDB;
 DROP TABLE IF EXISTS SchedaVisita;
@@ -182,6 +184,7 @@ CREATE TABLE IF NOT EXISTS SchedaVisita_has_Patologia (
     ON UPDATE NO ACTION
 );
 
+/*CorsiSicurezzaDB*/
 CREATE DATABASE IF NOT EXISTS CorsiSicurezzaDB;
 USE CorsiSicurezzaDB;
 
@@ -212,24 +215,46 @@ CREATE TABLE IF NOT EXISTS Corso (
     ON UPDATE NO ACTION
 );
 
-CREATE DATABASE IF NOT EXISTS RischiDB;
-USE RischiDB;
-DROP TABLE IF EXISTS Rischi;
-CREATE TABLE IF NOT EXISTS Rischi(
-    id int PRIMARY KEY AUTO_INCREMENT, matricola int,
-    data date, luogo varchar(30));
+/*AccessiDB*/
+CREATE DATABASE IF NOT EXISTS AccessiDB;
+USE AccessiDB;
+DROP TABLE IF EXISTS AccessoLuogoAbilitato;
+CREATE TABLE IF NOT EXISTS AccessoLuogoAbilitato(
+    id int PRIMARY KEY AUTO_INCREMENT, utente int,
+    luogo int);
+DROP TABLE IF EXISTS AccessoDipartimentoAbilitato;
+CREATE TABLE IF NOT EXISTS AccessoDipartimentoAbilitato(
+    id int PRIMARY KEY AUTO_INCREMENT, utente int,
+    dipartimento int);
 
+/*LuoghiDB*/
 CREATE DATABASE IF NOT EXISTS LuoghiDB;
 USE LuoghiDB;
 DROP TABLE IF EXISTS Luoghi;
 CREATE TABLE IF NOT EXISTS Luoghi(
-    id int PRIMARY KEY AUTO_INCREMENT, matricola int,
-    data date, luogo varchar(30));
+    codice int PRIMARY KEY, nome varchar(30), tipo varchar(30), dipartimento int, referente int); /*rischi is a multiple to multiple relationship, so it's a list of Rischi. i'm goin to save this information into another table*/
+DROP TABLE IF EXISTS RischiLuogo;
+CREATE TABLE IF NOT EXISTS RischiLuogo(
+    id int PRIMARY KEY AUTO_INCREMENT, luogo int,
+    rischioSpecifico int);
+DROP TABLE IF EXISTS Dipartimenti;
+CREATE TABLE IF NOT EXISTS Dipartimenti(
+    codice int PRIMARY KEY, nome varchar(30), responsabile int); /*rischi is a multiple to multiple relationship, so it's a list of Rischi. i'm goin to save this information into another table*/
+DROP TABLE IF EXISTS RischiDipartimento;
+CREATE TABLE IF NOT EXISTS RischiDipartimento(
+    id int PRIMARY KEY AUTO_INCREMENT, dipartimento int,
+    rischioGenerico int);
 
-create DATABASE IF NOT EXISTS AccessiDB;
-USE AccessiDB;
-DROP TABLE IF EXISTS Accessi;
-CREATE TABLE IF NOT EXISTS Accessi(
-    id int PRIMARY KEY AUTO_INCREMENT, matricola int,
-    data date, luogo varchar(30));
+/*RischiDB*/
+CREATE DATABASE IF NOT EXISTS RischiDB; /*check me with Marco*/
+USE RischiDB;
+DROP TABLE IF EXISTS RischioSpecifico;
+CREATE TABLE IF NOT EXISTS RischioSpecifico(
+    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30));
+DROP TABLE IF EXISTS RischioGenerico;
+CREATE TABLE IF NOT EXISTS RischioGenerico(
+    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30));
+
+
+
 
