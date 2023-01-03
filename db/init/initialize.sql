@@ -250,10 +250,10 @@ CREATE DATABASE IF NOT EXISTS RischiDB; /*check me with Marco*/
 USE RischiDB;
 DROP TABLE IF EXISTS RischioSpecifico;
 CREATE TABLE IF NOT EXISTS RischioSpecifico(
-    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30));
+    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30), tipologia varchar(30), corso int, visita int);
 DROP TABLE IF EXISTS RischioGenerico;
 CREATE TABLE IF NOT EXISTS RischioGenerico(
-    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30));
+    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30), tipologia varchar(30), corso int, visita int);
 
 
 

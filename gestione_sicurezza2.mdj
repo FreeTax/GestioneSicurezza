@@ -4695,6 +4695,7 @@
 											"model": {
 												"$ref": "AAAAAAGAdFq/MZni+m4="
 											},
+											"visible": false,
 											"font": "Arial;13;0",
 											"left": 1757,
 											"top": 2011,
@@ -4714,7 +4715,7 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1757,
-											"top": 2026,
+											"top": 2011,
 											"width": 126,
 											"height": 13,
 											"text": "+rischi",
@@ -4725,7 +4726,7 @@
 									"left": 1752,
 									"top": 1961,
 									"width": 136,
-									"height": 83
+									"height": 68
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -4738,7 +4739,7 @@
 									},
 									"font": "Arial;13;0",
 									"left": 1752,
-									"top": 2044,
+									"top": 2029,
 									"width": 136,
 									"height": 10
 								},
