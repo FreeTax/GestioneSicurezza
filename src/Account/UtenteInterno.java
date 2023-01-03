@@ -2,15 +2,16 @@ package Account;
 
 import Visite.SchedaVisita;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class UtenteInterno extends Utente{
     private int matricola;
-    private int type;
+    private String type;
 
-    public UtenteInterno(int codice, CreditoFormativo cfu_sostenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita, int matricola, int type/*, SchedaVisita visite*/) throws SQLException {
-        super(codice, cfu_sostenuti, nome, cognome, sesso, dipartimento, dataNascita/*, visite*/);
+    public UtenteInterno(int codice, String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int matricola, String type/*, SchedaVisita visite*/) throws SQLException {
+        super(codice, nome, cognome, sesso, dipartimento, dataNascita/*, visite*/);
         this.matricola = matricola;
         this.type = type;
     }
@@ -20,17 +21,18 @@ public class UtenteInterno extends Utente{
     }
 
     public void insertUtente() throws SQLException {
-        uGateway.InsertSql(matricola,nome,cognome);
+        uGateway.InsertUtenteInterno(matricola,nome,cognome,sesso,dataNascita,dipartimento);
     }
+
     public int getMatricola() {
         return matricola;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 }

@@ -32,7 +32,6 @@ DROP TABLE IF EXISTS UtenteEsterno;
 CREATE TABLE IF NOT EXISTS UtenteEsterno (
   idUtente INT NOT NULL,
   idEsterno INT NOT NULL,
-  tipo ENUM('base', 'supervisore', 'avanzato') NOT NULL,
   PRIMARY KEY (idEsterno,idUtente),
   CONSTRAINT fk_UtenteEsterno_Utente
     FOREIGN KEY (idUtente)
@@ -45,7 +44,7 @@ DROP TABLE IF EXISTS CreditoFormativo;
 
 CREATE TABLE IF NOT EXISTS CreditoFormativo (
   idCreditoFormativo INT PRIMARY KEY AUTO_INCREMENT,
-  idRischio INT NOT NULL,
+  idRischio VARCHAR(45) NOT NULL,
   CertificazioneEsterna VARCHAR(45) NULL
 );
 
@@ -75,6 +74,7 @@ CREATE TABLE IF NOT EXISTS Richiesta (
   idRichiesta INT PRIMARY KEY AUTO_INCREMENT,
   stato VARCHAR(45) NOT NULL,
   idUtente INT NOT NULL,
+  idRiferimento INT NOT NULL,
   tipo ENUM('luogo', 'dipartimento') NOT NULL,
   INDEX fk_Richiesta_Utente1_idx (idUtente ASC) VISIBLE,
   CONSTRAINT fk_Richiesta_Utente1
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS Richiesta (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
-
+/*
 DROP TABLE IF EXISTS RichiestaLuogo;
 
 CREATE TABLE IF NOT EXISTS RichiestaLuogo (
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS RichiestaDipartimento (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
-
+*/
 /*VisiteDB*/
 CREATE DATABASE IF NOT EXISTS VisiteDB;
 USE VisiteDB;
