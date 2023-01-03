@@ -16,71 +16,88 @@ public class UtenteGatewayDb {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Account", "root", "root");
-        //createTable();
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
     }
-
-    public void createTable() throws SQLException {
-        String tableSql ="DROP TABLE IF EXISTS Utente";
-        /*try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Account", "root", "root")){
-            stmt=con.createStatement();
-            stmt.execute(tableSql);
-        }*/
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root")) {
-            stmt=con.createStatement();
-            tableSql = "CREATE TABLE IF NOT EXISTS Utente"
-                    + "(matricola int PRIMARY KEY AUTO_INCREMENT, nome varchar(30),"
-                    + "cognome varchar(30), salary double)";
-            stmt.execute(tableSql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void InsertUtente(String nome,String cognome, String sesso, Date datanascita, String dipartimento, String tipologia) throws SQLException {
+        stmt=con.createStatement();
+        String insertSql = "INSERT INTO Utente(nome, cognome, sesso, datanascita, dipartimento, tipologia)"
+                + " VALUES('"+nome+"', '"+cognome+"', '"+sesso+"','"+datanascita.toString()+"','"+dipartimento+"','"+tipologia+"')";
+        stmt.executeUpdate(insertSql);
     }
-    public void InsertSql(int m,String n, String c) throws SQLException {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root")) {
-            stmt=con.createStatement();
-            String insertSql = "INSERT INTO Utente(matricola, nome, cognome)"
-                    + " VALUES("+m+", '"+n+"', '"+c+"')";
-            stmt.executeUpdate(insertSql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public void InsertUtenteInterno(int matricola,String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
+        stmt=con.createStatement();
+        String idUtente = null;
+        String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"'";
+        ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
+        if(resultSet.next()==false) {
+            InsertUtente(nome,cognome,sesso,datanascita,dipartimento,"interno");
+            ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
+            resultSet2.next();
+            idUtente = resultSet2.getString("idUtente");
         }
-
+        else{
+            idUtente = resultSet.getString("idUtente");
+        }
+        String insertSql = "INSERT INTO UtenteInterno(idUtente, matricola,tipo)"
+                + " VALUES('"+idUtente+"', '"+matricola+"', '"+"base"+"')";
+        stmt.executeUpdate(insertSql);
+    }
+    public void InsertUtenteEsterno(int idEsterno,String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
+        stmt=con.createStatement();
+        String idUtente = null;
+        String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"'";
+        ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
+        if(resultSet.next()==false) {
+            InsertUtente(nome,cognome,sesso,datanascita,dipartimento,"esterno");
+            ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
+            resultSet2.next();
+            idUtente = resultSet2.getString("idUtente");
+        }
+        else{
+            idUtente = resultSet.getString("idUtente");
+        }
+        String insertSql = "INSERT INTO UtenteEsterno(idUtente, idEsterno)"
+                + " VALUES('"+idUtente+"', '"+idEsterno+"')";
+        stmt.executeUpdate(insertSql);
     }
     public ArrayList<String> SelectSql() throws SQLException {
         ArrayList<String> risultati=new ArrayList<String>();
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root")) {
-            stmt=con.createStatement();
-            String selectSql = "SELECT * FROM Utente";
-            try (ResultSet resultSet = stmt.executeQuery(selectSql)) {
-                while (resultSet.next()) {
-                    String name = resultSet.getString("nome");
-                    risultati.add(name);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+        stmt=con.createStatement();
+        String selectSql = "SELECT * FROM Utente";
+        ResultSet resultSet = stmt.executeQuery(selectSql);
+        while (resultSet.next()) {
+            String name = resultSet.getString("nome");
+            risultati.add(name);
         }
-
         return risultati;
     }
-    /*
-    public String find(int id){
-        // find person record by id.
+
+    public void insertCreditoFormativo(String idRischio, String certificazione) throws SQLException {
+        stmt=con.createStatement();
+        String insertCredito="INSERT INTO CreditoFormativo(idRischio, CertificazioneEsterna) " +
+                "VALUES('"+idRischio+"', '"+certificazione+"')";
+        stmt.executeUpdate(insertCredito);
     }
-    public String findByFirstName(){
-        // find person by first name.
+
+    public void insertCreditoFormativo(String idRischio) throws SQLException {
+        insertCreditoFormativo(idRischio, "");
     }
-    public void update(String firstName, String lastName, String age){
-        // Update person entity.
+
+    public void sostieniCreditoFormativo(int idUtente, int idCredito) throws SQLException {
+        stmt=con.createStatement();
+        String insertCredito="INSERT INTO CreditoFormativoSostenuto(idCreditoFormativo,idUtente) " +
+                "VALUES("+idCredito+", '"+idUtente+"')";
+        stmt.executeUpdate(insertCredito);
     }
-    public void insert(String firstName, String lastName, String gender,String age){
-        // insert person entity.
+
+    public void InsertRichiesta(int idUtente, int idRiferimento, String tipo) throws SQLException {
+        stmt=con.createStatement();
+        String insertSql = "INSERT INTO Richiesta(stato, idUtente, idRiferimento, tipo)"
+                + " VALUES('"+"proposta"+"',"+idUtente+","+idRiferimento+",'"+tipo+"')";
+        stmt.executeUpdate(insertSql);
     }
-    public void delete(int id){
-        // Delete person record by id from database.
-    }*/
 
 }
 

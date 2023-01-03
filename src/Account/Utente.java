@@ -1,14 +1,12 @@
 package Account;
 
+import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import AccountGateway.UtenteGatewayDb;
-import Rischi.Rischio;
 import Visite.SchedaVisita;
-import Luoghi.Luogo;
-import Luoghi.Dipartimento;
+
 public abstract class Utente{
 
     protected int codice;
@@ -17,14 +15,13 @@ public abstract class Utente{
     protected String cognome;
     protected String sesso;
     protected String dipartimento;
-    protected LocalDate dataNascita;
+    protected Date dataNascita;
     protected SchedaVisita visite;
 
     protected UtenteGatewayDb uGateway;
 
-    public Utente(int codice, CreditoFormativo cfuSstenuti, String nome, String cognome, String sesso, String dipartimento, LocalDate dataNascita/*, SchedaVisita visite*/) throws SQLException {
+    public Utente(int codice, String nome, String cognome, String sesso, String dipartimento, Date dataNascita/*, SchedaVisita visite*/) throws SQLException {
         this.codice = codice;
-        this.cfuSostenuti = cfuSostenuti;
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
@@ -39,7 +36,7 @@ public abstract class Utente{
     }
 
     public void insertUtente() throws SQLException {
-        uGateway.InsertSql(0,nome,cognome);
+        uGateway.InsertUtente(nome,cognome,sesso,dataNascita,dipartimento,"");
     }
 
     public ArrayList<String> nomeUtenti() throws SQLException {
@@ -77,7 +74,7 @@ public abstract class Utente{
         this.dipartimento = dipartimento;
     }
 
-    public LocalDate getDataNascita() {
+    public Date getDataNascita() {
         return dataNascita;
     }
 }
