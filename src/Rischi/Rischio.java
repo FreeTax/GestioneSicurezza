@@ -10,8 +10,8 @@ public abstract class Rischio {
     private String nome;
     private String descrizione;
     private String tipologia;
-    private Corso corso;
-    private Visita visita;
+    private Corso corso=null;
+    private Visita visita=null;
     public Rischio() throws SQLException { //wating that Corso and Visita classes are implemented
 
     }
@@ -48,7 +48,31 @@ public abstract class Rischio {
         return visita;
     }
 
-    public void saveToDB(int codice) throws SQLException { }
+    public void setCodice(int codice) {
+        this.codice = codice;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public void setTipologia(String tipologia) {
+        this.tipologia = tipologia;
+    }
+
+    public void setCorso(Corso corso) {
+        this.corso = corso;
+    }
+
+    public void setVisita(Visita visita) {
+        this.visita = visita;
+    }
+
+    public void saveToDB() throws SQLException { }
 
     public abstract String toString();
 }

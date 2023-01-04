@@ -10,7 +10,7 @@ public class RischioGatewayDb {
     public RischioGatewayDb() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/AccessiDB", "root", "root");
+            con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -18,19 +18,20 @@ public class RischioGatewayDb {
 
     public void insertRischioGenerico(RischioGenerico r) throws SQLException {
         try{
-            String insertSql = "INSERT INTO RischioGenerico(nome, descrizione, tipologia, corso, visita)"
-                    + " VALUES('"+r.getNome()+"', '"+r.getDescrizione()+"', '"+r.getTipologia()+"', '"+r.getCorso()+"', '"+r.getVisita()+"')";
-            Statement stmt = con.createStatement();
+            String insertSql = "INSERT INTO RischioGenerico(codice, nome, descrizione, tipologia, corso, visita)"
+                    + " VALUES('"+r.getCodice()+"', '"+r.getNome()+"', '"+r.getDescrizione()+"', '"+r.getTipologia()+"', '"+0+"', '"+0+"')"; //wating that Corso and Visita classes are implemented
+            Statement stmt=con.createStatement();
             stmt.executeUpdate(insertSql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public void insertRischioSpecifico(RischioSpecifico r) throws SQLException{
         try{
-            String insertSql = "INSERT INTO RischioSpecifico(nome, descrizione, tipologia, corso, visita)"
-                    + " VALUES('"+r.getNome()+"', '"+r.getDescrizione()+"', '"+r.getTipologia()+"', '"+r.getCorso()+"', '"+r.getVisita()+"')";
+            String insertSql = "INSERT INTO RischioSpecifico(codice, nome, descrizione, tipologia, corso, visita)"
+                    + " VALUES('"+r.getCodice()+"', '"+r.getNome()+"', '"+r.getDescrizione()+"', '"+r.getTipologia()+"', '"+0+"', '"+0+"')"; //wating that Corso and Visita classes are implemented
             Statement stmt=con.createStatement();
             stmt.executeUpdate(insertSql);
         } catch (SQLException e) {
@@ -40,7 +41,7 @@ public class RischioGatewayDb {
 
     public RischioGenerico getRischioGenerico(int id) throws SQLException{
         try{
-            String selectSql = "SELECT * FROM RischioGenerico WHERE id="+id;
+            String selectSql = "SELECT * FROM RischioGenerico WHERE codice="+id;
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery(selectSql);
             if(rs.next()){
@@ -54,7 +55,7 @@ public class RischioGatewayDb {
 
     public RischioSpecifico getRischioSpecifico(int id) throws SQLException{
         try{
-            String selectSql = "SELECT * FROM RischioSpecifico WHERE id="+id;
+            String selectSql = "SELECT * FROM RischioSpecifico WHERE codice="+id;
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery(selectSql);
             if(rs.next()){
