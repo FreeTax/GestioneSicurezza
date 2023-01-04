@@ -1,29 +1,18 @@
 import GatewayIPC.GatewayUtente;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        //DbAction db=new DbAction();
-            /*try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                System.out.println("drivewrok");
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println("Ciao!");
-            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Prova", "root", "root")) {
-                System.out.println("connesso!");
-                Statement stmt=con.createStatement();
-                db.createTable(stmt);
-                db.InsertSql(stmt);
-                db.SelectSql(stmt);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-     */
+        System.out.println(Date.valueOf(LocalDate.of(2000, 3, 10)));
         GatewayUtente gUtente= new GatewayUtente();
-        gUtente.insertUtente(7029563,"marco","trambusti");
+        gUtente.insertUtenteInterno(7029563,"marco","trambusti","M","2000-10-03","ingegneria informatica");
+        gUtente.insertUtenteEsterno(14235,"prova","prova","F","2000-10-12","fisica");
+
+        gUtente.insertCreditoFormativo(1);
+        gUtente.sostieniCredito(1,1);
+        gUtente.insertRichiestaLuogo(1);
         System.out.println(gUtente.nomeUtenti());
     }
 }
