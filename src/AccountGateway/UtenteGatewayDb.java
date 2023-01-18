@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UtenteGatewayDb {
     private Connection con;
@@ -99,5 +100,57 @@ public class UtenteGatewayDb {
         stmt.executeUpdate(insertSql);
     }
 
+    public ArrayList<String> GetUtenteInterno(int matricola) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente WHERE matricola='matricola'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        ArrayList<String> risultati=new ArrayList<String>();
+        while (resultSet.next()) {
+            String name = resultSet.getString("nome");
+            String cognome = resultSet.getString("cognome");
+            String sesso = resultSet.getString("sesso");
+            String datanascita = resultSet.getString("datanascita");
+            String dipartimento = resultSet.getString("dipartimento");
+            String tipologia = resultSet.getString("tipologia");
+            risultati.add(name);
+        }
+        return risultati;
+    }
+
+    public ArrayList<String> GetUtenteEsterno( int idEsterno) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente WHERE idEsterno='idEsterno'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        ArrayList<String> risultati=new ArrayList<String>();
+        while (resultSet.next()) {
+            String idUtente = resultSet.getString("idUtente");
+            String name = resultSet.getString("nome");
+            String cognome = resultSet.getString("cognome");
+            String sesso = resultSet.getString("sesso");
+            String datanascita = resultSet.getString("datanascita");
+            String dipartimento = resultSet.getString("dipartimento");
+            risultati.add(idUtente);
+            risultati.add(name);
+            risultati.add(cognome);
+            risultati.add(sesso);
+            risultati.add(datanascita);
+            risultati.add(dipartimento);
+        }
+        return risultati;
+    }
+
+    public HashMap<String, String[]> GetCFUSostenuti(int idUtente) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM CreditoFormativoSostenuto cfs INNER JOIN CreditoFormativo cf on cf.idCreditoFormativo=cfs.idCreditoFormativo WHERE idUtente='idUtente'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        HashMap<String,String[]> risultati=new HashMap<String,String[]>();
+        while (resultSet.next()) {
+            String idCreditoFormativo = resultSet.getString("idCreditoFormativo");
+            String idRischio = resultSet.getString("idRischio");
+            String certificazioneEsterna = resultSet.getString("CertificazioneEsterna");
+            risultati.put(idCreditoFormativo, new String[]{idRischio,certificazioneEsterna});
+        }
+        return risultati;
+    }
 }
 

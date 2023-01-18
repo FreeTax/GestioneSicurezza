@@ -5,6 +5,7 @@ import Visite.SchedaVisita;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class UtenteInterno extends Utente{
     private int matricola;
@@ -18,6 +19,18 @@ public class UtenteInterno extends Utente{
 
     public UtenteInterno() throws SQLException {
         super();
+    }
+
+    public UtenteInterno(int matricola) throws SQLException {
+       ArrayList<String> resultset=uGateway.GetUtenteInterno(matricola);
+       codice=Integer.parseInt(resultset.get(0));
+       nome=resultset.get(1);
+       cognome=resultset.get(2);
+       sesso=resultset.get(3);
+       dataNascita=Date.valueOf(resultset.get(4));
+       dipartimento=resultset.get(5);
+       this.matricola = matricola;
+       this.type=resultset.get(6);
     }
 
     public void insertUtente() throws SQLException {

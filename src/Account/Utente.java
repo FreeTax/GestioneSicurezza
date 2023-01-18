@@ -3,6 +3,7 @@ package Account;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import AccountGateway.UtenteGatewayDb;
 import Visite.SchedaVisita;
@@ -10,7 +11,7 @@ import Visite.SchedaVisita;
 public abstract class Utente{
 
     protected int codice;
-    protected CreditoFormativo cfuSostenuti;
+    protected ArrayList<CreditoFormativo> cfuSostenuti;
     protected String nome;
     protected String cognome;
     protected String sesso;
@@ -42,12 +43,23 @@ public abstract class Utente{
     public ArrayList<String> nomeUtenti() throws SQLException {
         return uGateway.SelectSql();
     }
-    public CreditoFormativo getCfu_sostenuti() {
+    public ArrayList<CreditoFormativo> getCfu_sostenuti() {
         return cfuSostenuti;
     }
 
     public void setCfu_sostenuti(CreditoFormativo cfu_sostenuti) {
         this.cfuSostenuti = cfuSostenuti;
+    }
+
+    public void setCfuSostenuti() throws SQLException {
+        HashMap<String, String[]> resultset=uGateway.GetCFUSostenuti(codice);
+        resultset.forEach(((s, strings) -> {
+            try {
+                cfuSostenuti.add(new CreditoFormativo(Integer.parseInt(s),Integer.parseInt(strings[0]),strings[1]));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }));
     }
 
     public String getNome() {

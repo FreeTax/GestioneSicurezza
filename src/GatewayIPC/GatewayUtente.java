@@ -30,7 +30,7 @@ public class GatewayUtente {
     }
 
     public void insertCreditoFormativo(int codice) throws SQLException {
-        cf=new CreditoFormativo(codice, "");
+        cf=new CreditoFormativo(codice, 0,"");
         cf.insertCreditoFormativo();
     }
 
