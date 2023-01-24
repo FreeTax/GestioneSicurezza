@@ -28,4 +28,25 @@ public class CorsiSicurezzaGatewayDb {
                 + " VALUES('"+nome+"', '"+descrizione+"','"+inizio+"','"+fine+"',"+idCorsoType+")";
         stmt.executeUpdate(insertSql);
     }
+
+    public void updateCorsoType(int idCorsoType, String nome, String descrizione) throws SQLException {
+        stmt=con.createStatement();
+        String updateSql = "UPDATE CorsoType SET nome='"+nome+"', descrizione='"+descrizione+"' WHERE idCorsoType="+idCorsoType;
+        stmt.executeUpdate(updateSql);
+    }
+    public void updateCorso(int idCorso, String nome, String descrizione, Date inizio, Date fine, int idCorsoType) throws SQLException {
+        stmt=con.createStatement();
+        String updateSql = "UPDATE Corso SET nome='"+nome+"', descrizione='"+descrizione+"', inizio='"+inizio+"', fine='"+fine+"', idCorsoType="+idCorsoType+" WHERE idCorso="+idCorso;
+        stmt.executeUpdate(updateSql);
+    }
+    public void deleteCorsoType(int idCorsoType) throws SQLException {
+        stmt=con.createStatement();
+        String deleteSql = "DELETE FROM CorsoType WHERE idCorsoType="+idCorsoType;
+        stmt.executeUpdate(deleteSql);
+    }
+    public void deleteCorso(int idCorso) throws SQLException {
+        stmt=con.createStatement();
+        String deleteSql = "DELETE FROM Corso WHERE idCorso="+idCorso;
+        stmt.executeUpdate(deleteSql);
+    }
 }

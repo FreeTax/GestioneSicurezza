@@ -1,6 +1,9 @@
 package VisiteGateway;
 
+import Visite.Visita;
+
 import java.sql.*;
+import java.util.ArrayList;
 
 public class VisiteGatewayDb {
     private Connection con;
@@ -39,7 +42,7 @@ public class VisiteGatewayDb {
         stmt.executeUpdate(insertSql);
     }
 
-    public void InsertVisita(String idMedico,String descrizione, Timestamp data, String stato, String esito, int idSchedaVisita, int idVisitaType) throws SQLException {
+    public void insertVisita(String idMedico,String descrizione, Timestamp data, String stato, String esito, int idSchedaVisita, int idVisitaType) throws SQLException {
         stmt=con.createStatement();
         String insertSql = "INSERT INTO Visita(idMedico,descrizione,data,stato,esito,idSchedaVisita,idVisitaType)"
                 + " VALUES('"+idMedico+"', '"+descrizione+"', '"+data+"', '"+stato+"', '"+esito+"',"+idSchedaVisita+","+idVisitaType+")";
@@ -51,5 +54,42 @@ public class VisiteGatewayDb {
         String insertSql = "INSERT INTO SchedaVisita_has_Patologia(idSchedaVisita, idPatologia)"
                 + " VALUES("+idSchedaVisita+","+idPatologia+")";
         stmt.executeUpdate(insertSql);
+    }
+
+    public ArrayList<Visita> getVisiteDaSostenere(int idSchedaVisita) throws SQLException {
+        stmt=con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT * FROM Visita WHERE idSchedaVisita="+idSchedaVisita+" AND stato='da sostenere'");
+        ArrayList<Visita> visite=new ArrayList<>();
+        while(resultSet.next()){
+            visite.add(new Visita(resultSet.getInt("idVisita"),resultSet.getString("idMedico"),resultSet.getString("descrizione"), Timestamp.valueOf(resultSet.getString("data")),resultSet.getString("stato"),resultSet.getString("esito"), resultSet.getInt("idVisitaType")));
+        }
+        return visite;
+    }
+    public ArrayList<Visita> getVisiteEffettuate(int idSchedaVisita) throws SQLException {
+        stmt=con.createStatement();
+        ResultSet resultSet = stmt.executeQuery("SELECT * FROM Visita WHERE idSchedaVisita="+idSchedaVisita+" AND stato='sostenuta'");
+        ArrayList<Visita> visite=new ArrayList<>();
+        while(resultSet.next()){
+            visite.add(new Visita(resultSet.getInt("idVisita"),resultSet.getString("idMedico"),resultSet.getString("descrizione"), Timestamp.valueOf(resultSet.getString("data")),resultSet.getString("stato"),resultSet.getString("esito"), resultSet.getInt("idVisitaType")));
+        }
+        return visite;
+    }
+
+    public void updateVisita(int idVisita, String descrizione, Timestamp data, String stato, String esito, int idVisitaType) throws SQLException {
+        stmt=con.createStatement();
+        String updateSql = "UPDATE Visita SET descrizione='"+descrizione+"', data='"+data+"', stato='"+stato+"', esito='"+esito+"', idVisitaType="+idVisitaType+" WHERE idVisita="+idVisita;
+        stmt.executeUpdate(updateSql);
+    }
+
+    public void deleteVisita(int idVisita) throws SQLException {
+        stmt=con.createStatement();
+        String deleteSql = "DELETE FROM Visita WHERE idVisita="+idVisita;
+        stmt.executeUpdate(deleteSql);
+    }
+
+    public void deleteSchedaVisita(int idSchedaVisita) throws SQLException {
+        stmt=con.createStatement();
+        String deleteSql = "DELETE FROM SchedaVisita WHERE idSchedaVisita="+idSchedaVisita;
+        stmt.executeUpdate(deleteSql);
     }
 }

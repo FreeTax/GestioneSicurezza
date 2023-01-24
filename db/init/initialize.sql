@@ -44,8 +44,8 @@ DROP TABLE IF EXISTS CreditoFormativo;
 
 CREATE TABLE IF NOT EXISTS CreditoFormativo (
   idCreditoFormativo INT PRIMARY KEY AUTO_INCREMENT,
-  idRischio VARCHAR(45) NOT NULL,
-  CertificazioneEsterna VARCHAR(45) NULL
+  idRischio VARCHAR(45) NOT NULL
+  /*CertificazioneEsterna VARCHAR(45) NULL*/
 );
 
 DROP TABLE IF EXISTS CreditoFormativoSostenuto;
@@ -53,6 +53,7 @@ DROP TABLE IF EXISTS CreditoFormativoSostenuto;
 CREATE TABLE IF NOT EXISTS CreditoFormativoSostenuto (
   idCreditoFormativo INT NOT NULL,
   idUtente INT NOT NULL,
+  CertificazioneEsterna VARCHAR(45) NULL,
   PRIMARY KEY (idCreditoFormativo, idUtente),
   INDEX fk_CreditoFormativo_has_Utente_Utente1_idx (idUtente ASC) VISIBLE,
   INDEX fk_CreditoFormativo_has_Utente_CreditoFormativo1_idx (idCreditoFormativo ASC) VISIBLE,

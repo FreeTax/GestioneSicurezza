@@ -28,8 +28,11 @@ public class UtenteEsterno extends Utente{
     public void insertUtente() throws SQLException {
         uGateway.InsertUtenteEsterno(idEsterno,nome,cognome,sesso,dataNascita,dipartimento);
     }
-
     public int getIdEsterno() {
         return idEsterno;
+    }
+
+    public void updateUtenteDb() throws SQLException {
+        uGateway.updateUtenteEsterno(idEsterno,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento);
     }
 }

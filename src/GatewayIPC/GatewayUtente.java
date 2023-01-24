@@ -34,9 +34,14 @@ public class GatewayUtente {
         cf.insertCreditoFormativo();
     }
 
+    public void sostieniCredito( int idUtente, int codice, String certificazione) throws SQLException {
+        UtenteGatewayDb uGateway=new UtenteGatewayDb();
+        uGateway.sostieniCreditoFormativo(idUtente, codice, certificazione);
+    }
+
     public void sostieniCredito( int idUtente, int codice) throws SQLException {
         UtenteGatewayDb uGateway=new UtenteGatewayDb();
-        uGateway.sostieniCreditoFormativo(idUtente, codice);
+        uGateway.sostieniCreditoFormativo(idUtente, codice, null);
     }
 
     public void insertRichiestaLuogo(int idLuogo) throws SQLException {

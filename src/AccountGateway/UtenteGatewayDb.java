@@ -86,10 +86,10 @@ public class UtenteGatewayDb {
         insertCreditoFormativo(idRischio, "");
     }
 
-    public void sostieniCreditoFormativo(int idUtente, int idCredito) throws SQLException {
+    public void sostieniCreditoFormativo(int idUtente, int idCredito, String certificazione) throws SQLException {
         stmt=con.createStatement();
-        String insertCredito="INSERT INTO CreditoFormativoSostenuto(idCreditoFormativo,idUtente) " +
-                "VALUES("+idCredito+", '"+idUtente+"')";
+        String insertCredito="INSERT INTO CreditoFormativoSostenuto(idCreditoFormativo,idUtente, CertificazioneEsterna) " +
+                "VALUES("+idCredito+", '"+idUtente+"', '"+certificazione+"')";
         stmt.executeUpdate(insertCredito);
     }
 
@@ -152,5 +152,18 @@ public class UtenteGatewayDb {
         }
         return risultati;
     }
+
+    public void updateUtenteInterno(int matricola, String nome, String cognome, String sesso, String datanascita, String dipartimento, String tipologia) throws SQLException {
+        stmt=con.createStatement();
+        String updateSql = "UPDATE UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente SET nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"', tipologia='"+tipologia+"' WHERE matricola='"+matricola+"'";
+        stmt.executeUpdate(updateSql);
+    }
+
+    public void updateUtenteEsterno(int idEsterno, String nome, String cognome, String sesso, String datanascita, String dipartimento) throws SQLException {
+        stmt=con.createStatement();
+        String updateSql = "UPDATE UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente SET nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"' WHERE idEsterno='"+idEsterno+"'";
+        stmt.executeUpdate(updateSql);
+    }
+
 }
 

@@ -48,4 +48,8 @@ public class UtenteInterno extends Utente{
     public void setType(String type) {
         this.type = type;
     }
+
+    public void updateUtenteDb() throws SQLException {
+        uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,type);
+    }
 }
