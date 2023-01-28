@@ -88,4 +88,22 @@ public class RischioGatewayDb {
             throw new RuntimeException(e);
         }
     }
+    public void updateRischioGenerico(RischioGenerico r) throws SQLException{
+        try{
+            String updateSql = "UPDATE RischioGenerico SET nome='"+r.getNome()+"', descrizione='"+r.getDescrizione()+"', tipologia='"+r.getTipologia()+"' WHERE codice="+r.getCodice();
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(updateSql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void updateRischioSpecifico(RischioSpecifico r) throws SQLException{
+        try{
+            String updateSql = "UPDATE RischioSpecifico SET nome='"+r.getNome()+"', descrizione='"+r.getDescrizione()+"', tipologia='"+r.getTipologia()+"' WHERE codice="+r.getCodice();
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(updateSql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

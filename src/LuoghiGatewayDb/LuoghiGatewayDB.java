@@ -25,13 +25,13 @@ public class LuoghiGatewayDB {
             throw new RuntimeException(e);
         }
     }
-    public Luogo getLuogo(String codice) throws SQLException{
+    public Luogo getLuogo(int codice) throws SQLException{
         try{
             String selectSql = "SELECT * FROM Luogo WHERE codice='"+codice+"'";
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery(selectSql);
             if(rs.next()){
-                return new Luogo(rs.getString("codice"), rs.getString("nome"), rs.getString("tipo"), rs.getInt("referente"), rs.getInt("dipartimento"));
+                return new Luogo(rs.getInt("codice"), rs.getString("nome"), rs.getString("tipo"), rs.getInt("referente"), rs.getInt("dipartimento"));
             }
             return null;
         } catch (SQLException e) {
@@ -62,4 +62,43 @@ public class LuoghiGatewayDB {
             throw new RuntimeException(e);
         }
     }
+    public void updateDipartimento(Dipartimento d) throws SQLException{
+        try{
+            String updateSql = "UPDATE Dipartimento SET nome='"+d.getNome()+"', responsabile='"+d.getResponsabile()+"' WHERE codice='"+d.getCodice()+"'";
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(updateSql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void updateLuogo(Luogo l) throws SQLException{
+        try{
+            String updateSql = "UPDATE Luogo SET nome='"+l.getNome()+"', tipo='"+l.getTipo()+"', referente='"+l.getReferente()+"', dipartimento='"+l.getDipartimento()+"' WHERE codice='"+l.getCodice()+"'";
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(updateSql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteLuogo(int codice) throws SQLException{
+        try{
+            String deleteSql = "DELETE FROM Luogo WHERE codice='"+codice+"'";
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(deleteSql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteDipartimento(int id) throws SQLException{
+        try{
+            String deleteSql = "DELETE FROM Dipartimento WHERE codice='"+id+"'";
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(deleteSql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

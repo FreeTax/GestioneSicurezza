@@ -11,10 +11,12 @@ public class RischioSpecifico extends Rischio {
         super(codice, nome, descrizione, tipologia);
         rischioGatewayDb = new RischioGatewayDb();
     }
+
     public RischioSpecifico() throws SQLException {
         super();
         rischioGatewayDb = new RischioGatewayDb();
     }
+
     public RischioSpecifico(int codice) throws SQLException {
         super();
         rischioGatewayDb = new RischioGatewayDb();
@@ -24,6 +26,7 @@ public class RischioSpecifico extends Rischio {
         setDescrizione(r.getDescrizione());
         setTipologia(r.getTipologia());
     }
+
     public RischioSpecifico(RischioSpecifico r) throws SQLException {
         super();
         rischioGatewayDb = new RischioGatewayDb();

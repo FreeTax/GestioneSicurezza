@@ -89,6 +89,10 @@ public abstract class Utente{
     public Date getDataNascita() {
         return dataNascita;
     }
+
+    public int getCodice() {
+        return codice;
+    }
 }
 
 

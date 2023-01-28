@@ -75,6 +75,7 @@ public abstract class Rischio {
     public void saveToDB() throws SQLException { }
 
     public abstract String toString();
+
     public abstract Boolean removeRischio() throws SQLException;
 }
 

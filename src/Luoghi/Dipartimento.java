@@ -65,5 +65,17 @@ public class Dipartimento {
     public void insertDipartimento() throws SQLException {
         luoghiGatewayDB.insertDipartimento(this);
     }
+
+    public void updateDipartimento() throws SQLException {
+        luoghiGatewayDB.updateDipartimento(this);
+    }
+
+    public void deleteDipartimento() throws SQLException {
+        luoghiGatewayDB.deleteDipartimento(this.codice);
+    }
+
+    public int getId() {
+        return codice;
+    }
 }
 

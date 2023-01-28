@@ -16,6 +16,7 @@ public class RischioGenerico extends Rischio {
         super();
         rischioGatewayDb = new RischioGatewayDb();
     }
+
     public RischioGenerico(int codice) throws SQLException {
         super();
         rischioGatewayDb = new RischioGatewayDb();
@@ -51,7 +52,6 @@ public class RischioGenerico extends Rischio {
                 ", visita=" + getVisita() +*/
                 '}';
     }
-
 
     @Override
     public Boolean removeRischio() throws SQLException {

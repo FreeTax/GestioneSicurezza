@@ -9,13 +9,13 @@ import java.sql.SQLException;
 public class Luogo{
     //FIX ME: dipartiento and referente should be of type Dipartimento and Utente
     private LuoghiGatewayDB gateway;
-    private String codice;
+    private int codice;
     private String nome;
     private String tipo;
     private int referente;
     private Rischio rischi[];
     private int dipartimento;
-    public Luogo(String codice, String nome, String tipo, int referente, Rischio[] rischi, int dipartimento) throws SQLException {
+    public Luogo(int codice, String nome, String tipo, int referente, Rischio[] rischi, int dipartimento) throws SQLException {
         this.codice = codice;
         this.nome = nome;
         this.tipo = tipo;
@@ -24,7 +24,7 @@ public class Luogo{
         this.dipartimento = dipartimento;
         gateway= new LuoghiGatewayDB();
     }
-    public Luogo(String codice, String nome, String tipo, int referente, int dipartimento) throws SQLException {
+    public Luogo(int codice, String nome, String tipo, int referente, int dipartimento) throws SQLException {
         this.codice = codice;
         this.nome = nome;
         this.tipo = tipo;
@@ -33,7 +33,7 @@ public class Luogo{
         gateway= new LuoghiGatewayDB();
     }
 
-    public Luogo(String codice) throws SQLException {
+    public Luogo(int codice) throws SQLException {
         gateway= new LuoghiGatewayDB();
         Luogo l=gateway.getLuogo(codice);
         this.codice = l.getCodice();
@@ -56,8 +56,14 @@ public class Luogo{
     public void insertLuogo() throws SQLException{
         gateway.insertLuogo(this);
     }
+    public void updateLuogo() throws SQLException{
+        gateway.updateLuogo(this);
+    }
+    public void deleteLuogo() throws SQLException{
+        gateway.deleteLuogo(this.codice);
+    }
 
-    public String getCodice() {
+    public int getCodice() {
         return codice;
     }
 
@@ -80,4 +86,6 @@ public class Luogo{
     public int getDipartimento() {
         return dipartimento;
     }
+
+
 }
