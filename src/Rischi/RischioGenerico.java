@@ -53,4 +53,8 @@ public class RischioGenerico extends Rischio {
     }
 
 
+    @Override
+    public Boolean removeRischio() throws SQLException {
+        return rischioGatewayDb.removeRischioGenerico(this.getCodice());
+    }
 }

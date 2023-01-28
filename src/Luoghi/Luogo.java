@@ -1,21 +1,83 @@
 package Luoghi;
 
 import Account.Utente;
+import LuoghiGatewayDb.LuoghiGatewayDB;
 import Rischi.Rischio;
 
+import java.sql.SQLException;
+
 public class Luogo{
+    //FIX ME: dipartiento and referente should be of type Dipartimento and Utente
+    private LuoghiGatewayDB gateway;
     private String codice;
     private String nome;
     private String tipo;
-    private Utente referente;
+    private int referente;
     private Rischio rischi[];
-    private Dipartimento dipartimento;
-    public Luogo(String codice, String nome, String tipo, Utente referente, Rischio[] rischi, Dipartimento dipartimento) {
+    private int dipartimento;
+    public Luogo(String codice, String nome, String tipo, int referente, Rischio[] rischi, int dipartimento) throws SQLException {
         this.codice = codice;
         this.nome = nome;
         this.tipo = tipo;
         this.referente = referente;
         this.rischi = rischi;
         this.dipartimento = dipartimento;
+        gateway= new LuoghiGatewayDB();
+    }
+    public Luogo(String codice, String nome, String tipo, int referente, int dipartimento) throws SQLException {
+        this.codice = codice;
+        this.nome = nome;
+        this.tipo = tipo;
+        this.referente = referente;
+        this.dipartimento = dipartimento;
+        gateway= new LuoghiGatewayDB();
+    }
+
+    public Luogo(String codice) throws SQLException {
+        gateway= new LuoghiGatewayDB();
+        Luogo l=gateway.getLuogo(codice);
+        this.codice = l.getCodice();
+        this.nome = l.getNome();
+        this.tipo = l.getTipo();
+        this.referente = l.getReferente();
+        this.dipartimento = l.getDipartimento();
+    }
+
+    public Luogo(Luogo l) throws SQLException {
+        this.codice = l.getCodice();
+        this.nome = l.getNome();
+        this.tipo = l.getTipo();
+        this.referente = l.getReferente();
+        this.rischi = l.getRischi();
+        this.dipartimento = l.getDipartimento();
+        gateway= new LuoghiGatewayDB();
+    }
+
+    public void insertLuogo() throws SQLException{
+        gateway.insertLuogo(this);
+    }
+
+    public String getCodice() {
+        return codice;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public int getReferente() {
+        return referente;
+    }
+
+    public Rischio[] getRischi() {
+        return rischi;
+    }
+
+    public int getDipartimento() {
+        return dipartimento;
     }
 }

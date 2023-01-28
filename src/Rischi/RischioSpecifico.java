@@ -49,4 +49,9 @@ public class RischioSpecifico extends Rischio {
                 ", visita=" + getVisita() +*/
                 '}';
     }
+
+    @Override
+    public Boolean removeRischio() throws SQLException {
+        return rischioGatewayDb.removeRischioSpecifico(this.getCodice());
+    }
 }

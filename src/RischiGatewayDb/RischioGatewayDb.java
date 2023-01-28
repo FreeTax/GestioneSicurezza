@@ -66,4 +66,26 @@ public class RischioGatewayDb {
             throw new RuntimeException(e);
         }
     }
+
+    public Boolean removeRischioGenerico(int id) throws SQLException{
+        try{
+            String deleteSql = "DELETE FROM RischioGenerico WHERE codice="+id;
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(deleteSql);
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Boolean removeRischioSpecifico(int id) throws SQLException{
+        try{
+            String deleteSql = "DELETE FROM RischioSpecifico WHERE codice="+id;
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(deleteSql);
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
