@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class UtenteInterno extends Utente{
     private int matricola;
-    private String type;
+    private String tipo;
 
-    public UtenteInterno(int codice, String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int matricola, String type/*, SchedaVisita visite*/) throws SQLException {
-        super(codice, nome, cognome, sesso, dipartimento, dataNascita/*, visite*/);
+    public UtenteInterno(int codice, String password,String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int matricola, String tipo/*, SchedaVisita visite*/) throws SQLException {
+        super(codice, password, nome, cognome, sesso, dipartimento, dataNascita/*, visite*/);
         this.matricola = matricola;
-        this.type = type;
+        this.tipo = tipo;
     }
 
     public UtenteInterno() throws SQLException {
@@ -22,19 +22,20 @@ public class UtenteInterno extends Utente{
     }
 
     public UtenteInterno(int matricola) throws SQLException {
-       ArrayList<String> resultset=uGateway.GetUtenteInterno(matricola);
-       codice=Integer.parseInt(resultset.get(0));
-       nome=resultset.get(1);
-       cognome=resultset.get(2);
-       sesso=resultset.get(3);
-       dataNascita=Date.valueOf(resultset.get(4));
-       dipartimento=resultset.get(5);
-       this.matricola = matricola;
-       this.type=resultset.get(6);
+       UtenteInterno ui=uGateway.GetUtenteInterno(matricola);
+       this.matricola=ui.matricola;
+       this.codice=ui.codice;
+       this.password=ui.password;
+       this.nome=ui.nome;
+       this.cognome=ui.cognome;
+       this.sesso=ui.sesso;
+       this.dipartimento=ui.dipartimento;
+       this.dataNascita=ui.dataNascita;
+       this.tipo=ui.tipo;
     }
 
     public void insertUtente() throws SQLException {
-        uGateway.InsertUtenteInterno(matricola,nome,cognome,sesso,dataNascita,dipartimento);
+        uGateway.InsertUtenteInterno(matricola,password,nome,cognome,sesso,dataNascita,dipartimento);
     }
 
     public int getMatricola() {
@@ -42,14 +43,14 @@ public class UtenteInterno extends Utente{
     }
 
     public String getType() {
-        return type;
+        return tipo;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.tipo = tipo;
     }
 
     public void updateUtenteDb() throws SQLException {
-        uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,type);
+        uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,tipo);
     }
 }

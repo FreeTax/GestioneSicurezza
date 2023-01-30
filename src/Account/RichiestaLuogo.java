@@ -5,14 +5,14 @@ import Luoghi.Luogo;
 import java.sql.SQLException;
 
 public class RichiestaLuogo extends Richiesta {
-    private Luoghi.Luogo Luogo;
+    private int idLuogo;
 
-    public RichiestaLuogo(Utente utente, int statoRichiesta/*, Luoghi.Luogo luogo*/) throws SQLException {
-        super(utente, statoRichiesta);
-        //Luogo = luogo;
+    public RichiestaLuogo(int idUtente, int statoRichiesta, int idLuogo) throws SQLException {
+        super( idUtente, statoRichiesta);
+        this.idLuogo = idLuogo;
     }
 
-    public void insertRichiesta(int idRiferimento) throws SQLException {
-        super.insertRichiesta(idRiferimento, "luogo");
+    public void insertRichiesta(int idLuogo) throws SQLException {
+        super.insertRichiesta(idLuogo, "luogo");
     }
 }

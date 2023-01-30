@@ -4,17 +4,17 @@ import Luoghi.Dipartimento;
 
 import java.sql.SQLException;
 
-class RichiestaDipartimento extends Richiesta {
-    private Dipartimento dipartimento;
+public class RichiestaDipartimento extends Richiesta {
+    private int idDipartimento;
 
-    public RichiestaDipartimento(Utente utente, int statoRichiesta, Dipartimento dipartimento) throws SQLException {
-        super(utente, statoRichiesta);
-        this.dipartimento = dipartimento;
+    public RichiestaDipartimento(int idUtente, int statoRichiesta, int idDipartimento) throws SQLException {
+        super(idUtente, statoRichiesta);
+        this.idDipartimento = idDipartimento;
     }
-    public void insertRichiesta(int idRiferimento) throws SQLException {
-        super.insertRichiesta(idRiferimento, "dipartimento");
+    public void insertRichiesta() throws SQLException {
+        super.insertRichiesta(idDipartimento, "dipartimento");
     }
-    public void setIdDipartimento(String idDipartimento) {
-        this.dipartimento = dipartimento;
+    public void setIdDipartimento(int idDipartimento) {
+        this.idDipartimento = idDipartimento;
     }
 }

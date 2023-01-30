@@ -6,18 +6,18 @@ import Luoghi.Luogo;
 import java.sql.SQLException;
 
 abstract class Richiesta {
-    private Utente utente;
+    private int idUtente;
     private int statoRichiesta;
 
     private UtenteGatewayDb uGateway;
-    Richiesta(Utente utente, int statoRichiesta) throws SQLException {
-        this.utente = utente;
+    Richiesta(int idUtente, int statoRichiesta) throws SQLException {
+        this.idUtente = idUtente;
         this.statoRichiesta = statoRichiesta;
         uGateway=new UtenteGatewayDb();
     }
 
     public void insertRichiesta(int idRiferimento, String tipo) throws SQLException {
-        uGateway.InsertRichiesta(utente.codice,idRiferimento, tipo);
+        uGateway.InsertRichiesta(idUtente,idRiferimento, tipo);
     }
     public void insertRichiesta(int idRiferimento) throws SQLException {
     }

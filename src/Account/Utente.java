@@ -12,6 +12,7 @@ public abstract class Utente{
 
     protected int codice;
     protected ArrayList<CreditoFormativo> cfuSostenuti;
+    protected String password;
     protected String nome;
     protected String cognome;
     protected String sesso;
@@ -21,8 +22,9 @@ public abstract class Utente{
 
     protected UtenteGatewayDb uGateway;
 
-    public Utente(int codice, String nome, String cognome, String sesso, String dipartimento, Date dataNascita/*, SchedaVisita visite*/) throws SQLException {
+    public Utente(int codice, String password, String nome, String cognome, String sesso, String dipartimento, Date dataNascita/*, SchedaVisita visite*/) throws SQLException {
         this.codice = codice;
+        this.password = password;
         this.nome = nome;
         this.cognome = cognome;
         this.sesso = sesso;
@@ -37,12 +39,9 @@ public abstract class Utente{
     }
 
     public void insertUtente() throws SQLException {
-        uGateway.InsertUtente(nome,cognome,sesso,dataNascita,dipartimento,"");
+        uGateway.InsertUtente(password,nome,cognome,sesso,dataNascita,dipartimento,"");
     }
 
-    public ArrayList<String> nomeUtenti() throws SQLException {
-        return uGateway.SelectSql();
-    }
     public ArrayList<CreditoFormativo> getCfu_sostenuti() {
         return cfuSostenuti;
     }
@@ -52,14 +51,7 @@ public abstract class Utente{
     }
 
     public void setCfuSostenuti() throws SQLException {
-        HashMap<String, String[]> resultset=uGateway.GetCFUSostenuti(codice);
-        resultset.forEach(((s, strings) -> {
-            try {
-                cfuSostenuti.add(new CreditoFormativo(Integer.parseInt(s),Integer.parseInt(strings[0]),strings[1]));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }));
+        this.cfuSostenuti.addAll(uGateway.GetCFUSostenuti(this.codice));
     }
 
     public String getNome() {

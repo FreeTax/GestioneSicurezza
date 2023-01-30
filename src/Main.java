@@ -14,7 +14,6 @@ public class Main {
         //gUtente.insertCreditoFormativo(1);
         //gUtente.sostieniCredito(1,1);
         //gUtente.insertRichiestaLuogo(1);
-        System.out.println(gUtente.nomeUtenti());
         //RischioGenerico r1 = new RischioGenerico(1,"prova", "prova", "prova");
         //r1.saveToDB();
         //RischioGenerico r2= new RischioGenerico(1);
