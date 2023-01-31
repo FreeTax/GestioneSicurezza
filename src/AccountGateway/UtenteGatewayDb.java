@@ -1,8 +1,6 @@
 package AccountGateway;
 
-import Account.CreditoFormativo;
-import Account.UtenteEsterno;
-import Account.UtenteInterno;
+import Account.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -140,6 +138,36 @@ public class UtenteGatewayDb {
             String idRischio = resultSet.getString("idRischio");
             String certificazioneEsterna = resultSet.getString("CertificazioneEsterna");
             risultati.add(new CreditoFormativo(idCreditoFormativo, idRischio, certificazioneEsterna));
+        }
+        return risultati;
+    }
+
+    public ArrayList<RichiestaLuogo> GetRichiesteLuogo(int idUtente) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM Richiesta r INNER JOIN RichiestaLuogo rl on rl.idRichiesta=r.idRichiesta WHERE idUtente='idUtente'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        ArrayList<RichiestaLuogo> risultati=new ArrayList<RichiestaLuogo>();
+        while (resultSet.next()) {
+            //int idRichiesta = resultSet.getInt("idRichiesta");
+            int stato = resultSet.getInt("stato");
+            int idRiferimento = resultSet.getInt("idRiferimento");
+            //String tipo = resultSet.getString("tipo");
+            risultati.add(new RichiestaLuogo(idUtente, stato, idRiferimento));
+        }
+        return risultati;
+    }
+
+    public ArrayList<RichiestaDipartimento> GetRichiesteDipartimento(int idUtente) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM Richiesta r INNER JOIN RichiestaDipartimento rd on rd.idRichiesta=r.idRichiesta WHERE idUtente='idUtente'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        ArrayList<RichiestaDipartimento> risultati=new ArrayList<RichiestaDipartimento>();
+        while (resultSet.next()) {
+            //int idRichiesta = resultSet.getInt("idRichiesta");
+            int stato = resultSet.getInt("stato");
+            int idRiferimento = resultSet.getInt("idRiferimento");
+            //String tipo = resultSet.getString("tipo");
+            risultati.add(new RichiestaDipartimento(idUtente, stato, idRiferimento));
         }
         return risultati;
     }
