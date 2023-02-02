@@ -72,9 +72,9 @@ public class GatewayUtente {
         UtenteGatewayDb uGateway=new UtenteGatewayDb();
         uGateway.sostieniCreditoFormativo(idUtente, codice, null);
     }*/
-    /* TODO: capire come gestire utilizzo dei metodi sottostanti per utemti specifici*/
+    /* TODO: capire come gestire utilizzo dei metodi sottostanti per utenti specifici*/
     /*FIXME: get cfu sostenuti per rischi generici e specifici*/
-    public ArrayList<String> GetCFUSostenuti(int idUtente) throws SQLException {
+    public ArrayList<String> getCFUSostenuti(int idUtente) throws SQLException {
         UtenteGatewayDb uGateway=new UtenteGatewayDb();
         ArrayList<CreditoFormativo> cfus=uGateway.GetCFUSostenuti(idUtente);
         ArrayList<String> cfusString=new ArrayList<>();
@@ -82,7 +82,7 @@ public class GatewayUtente {
         return cfusString;
     }
     /* get richieste luogo e dipartimento*/
-    public ArrayList<String> GetRichiesteLuogo(int idUtente) throws SQLException {
+    public ArrayList<String> getRichiesteLuogo(int idUtente) throws SQLException {
         UtenteGatewayDb uGateway=new UtenteGatewayDb();
         ArrayList<RichiestaLuogo> richiesteLuogo=uGateway.GetRichiesteLuogo(idUtente);
         ArrayList<String> richiesteLuogoString=new ArrayList<>();
@@ -90,7 +90,7 @@ public class GatewayUtente {
         return richiesteLuogoString;
     }
 
-    public ArrayList<String> GetRichiesteDipartimento(int idUtente) throws SQLException {
+    public ArrayList<String> getRichiesteDipartimento(int idUtente) throws SQLException {
         UtenteGatewayDb uGateway=new UtenteGatewayDb();
         ArrayList<RichiestaDipartimento> richiesteDipartimento=uGateway.GetRichiesteDipartimento(idUtente);
         ArrayList<String> richiesteDipartimentoString=new ArrayList<>();

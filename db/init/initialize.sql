@@ -45,8 +45,8 @@ DROP TABLE IF EXISTS CreditoFormativo;
 
 CREATE TABLE IF NOT EXISTS CreditoFormativo (
   idCreditoFormativo INT PRIMARY KEY AUTO_INCREMENT,
-  idRischio VARCHAR(45) NOT NULL
-  /*CertificazioneEsterna VARCHAR(45) NULL*/
+  idRischio VARCHAR(45) NOT NULL,
+  CertificazioneEsterna VARCHAR(45) NULL
 );
 
 DROP TABLE IF EXISTS CreditoFormativoSostenuto;
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS Richiesta;
 
 CREATE TABLE IF NOT EXISTS Richiesta (
   idRichiesta INT PRIMARY KEY AUTO_INCREMENT,
-  stato VARCHAR(45) NOT NULL,
+  stato INT NOT NULL,
   idUtente INT NOT NULL,
   idRiferimento INT NOT NULL,
   tipo ENUM('luogo', 'dipartimento') NOT NULL,

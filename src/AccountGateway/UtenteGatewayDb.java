@@ -30,7 +30,7 @@ public class UtenteGatewayDb {
     public void InsertUtenteInterno(int matricola,  String password,String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
         stmt=con.createStatement();
         String idUtente = null;
-        String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"'";
+        String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='interno' AND password='"+password+"'";
         ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
         if(resultSet.next()==false) {
             InsertUtente(password,nome,cognome,sesso,datanascita,dipartimento,"interno");
@@ -47,17 +47,17 @@ public class UtenteGatewayDb {
     }
     public void InsertUtenteEsterno(int idEsterno,String password, String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
         stmt=con.createStatement();
-        String idUtente = null;
-        String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"'";
+        int idUtente = 0;
+        String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='esterno' AND password='"+password+"'";
         ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
         if(resultSet.next()==false) {
-            InsertUtente(nome,password,cognome,sesso,datanascita,dipartimento,"esterno");
+            InsertUtente(password,nome,cognome,sesso,datanascita,dipartimento,"esterno");
             ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
             resultSet2.next();
-            idUtente = resultSet2.getString("idUtente");
+            idUtente = resultSet2.getInt("idUtente");
         }
         else{
-            idUtente = resultSet.getString("idUtente");
+            idUtente = resultSet.getInt("idUtente");
         }
         String insertSql = "INSERT INTO UtenteEsterno(idUtente, idEsterno)"
                 + " VALUES('"+idUtente+"', '"+idEsterno+"')";
@@ -85,7 +85,7 @@ public class UtenteGatewayDb {
     public void InsertRichiesta(int idUtente, int idRiferimento, String tipo) throws SQLException {
         stmt=con.createStatement();
         String insertSql = "INSERT INTO Richiesta(stato, idUtente, idRiferimento, tipo)"
-                + " VALUES('"+"proposta"+"',"+idUtente+","+idRiferimento+",'"+tipo+"')";
+                + " VALUES('"+0+"',"+idUtente+","+idRiferimento+",'"+tipo+"')";
         stmt.executeUpdate(insertSql);
     }
 
@@ -128,9 +128,26 @@ public class UtenteGatewayDb {
         return utente;
     }
 
+    public int getIdUtente(int riferimento, boolean interno) throws SQLException {
+        stmt=con.createStatement();
+        String getSql;
+        if(interno==true){
+            getSql="SELECT idUtente FROM UtenteInterno WHERE matricola="+riferimento;
+        }
+        else {
+            getSql="SELECT idUtente FROM UtenteEsterno WHERE idEsterno="+riferimento;
+        }
+        int idUtente=0;
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        while (resultSet.next()) {
+            idUtente = resultSet.getInt("idUtente");
+        }
+        return idUtente;
+    }
+
     public ArrayList<CreditoFormativo> GetCFUSostenuti(int idUtente) throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM CreditoFormativoSostenuto cfs INNER JOIN CreditoFormativo cf on cf.idCreditoFormativo=cfs.idCreditoFormativo WHERE idUtente='idUtente'";
+        String getSql="SELECT * FROM CreditoFormativoSostenuto cfs INNER JOIN CreditoFormativo cf on cf.idCreditoFormativo=cfs.idCreditoFormativo WHERE idUtente="+idUtente;
         ResultSet resultSet = stmt.executeQuery(getSql);
         ArrayList<CreditoFormativo> risultati=new ArrayList<CreditoFormativo>();
         while (resultSet.next()) {
@@ -144,7 +161,7 @@ public class UtenteGatewayDb {
 
     public ArrayList<RichiestaLuogo> GetRichiesteLuogo(int idUtente) throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM Richiesta r INNER JOIN RichiestaLuogo rl on rl.idRichiesta=r.idRichiesta WHERE idUtente='idUtente'";
+        String getSql="SELECT * FROM Richiesta r WHERE r.idUtente="+idUtente+" AND r.tipo='luogo'";
         ResultSet resultSet = stmt.executeQuery(getSql);
         ArrayList<RichiestaLuogo> risultati=new ArrayList<RichiestaLuogo>();
         while (resultSet.next()) {
@@ -159,7 +176,7 @@ public class UtenteGatewayDb {
 
     public ArrayList<RichiestaDipartimento> GetRichiesteDipartimento(int idUtente) throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM Richiesta r INNER JOIN RichiestaDipartimento rd on rd.idRichiesta=r.idRichiesta WHERE idUtente='idUtente'";
+        String getSql="SELECT * FROM Richiesta r WHERE r.idUtente="+idUtente+" AND r.tipo='dipartimento'";
         ResultSet resultSet = stmt.executeQuery(getSql);
         ArrayList<RichiestaDipartimento> risultati=new ArrayList<RichiestaDipartimento>();
         while (resultSet.next()) {
@@ -172,9 +189,9 @@ public class UtenteGatewayDb {
         return risultati;
     }
 
-    public void updateUtenteInterno(int matricola, String nome, String cognome, String sesso, String datanascita, String dipartimento, String tipologia) throws SQLException {
+    public void updateUtenteInterno(int matricola, String nome, String cognome, String sesso, String datanascita, String dipartimento, String tipo) throws SQLException {
         stmt=con.createStatement();
-        String updateSql = "UPDATE UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente SET nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"', tipologia='"+tipologia+"' WHERE matricola='"+matricola+"'";
+        String updateSql = "UPDATE UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente SET nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"', tipo='"+tipo+"' WHERE matricola='"+matricola+"'";
         stmt.executeUpdate(updateSql);
     }
 

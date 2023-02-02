@@ -11,10 +11,10 @@ public class RichiestaDipartimento extends Richiesta {
         super(idUtente, statoRichiesta);
         this.idDipartimento = idDipartimento;
     }
-    public void insertRichiesta() throws SQLException {
+    public void insertRichiesta(int idDipartimento) throws SQLException {
         super.insertRichiesta(idDipartimento, "dipartimento");
     }
-    public void setIdDipartimento(int idDipartimento) {
+   /* public void setIdDipartimento(int idDipartimento) {
         this.idDipartimento = idDipartimento;
-    }
+    }*/
 }
