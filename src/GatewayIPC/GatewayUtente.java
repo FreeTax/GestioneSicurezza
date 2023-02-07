@@ -24,9 +24,9 @@ public class GatewayUtente {
         u.insertUtente();
     }
 
-    public void insertCreditoFormativo(int codice) throws SQLException {
-        cf=new CreditoFormativo(codice, "0","");
-        cf.insertCreditoFormativo();
+    public void insertCreditoFormativo(int codice, String idRischio) throws SQLException {
+        cf=new CreditoFormativo(codice, idRischio,"");
+        cf.insertCreditoFormativo(idRischio);
     }
 
 

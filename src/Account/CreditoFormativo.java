@@ -19,13 +19,13 @@ public class CreditoFormativo {
         uGateway=new UtenteGatewayDb();
     }
 
-    public void insertCreditoFormativo() throws SQLException {
-        String idRischio="FE123"; //rischio.getCodice()
+    public void insertCreditoFormativo(String idRischio) throws SQLException {
+        //String idRischio="FE123"; //rischio.getCodice()
         uGateway.insertCreditoFormativo(idRischio);
     }
 
     public String toString() {
-        return "CreditoFormativo [codice=" + codice + ", idRischio=" + idRischio + ", certificaEsterna=" + certificaEsterna + "]";
+        return "codice=" + codice + ", idRischio=" + idRischio + ", certificaEsterna=" + certificaEsterna ;
     }
 
 }

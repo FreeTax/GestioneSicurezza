@@ -40,7 +40,7 @@ class GatewayUtenteTest {
     @Test
     @Order(3)
     void insertCreditoFormativo() throws SQLException {
-        gU.insertCreditoFormativo(1);
+        gU.insertCreditoFormativo(1, "FE123");
     }
 
     @Test
@@ -106,6 +106,7 @@ class GatewayUtenteTest {
         int idUtente=uDb.getIdUtente(1234567,true);
         ArrayList<String> creditisostenuti=gU.getCFUSostenuti(idUtente);
         assert creditisostenuti.size()==1;
+        assertArrayEquals(creditisostenuti.toArray(),new String[]{"codice=1, idRischio=FE123, certificaEsterna=http:certificazione"});
     }
 
     @Test
@@ -114,6 +115,7 @@ class GatewayUtenteTest {
         int idUtente=uDb.getIdUtente(1234567,true);
         ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(idUtente);
         assert richiesteluogo.size()==1;
+        assertArrayEquals(richiesteluogo.toArray(),new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
     }
 
     @Test
@@ -122,5 +124,6 @@ class GatewayUtenteTest {
         int idUtente=uDb.getIdUtente(19029420,false);
         ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(idUtente);
         assert richiestedipartimento.size()==1;
+        assertArrayEquals(richiestedipartimento.toArray(),new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
     }
 }
