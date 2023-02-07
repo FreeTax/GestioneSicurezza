@@ -76,5 +76,7 @@ public class Visita {
     public void setIdType(int idType) {
         this.idType = idType;
     }
+
+
 }
 

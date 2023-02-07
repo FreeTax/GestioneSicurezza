@@ -24,6 +24,24 @@ public class SchedaVisita {
         this.vGateway=new VisiteGatewayDb();
     }
 
+    public SchedaVisita(int idUtente) throws SQLException {
+        this.vGateway=new VisiteGatewayDb();
+        SchedaVisita v= vGateway.getSchedaVisistaFromUserID(idUtente);
+        this.idUtente=idUtente;
+        if(v!=null) {
+            this.codice = v.getId();
+            this.elencoPatologie = v.getElencoPatologie();
+            this.visiteEffettuate = v.getVisiteEffettuate();
+            this.visiteDaSostentere = v.getVisiteDaSostentere();
+        }
+        else { //i dont like to let ScheduleVisita with null values on codice if this is not save on db yet. Talk whit marco
+            this.elencoPatologie = new String[0];
+            this.visiteEffettuate = new ArrayList<Visita>();
+            this.visiteDaSostentere = new ArrayList<Visita>();
+        }
+    }
+
+
     public void syncVisiteEffettuate() throws SQLException {
         this.visiteEffettuate=vGateway.getVisiteEffettuate(codice);
     }
@@ -47,4 +65,42 @@ public class SchedaVisita {
         visiteDaSostentere.remove(visita);
         vGateway.updateVisita(visita.getId(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType());
     }
+
+    public void setElencoPatologie(String[] elencoPatologie) {
+        this.elencoPatologie = elencoPatologie;
+    }
+
+    public void setVisiteEffettuate(ArrayList<Visita> visiteEffettuate) {
+        this.visiteEffettuate = visiteEffettuate;
+    }
+
+    public void setVisiteDaSostentere(ArrayList<Visita> visiteDaSostentere) {
+        this.visiteDaSostentere = visiteDaSostentere;
+    }
+
+    public int getId() {
+        return codice;
+    }
+
+    public String[] getElencoPatologie() {
+        return elencoPatologie;
+    }
+
+    public int getIdUtente() {
+        return idUtente;
+    }
+
+
+    public ArrayList<Visita> getVisiteDaSostentere() {
+        return visiteDaSostentere;
+    }
+
+    public ArrayList<Visita> getVisiteEffettuate() {
+        return visiteEffettuate;
+    }
+
+    public void saveNewSchedaVisita() throws SQLException {
+        vGateway.InsertSchedaVisite(this.idUtente);
+    }
+
 }
