@@ -1,6 +1,7 @@
 package CorsiSicurezzaGateway;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class CorsiSicurezzaGatewayDb {
     private Connection con;
@@ -22,7 +23,7 @@ public class CorsiSicurezzaGatewayDb {
         stmt.executeUpdate(insertSql);
     }
 
-    public void InsertCorso(String nome, String descrizione, Date inizio, Date fine, int idCorsoType) throws SQLException {
+    public void InsertCorso(String nome, String descrizione, int idCorsoType, LocalDate inizio, LocalDate fine) throws SQLException {
         stmt=con.createStatement();
         String insertSql = "INSERT INTO Corso(nome, descrizione, inizio, fine, idCorsoType)"
                 + " VALUES('"+nome+"', '"+descrizione+"','"+inizio+"','"+fine+"',"+idCorsoType+")";
