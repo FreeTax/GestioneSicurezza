@@ -17,4 +17,9 @@ public class RichiestaDipartimento extends Richiesta {
    /* public void setIdDipartimento(int idDipartimento) {
         this.idDipartimento = idDipartimento;
     }*/
+
+    @Override
+    public String toString() {
+        return super.toString()+", idDipartimento=" + idDipartimento;
+    }
 }

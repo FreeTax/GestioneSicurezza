@@ -15,4 +15,9 @@ public class RichiestaLuogo extends Richiesta {
     public void insertRichiesta(int idLuogo) throws SQLException {
         super.insertRichiesta(idLuogo, "luogo");
     }
+
+    @Override
+    public String toString() {
+        return super.toString()+", idLuogo=" + idLuogo;
+    }
 }
