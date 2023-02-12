@@ -26,13 +26,14 @@ public class SchedaVisita {
 
     public SchedaVisita(int idUtente) throws SQLException {
         this.vGateway=new VisiteGatewayDb();
-        SchedaVisita v= vGateway.getSchedaVisistaFromUserID(idUtente);
+        SchedaVisita sv= vGateway.getSchedaVisistaFromUserID(idUtente);
+
         this.idUtente=idUtente;
-        if(v!=null) {
-            this.codice = v.getId();
-            this.elencoPatologie = v.getElencoPatologie();
-            this.visiteEffettuate = v.getVisiteEffettuate();
-            this.visiteDaSostentere = v.getVisiteDaSostentere();
+        if(sv!=null) {
+            this.codice = sv.getId();
+            this.elencoPatologie = sv.getElencoPatologie();
+            this.visiteEffettuate = sv.getVisiteEffettuate();
+            this.visiteDaSostentere = sv.getVisiteDaSostentere();
         }
         else { //i dont like to let ScheduleVisita with null values on codice if this is not save on db yet. Talk whit marco
             this.elencoPatologie = new String[0];
@@ -40,8 +41,6 @@ public class SchedaVisita {
             this.visiteDaSostentere = new ArrayList<Visita>();
         }
     }
-
-
     public void syncVisiteEffettuate() throws SQLException {
         this.visiteEffettuate=vGateway.getVisiteEffettuate(codice);
     }
@@ -52,7 +51,7 @@ public class SchedaVisita {
 
     public void insertVisitaDaSostentere(Visita visita) throws SQLException {
        visiteDaSostentere.add(visita);
-       vGateway.insertVisita(visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType(), this.codice);
+       vGateway.insertVisita(visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(),  this.codice, visita.getIdType());
     }
 
     public void insertVisitaEffettuata(Visita visita) throws SQLException {

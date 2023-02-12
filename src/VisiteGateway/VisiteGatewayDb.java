@@ -48,6 +48,7 @@ public class VisiteGatewayDb {
         stmt=con.createStatement();
         String insertSql = "INSERT INTO Visita(idMedico,descrizione,data,stato,esito,idSchedaVisita,idVisitaType)"
                 + " VALUES('"+idMedico+"', '"+descrizione+"', '"+data+"', '"+stato+"', '"+esito+"',"+idSchedaVisita+","+idVisitaType+")";
+        System.out.println(insertSql);
         stmt.executeUpdate(insertSql);
     }
 
@@ -138,7 +139,18 @@ public class VisiteGatewayDb {
             sv.setElencoPatologie(elencoPatologie(sv.getId()));
             sv.setVisiteEffettuate(getVisiteEffettuate(sv.getId()));
             sv.setVisiteDaSostentere(getVisiteDaSostenere(sv.getId()));
+            return sv;
         }
         return null;
     }
+
+    public void addVisitaType(String nome, String descrizione, String frequenza) throws SQLException {
+        if(stmt==null){
+            stmt=con.createStatement();
+        }
+        String insertSql = "INSERT INTO VisitaType(nome,descrizione, frequenza)"
+                + " VALUES('"+nome+"', '"+descrizione+"', '"+frequenza+"')";
+        stmt.executeUpdate(insertSql);
+    }
+
 }
