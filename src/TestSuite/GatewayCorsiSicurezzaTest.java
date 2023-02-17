@@ -1,5 +1,6 @@
-package GatewayIPC;
+package TestSuite;
 
+import GatewayIPC.GatewayCorsiSicurezza;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

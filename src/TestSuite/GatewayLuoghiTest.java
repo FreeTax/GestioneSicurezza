@@ -1,23 +1,19 @@
-package GatewayIPC;
+package TestSuite;
 
 import Account.UtenteInterno;
-import Luoghi.Dipartimento;
+import GatewayIPC.GatewayLuoghi;
 import Luoghi.Luogo;
 import LuoghiGatewayDb.LuoghiGatewayDB;
-import Account.Utente;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Order;
-import org.junit.Assert.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GatewayLuoghiTest {
-    GatewayLuoghi gL=new GatewayLuoghi();    @Test
+    GatewayLuoghi gL=new GatewayLuoghi();
+    @Test
     @Order(1)
     public void addDipartimento() throws SQLException {
         gL.addDipartimento(1, "nomeDipartimento", 1);

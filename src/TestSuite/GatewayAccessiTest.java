@@ -1,10 +1,14 @@
-package GatewayIPC;
+package TestSuite;
+import GatewayIPC.GatewayAccessi;
+import GatewayIPC.GatewayUtente;
 import org.junit.Test;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.sql.SQLException;
 
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GatewayAccessiTest {
     GatewayAccessi gatewayAccessi;
 
@@ -13,7 +17,7 @@ public class GatewayAccessiTest {
     public void insertAccessoDipartimento() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         GatewayUtente gu = new GatewayUtente();
-        gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "1", "1");
+        gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1");
         gatewayAccessi.inserAccessoDipartimento(1, 1);
     }
 

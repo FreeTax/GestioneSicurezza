@@ -8,19 +8,31 @@ import java.util.ArrayList;
 
 public class GatewayVisite {
     public void aggiungiVisistaUtente(int idUtente, int codiceVisita, String dottore, String descrizione, Timestamp data, String stato, int idType) throws SQLException {
-        SchedaVisita sv= new SchedaVisita(idUtente);
-        Visita v=new Visita(codiceVisita, dottore, descrizione, data, stato, null, idType);
-        sv.insertVisitaDaSostentere(v);
-
+        try{
+            SchedaVisita sv= new SchedaVisita(idUtente);
+            Visita v=new Visita(codiceVisita, dottore, descrizione, data, stato, null, idType);
+            sv.insertVisitaDaSostentere(v);
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public void aggiungiNuovaSchedaVisita(int idUtente) throws SQLException {
-        SchedaVisita sv= new SchedaVisita(idUtente);
-        sv.saveNewSchedaVisita();
+        try{
+            SchedaVisita sv= new SchedaVisita(idUtente);
+            sv.saveNewSchedaVisita();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public ArrayList<Visita> getVisiteSostenute(int idUtente) throws SQLException {
-        SchedaVisita sv= new SchedaVisita(idUtente);
-        return sv.getVisiteEffettuate();
+        try{
+            SchedaVisita sv= new SchedaVisita(idUtente);
+            return sv.getVisiteEffettuate();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
     }
 }

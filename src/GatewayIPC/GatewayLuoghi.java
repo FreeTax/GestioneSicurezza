@@ -12,13 +12,22 @@ import java.util.ArrayList;
 public class GatewayLuoghi {
 
     public void addLuogo(int codice, String nome, String tipo, int referente, int dipartimento) throws SQLException {
-        Luogo l = new Luogo(codice, nome,  tipo,  referente,  dipartimento);
-        l.saveToDB();
+        try{
+            Luogo l = new Luogo(codice, nome,  tipo,  referente,  dipartimento);
+            l.saveToDB();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
     }
 
     public void addDipartimento(int codice, String nome, int responsabile) throws SQLException {
-        Dipartimento d=new Dipartimento(codice, nome, responsabile);
-        d.saveToDB();
+        try{
+            Dipartimento d = new Dipartimento(codice, nome, responsabile);
+            d.saveToDB();
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public UtenteInterno getResponsabileLuogo(Luogo l) throws SQLException {
@@ -39,9 +48,5 @@ public class GatewayLuoghi {
         catch (SQLException e){
             throw new SQLException("Responsabile non trovato");
         }
-    }
-
-    public void getResponsabileDipartimento() {
-
     }
 }

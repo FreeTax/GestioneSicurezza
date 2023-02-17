@@ -7,21 +7,37 @@ import java.sql.SQLException;
 
 public class GatewayRischi {
     private Rischio r;
-    public void insertRischioGenerico(int codice, String nome, String descrizione, String tipologia) throws SQLException, SQLException {
-        r=new RischioGenerico(codice, nome, descrizione, tipologia);
-        r.saveToDB();
+    public void insertRischioGenerico(int codice, String nome, String descrizione, String tipologia) throws SQLException {
+        try{
+            r=new RischioGenerico(codice, nome, descrizione, tipologia);
+            r.saveToDB();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
     public void insertRischioSpecifico(int codice, String nome, String descrizione, String tipologia) throws SQLException {
-        r=new RischioSpecifico(codice, nome, descrizione, tipologia);
-        r.saveToDB();
+        try{
+            r=new RischioSpecifico(codice, nome, descrizione, tipologia);
+            r.saveToDB();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
     public RischioGenerico getRischioGenerico(int codice) throws SQLException {
-        r=new RischioGenerico(codice);
-        return (RischioGenerico) r;
+        try {
+            r = new RischioGenerico(codice);
+            return (RischioGenerico) r;
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
     public RischioSpecifico getRischioSpecifico(int codice) throws SQLException {
-        r=new RischioSpecifico(codice);
-        return (RischioSpecifico) r;
+        try{
+            r = new RischioSpecifico(codice);
+            return (RischioSpecifico) r;
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
 }

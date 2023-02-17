@@ -48,7 +48,6 @@ public class VisiteGatewayDb {
         stmt=con.createStatement();
         String insertSql = "INSERT INTO Visita(idMedico,descrizione,data,stato,esito,idSchedaVisita,idVisitaType)"
                 + " VALUES('"+idMedico+"', '"+descrizione+"', '"+data+"', '"+stato+"', '"+esito+"',"+idSchedaVisita+","+idVisitaType+")";
-        System.out.println(insertSql);
         stmt.executeUpdate(insertSql);
     }
 

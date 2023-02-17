@@ -23,34 +23,59 @@ public class GatewayAccessi {
     }
 
     public void inserAccessoDipartimento(int utente, int dipartimento) throws SQLException{
-        Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
-        a.insertAccesso();
+        try{
+            Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
+            a.insertAccesso();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+
     }
 
     public void insertAccessoLuogo(int utente, int luogo) throws SQLException{
+        try{
+            Accesso a = new AccessoLuogoAbilitato(utente, luogo);
+            a.insertAccesso();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
 
-        Accesso a = new AccessoLuogoAbilitato(utente, luogo);
-        a.insertAccesso();
     }
 
     public void updateAccessoDipartimento(int utente, int dipartimento) throws SQLException{
-        Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
-        a.updateAccesso();
+        try{
+            Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
+            a.updateAccesso();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public void updateAccessoLuogo(int utente, int dipartimento) throws SQLException{
-        Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
-        a.updateAccesso();
+        try{
+            Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
+            a.updateAccesso();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public void deleteAccessoDipartimento(int utente, int dipartimento) throws SQLException{
-        Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
-        a.deleteAccesso();
+        try{
+            Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
+            a.deleteAccesso();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public void deleteAccessoLuogo(int utente, int dipartimento) throws SQLException{
-        Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
-        a.deleteAccesso();
+        try{
+            Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
+            a.deleteAccesso();
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
 

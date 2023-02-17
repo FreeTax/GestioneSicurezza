@@ -12,7 +12,7 @@ public class UtenteInterno extends Utente{
     private String tipo;
 
     public UtenteInterno(int codice, String password,String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int matricola, String tipo/*, SchedaVisita visite*/) throws SQLException {
-        super(codice, password, nome, cognome, sesso, dipartimento, dataNascita/*, visite*/);
+        super(codice, password, nome, cognome, sesso, dipartimento, dataNascita);
         this.matricola = matricola;
         this.tipo = tipo;
     }
