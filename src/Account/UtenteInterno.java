@@ -35,7 +35,7 @@ public class UtenteInterno extends Utente{
     }
 
     public void insertUtente() throws SQLException {
-        uGateway.InsertUtenteInterno(matricola,password,nome,cognome,sesso,dataNascita,dipartimento);
+        uGateway.InsertUtenteInterno(matricola,password,nome,cognome,sesso,dataNascita,dipartimento,tipo);
     }
 
     public int getMatricola() {

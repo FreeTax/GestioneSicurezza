@@ -13,10 +13,10 @@ public class GatewayUtente {
     private Utente u;
     private CreditoFormativo cf;
 
-    public void insertUtenteInterno(int matricola,String password, String nome, String cognome,String sesso,String datanascita,String Dipartimento) throws SQLException {
+    public void insertUtenteInterno(int matricola,String password, String nome, String cognome,String sesso,String datanascita,String Dipartimento,String tipo) throws SQLException {
         try{
             Date date = Date.valueOf(datanascita);
-            u=new UtenteInterno(matricola, password, nome,  cognome, sesso,  Dipartimento, date,matricola,"base" );
+            u=new UtenteInterno(matricola, password, nome,  cognome, sesso,  Dipartimento, date,matricola,tipo);
             u.insertUtente();
         }catch (Exception e){
             System.out.println(e);
@@ -115,13 +115,18 @@ public class GatewayUtente {
     }*/
     /* TODO: capire come gestire utilizzo dei metodi sottostanti per utenti specifici*/
     /*FIXME: get cfu sostenuti per rischi generici e specifici*/
-    public ArrayList<String> getCFUSostenuti(int idUtente) throws SQLException {
+    public ArrayList<String> getCFUSostenuti(int idAutorizzato ,int idUtente) throws SQLException {
         try{
             UtenteGatewayDb uGateway=new UtenteGatewayDb();
-            ArrayList<CreditoFormativo> cfus=uGateway.GetCFUSostenuti(idUtente);
-            ArrayList<String> cfusString=new ArrayList<>();
-            cfus.forEach(cf->cfusString.add(cf.toString()));
-            return cfusString;
+            if(uGateway.checkSupervisore(idAutorizzato) || uGateway.checkAvanzato(idAutorizzato)){
+                ArrayList<CreditoFormativo> cfus=uGateway.GetCFUSostenuti(idUtente);
+                ArrayList<String> cfusString=new ArrayList<>();
+                cfus.forEach(cf->cfusString.add(cf.toString()));
+                return cfusString;
+            }
+            else{
+                throw new SQLException("Utente non autorizzato");
+            }
         }catch (Exception e) {
             throw new SQLException(e.getMessage());
         }
@@ -130,10 +135,15 @@ public class GatewayUtente {
     public ArrayList<String> getRichiesteLuogo(int idUtente) throws SQLException {
         try{
             UtenteGatewayDb uGateway=new UtenteGatewayDb();
-            ArrayList<RichiestaLuogo> richiesteLuogo=uGateway.GetRichiesteLuogo(idUtente);
-            ArrayList<String> richiesteLuogoString=new ArrayList<>();
-            richiesteLuogo.forEach(rl->richiesteLuogoString.add(rl.toString()));
-            return richiesteLuogoString;
+            if(uGateway.checkSupervisore(idUtente)){
+                ArrayList<RichiestaLuogo> richiesteLuogo=uGateway.GetRichiesteLuogo();
+                ArrayList<String> richiesteLuogoString=new ArrayList<>();
+                richiesteLuogo.forEach(rl->richiesteLuogoString.add(rl.toString()));
+                return richiesteLuogoString;
+            }
+            else{
+                throw new SQLException("Utente non autorizzato");
+            }
         }catch (Exception e) {
             throw new SQLException(e.getMessage());
         }
@@ -142,10 +152,15 @@ public class GatewayUtente {
     public ArrayList<String> getRichiesteDipartimento(int idUtente) throws SQLException {
         try{
             UtenteGatewayDb uGateway=new UtenteGatewayDb();
-            ArrayList<RichiestaDipartimento> richiesteDipartimento=uGateway.GetRichiesteDipartimento(idUtente);
-            ArrayList<String> richiesteDipartimentoString=new ArrayList<>();
-            richiesteDipartimento.forEach(rd->richiesteDipartimentoString.add(rd.toString()));
-            return richiesteDipartimentoString;
+            if(uGateway.checkAvanzato(idUtente)){
+                ArrayList<RichiestaDipartimento> richiesteDipartimento=uGateway.GetRichiesteDipartimento();
+                ArrayList<String> richiesteDipartimentoString=new ArrayList<>();
+                richiesteDipartimento.forEach(rd->richiesteDipartimentoString.add(rd.toString()));
+                return richiesteDipartimentoString;
+            }
+            else{
+                throw new SQLException("Utente non autorizzato");
+            }
         }catch (Exception e) {
             throw new SQLException(e.getMessage());
         }

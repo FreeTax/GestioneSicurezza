@@ -27,7 +27,7 @@ public class UtenteGatewayDb {
                 + " VALUES('"+password+"', '"+nome+"', '"+cognome+"', '"+sesso+"','"+datanascita.toString()+"','"+dipartimento+"','"+tipologia+"')";
         stmt.executeUpdate(insertSql);
     }
-    public void InsertUtenteInterno(int matricola,  String password,String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
+    public void InsertUtenteInterno(int matricola, String password,String nome,String cognome, String sesso, Date datanascita, String dipartimento, String tipo) throws SQLException {
         stmt=con.createStatement();
         String idUtente = null;
         String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='interno' AND password='"+password+"'";
@@ -39,10 +39,9 @@ public class UtenteGatewayDb {
             idUtente = resultSet2.getString("idUtente");
         }
         else{
-            idUtente = resultSet.getString("idUtente");
+            throw new SQLException("Utente già presente");
         }
-        String insertSql = "INSERT INTO UtenteInterno(idUtente, matricola,tipo)"
-                + " VALUES('"+idUtente+"', '"+matricola+"', '"+"base"+"')";
+        String insertSql = "INSERT INTO UtenteInterno(idUtente, matricola,tipo)" + " VALUES('"+idUtente+"', '"+matricola+"', '"+tipo+"')";
         stmt.executeUpdate(insertSql);
     }
     public void InsertUtenteEsterno(int idEsterno,String password, String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
@@ -50,6 +49,7 @@ public class UtenteGatewayDb {
         int idUtente = 0;
         String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='esterno' AND password='"+password+"'";
         ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
+
         if(resultSet.next()==false) {
             InsertUtente(password,nome,cognome,sesso,datanascita,dipartimento,"esterno");
             ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
@@ -57,7 +57,7 @@ public class UtenteGatewayDb {
             idUtente = resultSet2.getInt("idUtente");
         }
         else{
-            idUtente = resultSet.getInt("idUtente");
+            throw new SQLException("Utente già presente");
         }
         String insertSql = "INSERT INTO UtenteEsterno(idUtente, idEsterno)"
                 + " VALUES('"+idUtente+"', '"+idEsterno+"')";
@@ -159,30 +159,32 @@ public class UtenteGatewayDb {
         return risultati;
     }
 
-    public ArrayList<RichiestaLuogo> GetRichiesteLuogo(int idUtente) throws SQLException {
+    public ArrayList<RichiestaLuogo> GetRichiesteLuogo() throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM Richiesta r WHERE r.idUtente="+idUtente+" AND r.tipo='luogo'";
+        String getSql="SELECT * FROM Richiesta r WHERE  r.tipo='luogo'";
         ResultSet resultSet = stmt.executeQuery(getSql);
         ArrayList<RichiestaLuogo> risultati=new ArrayList<RichiestaLuogo>();
         while (resultSet.next()) {
             //int idRichiesta = resultSet.getInt("idRichiesta");
             int stato = resultSet.getInt("stato");
             int idRiferimento = resultSet.getInt("idRiferimento");
+            int idUtente = resultSet.getInt("idUtente");
             //String tipo = resultSet.getString("tipo");
             risultati.add(new RichiestaLuogo(idUtente, stato, idRiferimento));
         }
         return risultati;
     }
 
-    public ArrayList<RichiestaDipartimento> GetRichiesteDipartimento(int idUtente) throws SQLException {
+    public ArrayList<RichiestaDipartimento> GetRichiesteDipartimento() throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM Richiesta r WHERE r.idUtente="+idUtente+" AND r.tipo='dipartimento'";
+        String getSql="SELECT * FROM Richiesta r WHERE r.tipo='dipartimento'";
         ResultSet resultSet = stmt.executeQuery(getSql);
         ArrayList<RichiestaDipartimento> risultati=new ArrayList<RichiestaDipartimento>();
         while (resultSet.next()) {
             //int idRichiesta = resultSet.getInt("idRichiesta");
             int stato = resultSet.getInt("stato");
             int idRiferimento = resultSet.getInt("idRiferimento");
+            int idUtente = resultSet.getInt("idUtente");
             //String tipo = resultSet.getString("tipo");
             risultati.add(new RichiestaDipartimento(idUtente, stato, idRiferimento));
         }
@@ -214,6 +216,26 @@ public class UtenteGatewayDb {
     public boolean loginEsterno(int idEsterno, String password) throws SQLException {
         stmt=con.createStatement();
         String getSql="SELECT * FROM UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente WHERE idEsterno='"+idEsterno+"' AND password='"+password+"'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        if(resultSet.next()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkSupervisore(int idUtente) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM UtenteInterno WHERE idUtente="+idUtente+" and tipo='supervisore'";
+        ResultSet resultSet = stmt.executeQuery(getSql);
+        if(resultSet.next()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkAvanzato(int idUtente) throws SQLException {
+        stmt=con.createStatement();
+        String getSql="SELECT * FROM UtenteInterno WHERE idUtente="+idUtente+" and tipo='avanzato'";
         ResultSet resultSet = stmt.executeQuery(getSql);
         if(resultSet.next()){
             return true;

@@ -16,7 +16,7 @@ public class GatewayAccessiTest {
     public void insertAccessoDipartimento() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         GatewayUtente gu = new GatewayUtente();
-        gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1");
+        gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
         gatewayAccessi.inserAccessoDipartimento(1, 1);
     }
 
