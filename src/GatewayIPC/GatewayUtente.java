@@ -14,9 +14,13 @@ public class GatewayUtente {
     private CreditoFormativo cf;
 
     public void insertUtenteInterno(int matricola,String password, String nome, String cognome,String sesso,String datanascita,String Dipartimento) throws SQLException {
-        Date date = Date.valueOf(datanascita);
-        u=new UtenteInterno(1, password, nome,  cognome, sesso,  Dipartimento, date,matricola,"base" );
-        u.insertUtente();
+        try{
+            Date date = Date.valueOf(datanascita);
+            u=new UtenteInterno(matricola, password, nome,  cognome, sesso,  Dipartimento, date,matricola,"base" );
+            u.insertUtente();
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
     public void insertUtenteEsterno(int idEsterno,String password, String nome, String cognome,String sesso,String datanascita,String Dipartimento) throws SQLException {
         Date date = Date.valueOf(datanascita);

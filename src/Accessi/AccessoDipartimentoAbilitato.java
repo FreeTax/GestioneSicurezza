@@ -5,7 +5,7 @@ import Luoghi.Dipartimento;
 
 import java.sql.SQLException;
 
-class AccessoDipartimentoAbilitato extends Accesso {
+public class AccessoDipartimentoAbilitato extends Accesso {
     private Utente utente;
     private Dipartimento dipartimento;
 

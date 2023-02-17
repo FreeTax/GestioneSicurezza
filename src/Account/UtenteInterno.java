@@ -22,16 +22,16 @@ public class UtenteInterno extends Utente{
     }
 
     public UtenteInterno(int matricola) throws SQLException {
-       UtenteInterno ui=uGateway.GetUtenteInterno(matricola);
-       this.matricola=ui.matricola;
-       this.codice=ui.codice;
-       this.password=ui.password;
-       this.nome=ui.nome;
-       this.cognome=ui.cognome;
-       this.sesso=ui.sesso;
-       this.dipartimento=ui.dipartimento;
-       this.dataNascita=ui.dataNascita;
-       this.tipo=ui.tipo;
+            UtenteInterno ui=uGateway.GetUtenteInterno(matricola);
+            this.matricola=ui.matricola;
+            this.codice=ui.codice;
+            this.password=ui.password;
+            this.nome=ui.nome;
+            this.cognome=ui.cognome;
+            this.sesso=ui.sesso;
+            this.dipartimento=ui.dipartimento;
+            this.dataNascita=ui.dataNascita;
+            this.tipo=ui.tipo;
     }
 
     public void insertUtente() throws SQLException {

@@ -34,6 +34,10 @@ public abstract class Utente{
         uGateway=new UtenteGatewayDb();
     }
 
+    public SchedaVisita getVisite() {
+        return visite;
+    }
+
     public Utente() throws SQLException {
         uGateway=new UtenteGatewayDb();
     }

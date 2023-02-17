@@ -5,7 +5,7 @@ import Luoghi.Luogo;
 
 import java.sql.SQLException;
 
-class AccessoLuogoAbilitato extends Accesso {
+public class AccessoLuogoAbilitato extends Accesso {
     private Utente utente;
     private Luogo luoghoAbilitato;
 

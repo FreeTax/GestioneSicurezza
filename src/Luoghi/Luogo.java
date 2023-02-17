@@ -33,14 +33,20 @@ public class Luogo{
         gateway= new LuoghiGatewayDB();
     }
 
+
     public Luogo(int codice) throws SQLException {
-        gateway= new LuoghiGatewayDB();
-        Luogo l=gateway.getLuogo(codice);
-        this.codice = l.getCodice();
-        this.nome = l.getNome();
-        this.tipo = l.getTipo();
-        this.referente = l.getReferente();
-        this.dipartimento = l.getDipartimento();
+        try {
+            gateway = new LuoghiGatewayDB();
+            Luogo l=gateway.getLuogo(codice);
+            this.codice = l.getCodice();
+            this.nome = l.getNome();
+            this.tipo = l.getTipo();
+            this.referente = l.getReferente();
+            this.dipartimento = l.getDipartimento();
+        }
+        catch (SQLException e){
+            throw new SQLException("Luogo non trovato");
+        }
     }
 
     public Luogo(Luogo l) throws SQLException {
@@ -53,7 +59,7 @@ public class Luogo{
         gateway= new LuoghiGatewayDB();
     }
 
-    public void insertLuogo() throws SQLException{
+    public void saveToDB() throws SQLException{
         gateway.insertLuogo(this);
     }
     public void updateLuogo() throws SQLException{
