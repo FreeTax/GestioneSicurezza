@@ -91,7 +91,7 @@ public class UtenteGatewayDb {
 
     public UtenteInterno GetUtenteInterno(int matricola) throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente WHERE matricola='matricola'";
+        String getSql="SELECT * FROM UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente WHERE matricola="+matricola;
         ResultSet resultSet = stmt.executeQuery(getSql);
         UtenteInterno utente=null;
         while (resultSet.next()) {
@@ -111,7 +111,7 @@ public class UtenteGatewayDb {
 
     public UtenteEsterno GetUtenteEsterno(int idEsterno) throws SQLException {
         stmt=con.createStatement();
-        String getSql="SELECT * FROM UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente WHERE idEsterno='idEsterno'";
+        String getSql="SELECT * FROM UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente WHERE idEsterno="+idEsterno;
         ResultSet resultSet = stmt.executeQuery(getSql);
         UtenteEsterno utente=null;
         while (resultSet.next()) {

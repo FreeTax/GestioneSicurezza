@@ -1,5 +1,6 @@
 package GatewayIPC;
 
+import Account.UtenteInterno;
 import Luoghi.Dipartimento;
 import Luoghi.Luogo;
 import LuoghiGatewayDb.LuoghiGatewayDB;
@@ -25,14 +26,14 @@ public class GatewayLuoghiTest {
     @Test
     @Order(2)
     public void addLuogo() throws SQLException {
-        gL.addLuogo(1,"nome", "aula", 1, 1);
+        gL.addLuogo(1,"nome", "aula", 1234567, 1);
     }
 
     @Test
     @Order(3)
     public void getResponsabileLuogo() throws SQLException {
         Luogo l = new Luogo(1);
-        Utente u=gL.getResponsabileLuogo(l);
+        UtenteInterno u =gL.getResponsabileLuogo(l);
         assertEquals(1, u.getCodice());
     }
 

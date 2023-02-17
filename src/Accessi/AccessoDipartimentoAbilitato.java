@@ -6,36 +6,36 @@ import Luoghi.Dipartimento;
 import java.sql.SQLException;
 
 public class AccessoDipartimentoAbilitato extends Accesso {
-    private Utente utente;
-    private Dipartimento dipartimento;
+    private int idUtente;
+    private int idDipartimento;
 
-    public AccessoDipartimentoAbilitato(Utente utente, Dipartimento dipartimento) throws SQLException {
+    public AccessoDipartimentoAbilitato(int utente, int dipartimento) throws SQLException {
         super(utente);
-        this.dipartimento = dipartimento;
+        this.idDipartimento = dipartimento;
     }
 
 
     @Override
     public void insertAccesso() throws SQLException {
-        gatewayDb.inserAccessoDipartimento(utente.getCodice(), dipartimento.getId());
+        gatewayDb.inserAccessoDipartimento(idUtente, idDipartimento);
     }
 
     @Override
     public void updateAccesso() throws SQLException {
-        gatewayDb.updateAccessoDipartimento(utente.getCodice(), dipartimento.getId());
+        gatewayDb.updateAccessoDipartimento(idUtente, idDipartimento);
 
     }
 
     @Override
     public void deleteAccesso() throws SQLException {
-        gatewayDb.deleteAccessoDipartimento(utente.getCodice(), dipartimento.getId());
+        gatewayDb.deleteAccessoDipartimento(idUtente, idDipartimento);
     }
 
-    public Utente getUtente() {
-        return utente;
+    public int getIdUtente() {
+        return idUtente;
     }
 
-    public Dipartimento dipartimento() {
-        return dipartimento;
+    public int getIdDipartimento() {
+        return idDipartimento;
     }
 }

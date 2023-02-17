@@ -1,31 +1,28 @@
 package Accessi;
 
-import Account.Utente;
-import Luoghi.Luogo;
-
 import java.sql.SQLException;
 
 public class AccessoLuogoAbilitato extends Accesso {
-    private Utente utente;
-    private Luogo luoghoAbilitato;
+    private int luogo;
+    private int utente;
 
-    public AccessoLuogoAbilitato(Utente utente, Luogo luoghoAbilitato) throws SQLException {
+    public AccessoLuogoAbilitato(int utente, int luogo) throws SQLException {
         super(utente);
-        this.luoghoAbilitato = luoghoAbilitato;
+        this.luogo = luogo;
     }
 
     @Override
     public void insertAccesso() throws SQLException {
-        gatewayDb.insertAccessoLuogo(utente.getCodice(), luoghoAbilitato.getCodice());
+        gatewayDb.insertAccessoLuogo(utente,luogo );
     }
 
     @Override
     public void updateAccesso() throws SQLException {
-        gatewayDb.updateAccessoLuogo(utente.getCodice(), luoghoAbilitato.getCodice());
+        gatewayDb.updateAccessoLuogo(utente, luogo);
     }
 
     @Override
     public void deleteAccesso() throws SQLException {
-        gatewayDb.deleteAccessoLuogo(utente.getCodice(), luoghoAbilitato.getCodice());
+        gatewayDb.deleteAccessoLuogo(utente, luogo);
     }
 }

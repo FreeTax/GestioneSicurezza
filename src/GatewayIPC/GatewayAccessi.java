@@ -22,69 +22,34 @@ public class GatewayAccessi {
         accessoLuogoAbilitatoGatewayDb = new AccessoLuogoAbilitatoGatewayDb();
     }
 
-    public void inserAccessoDipartimento(int utente, boolean ext, int dipartimento) throws SQLException{
-        Utente u;
-        if(ext)
-            u = new UtenteEsterno(utente);
-        else
-            u = new UtenteInterno(utente);
-        Dipartimento d= new Dipartimento(dipartimento);
-        Accesso a = new AccessoDipartimentoAbilitato(u, d);
+    public void inserAccessoDipartimento(int utente, int dipartimento) throws SQLException{
+        Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
         a.insertAccesso();
     }
 
-    public void insertAccessoLuogo(int utente, boolean ext, int luogo) throws SQLException{
-        Utente u;
-        if(ext)
-            u = new UtenteEsterno(utente);
-        else
-            u = new UtenteInterno(utente);
-        Luogo l= new Luogo(luogo);
-        Accesso a = new AccessoLuogoAbilitato(u, l);
+    public void insertAccessoLuogo(int utente, int luogo) throws SQLException{
+
+        Accesso a = new AccessoLuogoAbilitato(utente, luogo);
         a.insertAccesso();
     }
 
-    public void updateAccessoDipartimento(int utente, boolean ext, int dipartimento) throws SQLException{
-        Utente u;
-        if (ext)
-            u= new UtenteEsterno(utente);
-        else
-            u= new UtenteInterno(utente);
-        Dipartimento d= new Dipartimento(dipartimento);
-        Accesso a = new AccessoDipartimentoAbilitato(u, d);
+    public void updateAccessoDipartimento(int utente, int dipartimento) throws SQLException{
+        Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
         a.updateAccesso();
     }
 
-    public void updateAccessoLuogo(int utente, boolean ext, int luogo) throws SQLException{
-        Utente u;
-        if (ext)
-            u= new UtenteEsterno(utente);
-        else
-            u= new UtenteInterno(utente);
-        Luogo l= new Luogo(luogo);
-        Accesso a = new AccessoLuogoAbilitato(u, l);
+    public void updateAccessoLuogo(int utente, int dipartimento) throws SQLException{
+        Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
         a.updateAccesso();
     }
 
-    public void deleteAccessoDipartimento(int utente, boolean ext, int id) throws SQLException{
-        Utente u;
-        if (ext)
-            u= new UtenteEsterno(utente);
-        else
-            u= new UtenteInterno(utente);
-        Dipartimento d= new Dipartimento(id);
-        Accesso a = new AccessoDipartimentoAbilitato(u, d);
+    public void deleteAccessoDipartimento(int utente, int dipartimento) throws SQLException{
+        Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
         a.deleteAccesso();
     }
 
-    public void deleteAccessoLuogo(int utente, boolean ext, int id) throws SQLException{
-        Utente u;
-        if (ext)
-            u= new UtenteEsterno(utente);
-        else
-            u= new UtenteInterno(utente);
-        Luogo l= new Luogo(id);
-        Accesso a = new AccessoLuogoAbilitato(u, l);
+    public void deleteAccessoLuogo(int utente, int dipartimento) throws SQLException{
+        Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
         a.deleteAccesso();
     }
 

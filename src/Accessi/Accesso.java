@@ -1,17 +1,14 @@
 package Accessi;
 import AccessiGatewayDb.AccessoLuogoAbilitatoGatewayDb;
-import Account.Utente;
-import Luoghi.Dipartimento;
-import Luoghi.Luogo;
 
 import java.sql.SQLException;
 
 public abstract class Accesso {
-    private Utente utente;
+    private int idUtente;
     protected AccessoLuogoAbilitatoGatewayDb gatewayDb;
 
-    protected Accesso(Utente utente) throws SQLException {
-        this.utente = utente;
+    protected Accesso(int utente) throws SQLException {
+        this.idUtente = utente;
         this.gatewayDb = new AccessoLuogoAbilitatoGatewayDb();
     }
 
