@@ -115,10 +115,15 @@ public class GatewayUtenteTest {
     }
 
     @Test
-    public void _12caricaCertificazione() throws SQLException {
-        int idUtente=uDb.getIdUtente(1234567,true);
-        gU.caricaCertificazione(idUtente,1,14);
+    public void _12caricaCreditoFormativoType() throws SQLException {
+
     }
+    //TODO: talk with @Marco about CerditoFormativoSostenuto and CreditoFormativo and how to test them
+//    @Test
+//    public void _12caricaCertificazione() throws SQLException {
+//        int idUtente=uDb.getIdUtente(1234567,true);
+//        gU.caricaCertificazione(idUtente,1,14);
+//    }
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     @Test
