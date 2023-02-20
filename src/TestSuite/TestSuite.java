@@ -1,9 +1,11 @@
 package TestSuite;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
+import java.sql.*;
 
 
 @RunWith(Suite.class)
@@ -15,5 +17,4 @@ import org.junit.runners.Suite;
         GatewayVisiteTest.class
 })
 class TestSuite {
-
 }

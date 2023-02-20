@@ -100,7 +100,7 @@ public class GatewayUtente {
         }
     }
     /* caricamento certificazione*/
-    public void caricaCertificazione( int idUtente, int codice, String certificazione) throws SQLException {
+    public void caricaCertificazione( int idUtente, int codice, int certificazione) throws SQLException {
         try{
             UtenteGatewayDb uGateway=new UtenteGatewayDb();
             uGateway.sostieniCreditoFormativo(idUtente, codice, certificazione);
@@ -108,13 +108,7 @@ public class GatewayUtente {
             throw new SQLException(e.getMessage());
         }
     }
-    /*
-    public void sostieniCredito( int idUtente, int codice) throws SQLException {
-        UtenteGatewayDb uGateway=new UtenteGatewayDb();
-        uGateway.sostieniCreditoFormativo(idUtente, codice, null);
-    }*/
-    /* TODO: capire come gestire utilizzo dei metodi sottostanti per utenti specifici*/
-    /*FIXME: get cfu sostenuti per rischi generici e specifici*/
+
     public ArrayList<String> getCFUSostenuti(int idAutorizzato ,int idUtente) throws SQLException {
         try{
             UtenteGatewayDb uGateway=new UtenteGatewayDb();

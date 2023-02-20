@@ -75,7 +75,7 @@ public class UtenteGatewayDb {
         insertCreditoFormativo(idRischio, "");
     }
 
-    public void sostieniCreditoFormativo(int idUtente, int idCredito, String certificazione) throws SQLException {
+    public void sostieniCreditoFormativo(int idUtente, int idCredito, int certificazione) throws SQLException {
         stmt=con.createStatement();
         String insertCredito="INSERT INTO CreditoFormativoSostenuto(idCreditoFormativo,idUtente, CertificazioneEsterna) " +
                 "VALUES("+idCredito+", '"+idUtente+"', '"+certificazione+"')";

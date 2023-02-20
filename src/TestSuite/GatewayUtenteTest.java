@@ -7,7 +7,10 @@ import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.jupiter.api.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,6 +27,33 @@ public class GatewayUtenteTest {
     public GatewayUtenteTest() throws SQLException {
         gU = new GatewayUtente();
         uDb=new UtenteGatewayDb()   ;
+    }
+
+    public void resetDB(){
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("DELETE FROM UtenteInterno");
+            stmt.executeUpdate("DELETE FROM UtenteEsterno");
+            stmt.executeUpdate("DELETE FROM CreditoFormativoSostenuto");
+            stmt.executeUpdate("DELETE FROM CreditoFormativo ");
+            stmt.executeUpdate("DELETE FROM Richiesta");
+            stmt.executeUpdate("DELETE FROM Utente");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @BeforeAll
+    public void _00reset() throws SQLException {
+        resetDB();
+    }
+
+    @Test
+    @AfterAll
+    public void _00reset2() throws SQLException {
+        resetDB();
     }
 
 
@@ -87,7 +117,7 @@ public class GatewayUtenteTest {
     @Test
     public void _12caricaCertificazione() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
-        gU.caricaCertificazione(idUtente,1,"http:certificazione");
+        gU.caricaCertificazione(idUtente,1,14);
     }
     @Rule
     public ExpectedException thrown = ExpectedException.none();
