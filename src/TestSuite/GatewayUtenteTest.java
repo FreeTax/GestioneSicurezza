@@ -39,6 +39,9 @@ public class GatewayUtenteTest {
             stmt.executeUpdate("DELETE FROM CreditoFormativo ");
             stmt.executeUpdate("DELETE FROM Richiesta");
             stmt.executeUpdate("DELETE FROM Utente");
+            stmt.executeUpdate("ALTER TABLE CreditoFormativo AUTO_INCREMENT = 1");
+            stmt.executeUpdate("ALTER TABLE Utente AUTO_INCREMENT = 1");
+            stmt.executeUpdate("ALTER TABLE Richiesta AUTO_INCREMENT = 1");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -112,11 +115,6 @@ public class GatewayUtenteTest {
     @Test
     public void _11aggiornaUtenteEsterno() throws SQLException {
         gU.aggiornaUtenteEsterno(19029420, "nuovapasswordesterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento");
-    }
-
-    @Test
-    public void _12caricaCreditoFormativoType() throws SQLException {
-
     }
     @Test
     public void _12caricaCertificazione() throws SQLException {

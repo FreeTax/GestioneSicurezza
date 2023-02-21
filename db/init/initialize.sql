@@ -85,32 +85,7 @@ CREATE TABLE IF NOT EXISTS Richiesta (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
-/*
-DROP TABLE IF EXISTS RichiestaLuogo;
 
-CREATE TABLE IF NOT EXISTS RichiestaLuogo (
-  idRichiesta INT NOT NULL,
-  idLuogo VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idRichiesta),
-  CONSTRAINT fk_RichiestaLuogo_Richiesta1
-    FOREIGN KEY (idRichiesta)
-    REFERENCES Richiesta (idRichiesta)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-DROP TABLE IF EXISTS RichiestaDipartimento;
-
-CREATE TABLE IF NOT EXISTS RichiestaDipartimento (
-  idRichiesta INT NOT NULL,
-  idDipartimento VARCHAR(45) NOT NULL,
-  PRIMARY KEY (idRichiesta),
-  CONSTRAINT fk_RichiestaDipartimento_Richiesta1
-    FOREIGN KEY (idRichiesta)
-    REFERENCES Richiesta (idRichiesta)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-*/
 /*VisiteDB*/
 CREATE DATABASE IF NOT EXISTS VisiteDB;
 USE VisiteDB;
