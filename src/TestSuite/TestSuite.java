@@ -1,9 +1,10 @@
 package TestSuite;
 
-import org.junit.Test;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import TestSuite.InitDB;
 
 import java.sql.*;
 
@@ -17,4 +18,5 @@ import java.sql.*;
         GatewayVisiteTest.class
 })
 class TestSuite {
+
 }

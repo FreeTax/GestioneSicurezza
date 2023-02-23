@@ -31,14 +31,14 @@ public class Main {
         Utente u3= new UtenteInterno(3); //avanzato
         Utente u4= new UtenteEsterno(4);//esterno
         System.out.println(u3.getType());
-        if(gA.inserAccessoDipartimento(4, 2, u3.getType()))
+        if(gA.inserAccessoDipartimento(4, 2, u3.getCodice()))
             System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
-        if(gA.insertAccessoLuogo(1,1,u2.getType()))
+        if(gA.insertAccessoLuogo(1,1,u2.getCodice()))
             System.out.println("utente" + u2.getCodice() + " ha accesso al luogo 1");
 
-        if(gA.inserAccessoDipartimento(4,1,u2.getType()))
+        if(gA.inserAccessoDipartimento(4,1,u2.getCodice()))
             System.out.println("utente" + u2.getCodice() + " ha accesso al dipartimento 2");
-        if(gA.insertAccessoLuogo(4,1,u1.getType()))
+        if(gA.insertAccessoLuogo(4,1,u1.getCodice()))
             System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
 
 

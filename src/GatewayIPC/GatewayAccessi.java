@@ -5,12 +5,7 @@ import Accessi.AccessoDipartimentoAbilitato;
 import Accessi.AccessoLuogoAbilitato;
 
 import AccessiGatewayDb.AccessoLuogoAbilitatoGatewayDb;
-
-import Account.Utente;
-import Account.UtenteEsterno;
-import Account.UtenteInterno;
-import Luoghi.Dipartimento;
-import Luoghi.Luogo;
+import GatewayIPC.GatewayUtente;
 
 import java.sql.SQLException;
 
@@ -22,10 +17,10 @@ public class GatewayAccessi {
         accessoLuogoAbilitatoGatewayDb = new AccessoLuogoAbilitatoGatewayDb();
     }
 
-    public boolean inserAccessoDipartimento(int utente, int dipartimento, String authorizerType) throws SQLException{  //TODO: CreditiFromativi check is missing
+    public boolean inserAccessoDipartimento(int utente, int dipartimento, int authorizerUser) throws SQLException{  //TODO: CreditiFromativi check is missing
 
         try{
-            if(!authorizerType.equals("avanzato")) throw new Error ("la persona che tenta di abilitare l'utente non è un utente avanzato");
+            if(!GatewayUtente.checkAvanzato(authorizerUser)) throw new Error ("la persona che tenta di abilitare l'utente non è un utente avanzato");
             Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
             a.insertAccesso();
             return true;
@@ -38,10 +33,10 @@ public class GatewayAccessi {
             }
     }
 
-    public boolean insertAccessoLuogo(int utente, int luogo, String authorizerType){
+    public boolean insertAccessoLuogo(int utente, int luogo, int authorizerUser){
 
         try{
-            if(!authorizerType.equals("avanzato")&&!authorizerType.equals("supervisore")) throw new Error ("ela persona che tenta di abilitare l'utente non è un utente avanzato o un supervisore");
+            if(!GatewayUtente.checkSupervisore(authorizerUser)) throw new Error ("la persona che tenta di abilitare l'utente non è un utente avanzato o un supervisore");
             Accesso a = new AccessoLuogoAbilitato(utente, luogo);
             a.insertAccesso();
             return true;

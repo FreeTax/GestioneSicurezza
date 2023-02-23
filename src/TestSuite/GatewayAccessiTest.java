@@ -8,6 +8,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.sql.SQLException;
 
+import static org.junit.Assert.assertEquals;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GatewayAccessiTest {
     GatewayAccessi gatewayAccessi;
@@ -17,14 +19,15 @@ public class GatewayAccessiTest {
         gatewayAccessi = new GatewayAccessi();
         GatewayUtente gu = new GatewayUtente();
         gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
-        gatewayAccessi.inserAccessoDipartimento(1, 1, "avanzato"); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        gu.aggiornaUtenteInterno(2, "password", "nome2", "cognome2", "maschile", "2000-10-03", "1","avanzato");
+        assertEquals(true, gatewayAccessi.inserAccessoDipartimento(1, 1, 2)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
 
     }
 
     @Test
     public void insertAccessoLuogo() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
-        gatewayAccessi.insertAccessoLuogo(1,  1, "avanzato");
+        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 1, 2)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
     @Test

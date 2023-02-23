@@ -41,7 +41,6 @@ public class GatewayUtente {
         }
     }
 
-
     /*login utente interno e esterno*/
     public boolean loginInterno(int matricola, String password) throws SQLException {
         try{
@@ -61,6 +60,27 @@ public class GatewayUtente {
             throw new SQLException(e.getMessage());
         }
     }
+
+    public static boolean checkSupervisore(int idUtente) {
+        try{
+            UtenteGatewayDb uGateway=new UtenteGatewayDb();
+            return uGateway.checkSupervisore(idUtente);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean checkAvanzato(int idUtente) {
+        try{
+            UtenteGatewayDb uGateway=new UtenteGatewayDb();
+            return uGateway.checkAvanzato(idUtente);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
     /* inserimento richiesta accesso a luogo e dipartimento*/
     public void insertRichiestaLuogo(int idUtente, int idLuogo) throws SQLException {
         try{

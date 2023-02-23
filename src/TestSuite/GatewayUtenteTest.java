@@ -2,19 +2,16 @@ package TestSuite;
 
 import AccountGateway.UtenteGatewayDb;
 import GatewayIPC.GatewayUtente;
-
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
-import org.junit.jupiter.api.*;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
@@ -28,31 +25,11 @@ public class GatewayUtenteTest {
         gU = new GatewayUtente();
         uDb=new UtenteGatewayDb()   ;
     }
-
-    public void resetDB(){
-        try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
-            Statement stmt = con.createStatement();
-            stmt.executeUpdate("DELETE FROM UtenteInterno");
-            stmt.executeUpdate("DELETE FROM UtenteEsterno");
-            stmt.executeUpdate("DELETE FROM CreditoFormativoSostenuto");
-            stmt.executeUpdate("DELETE FROM CreditoFormativo ");
-            stmt.executeUpdate("DELETE FROM Richiesta");
-            stmt.executeUpdate("DELETE FROM Utente");
-            stmt.executeUpdate("ALTER TABLE CreditoFormativo AUTO_INCREMENT = 1");
-            stmt.executeUpdate("ALTER TABLE Utente AUTO_INCREMENT = 1");
-            stmt.executeUpdate("ALTER TABLE Richiesta AUTO_INCREMENT = 1");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Test
     @BeforeAll
     public void _00reset() throws SQLException {
         InitDB.initDB();
     }
-
     @Test
     public void _01insertUtenteInterno() throws SQLException {
         gU.insertUtenteInterno(1234567, "passwordinterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento","base");
