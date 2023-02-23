@@ -22,7 +22,7 @@ public abstract class Utente{
 
     protected UtenteGatewayDb uGateway;
 
-    public Utente(int codice, String password, String nome, String cognome, String sesso, String dipartimento, Date dataNascita/*, SchedaVisita visite*/) throws SQLException {
+    public Utente(int codice, String password, String nome, String cognome, String sesso, String dipartimento, Date dataNascita) throws SQLException {
         this.codice = codice;
         this.password = password;
         this.nome = nome;
@@ -33,6 +33,8 @@ public abstract class Utente{
         this.visite=visite;
         uGateway=new UtenteGatewayDb();
     }
+
+    public abstract String getType();
 
     public SchedaVisita getVisite() {
         return visite;
@@ -89,6 +91,8 @@ public abstract class Utente{
     public int getCodice() {
         return codice;
     }
+
+
 }
 
 

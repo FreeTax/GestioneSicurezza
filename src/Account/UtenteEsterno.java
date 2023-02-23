@@ -36,4 +36,9 @@ public class UtenteEsterno extends Utente{
     public void updateUtenteDb() throws SQLException {
         uGateway.updateUtenteEsterno(idEsterno,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento);
     }
+
+    @Override
+    public String getType() {
+        return "Esterno";
+    }
 }

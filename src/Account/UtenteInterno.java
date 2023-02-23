@@ -11,7 +11,7 @@ public class UtenteInterno extends Utente{
     private int matricola;
     private String tipo;
 
-    public UtenteInterno(int codice, String password,String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int matricola, String tipo/*, SchedaVisita visite*/) throws SQLException {
+    public UtenteInterno(int codice, String password,String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int matricola, String tipo) throws SQLException {
         super(codice, password, nome, cognome, sesso, dipartimento, dataNascita);
         this.matricola = matricola;
         this.tipo = tipo;
@@ -42,6 +42,7 @@ public class UtenteInterno extends Utente{
         return matricola;
     }
 
+    @Override
     public String getType() {
         return tipo;
     }
@@ -53,4 +54,6 @@ public class UtenteInterno extends Utente{
     public void updateUtenteDb() throws SQLException {
         uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,tipo);
     }
+
+
 }

@@ -50,15 +50,8 @@ public class GatewayUtenteTest {
     @Test
     @BeforeAll
     public void _00reset() throws SQLException {
-        resetDB();
+        InitDB.initDB();
     }
-
-    @Test
-    @AfterAll
-    public void _00reset2() throws SQLException {
-        resetDB();
-    }
-
 
     @Test
     public void _01insertUtenteInterno() throws SQLException {

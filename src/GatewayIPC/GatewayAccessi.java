@@ -22,59 +22,79 @@ public class GatewayAccessi {
         accessoLuogoAbilitatoGatewayDb = new AccessoLuogoAbilitatoGatewayDb();
     }
 
-    public void inserAccessoDipartimento(int utente, int dipartimento) throws SQLException{
+    public boolean inserAccessoDipartimento(int utente, int dipartimento, String authorizerType) throws SQLException{  //TODO: CreditiFromativi check is missing
+
         try{
+            if(!authorizerType.equals("avanzato")) throw new Error ("la persona che tenta di abilitare l'utente non è un utente avanzato");
             Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
             a.insertAccesso();
-        }catch (SQLException e) {
-            throw new SQLException(e.getMessage());
-        }
-
+            return true;
+            }catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return false;
+            }catch (Error e){
+                System.out.println(e.getMessage());
+                return false;
+            }
     }
 
-    public void insertAccessoLuogo(int utente, int luogo) throws SQLException{
+    public boolean insertAccessoLuogo(int utente, int luogo, String authorizerType){
+
         try{
+            if(!authorizerType.equals("avanzato")&&!authorizerType.equals("supervisore")) throw new Error ("ela persona che tenta di abilitare l'utente non è un utente avanzato o un supervisore");
             Accesso a = new AccessoLuogoAbilitato(utente, luogo);
             a.insertAccesso();
-        }catch (SQLException e) {
-            throw new SQLException(e.getMessage());
-        }
-
+            return true;
+            }catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return false;
+            }catch (Error e){
+                System.out.println(e.getMessage());
+                return false;
+            }
     }
 
-    public void updateAccessoDipartimento(int utente, int dipartimento) throws SQLException{
+    public boolean updateAccessoDipartimento(int utente, int dipartimento){
         try{
             Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
             a.updateAccesso();
+            return true;
         }catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 
-    public void updateAccessoLuogo(int utente, int dipartimento) throws SQLException{
+    public boolean updateAccessoLuogo(int utente, int dipartimento) throws SQLException{
         try{
             Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
             a.updateAccesso();
+            return true;
         }catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 
-    public void deleteAccessoDipartimento(int utente, int dipartimento) throws SQLException{
+    public boolean deleteAccessoDipartimento(int utente, int dipartimento) throws SQLException{
         try{
             Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
             a.deleteAccesso();
+            return true;
         }catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 
-    public void deleteAccessoLuogo(int utente, int dipartimento) throws SQLException{
+    public boolean deleteAccessoLuogo(int utente, int dipartimento) throws SQLException{
         try{
             Accesso a = new AccessoLuogoAbilitato(utente, dipartimento);
             a.deleteAccesso();
+            return true;
         }catch (SQLException e) {
-            throw new SQLException(e.getMessage());
+            System.out.println(e.getMessage());
+            return false;
         }
     }
 
