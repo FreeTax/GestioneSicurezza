@@ -22,6 +22,9 @@ abstract class Richiesta {
     public void insertRichiesta(int idRiferimento) throws SQLException {
     }
 
+    public void setStatoRichiesta(int statoRichiesta) {
+        this.statoRichiesta = statoRichiesta;
+    }
     public String toString() {
         return "idUtente=" + idUtente + ", statoRichiesta=" + statoRichiesta;
     }

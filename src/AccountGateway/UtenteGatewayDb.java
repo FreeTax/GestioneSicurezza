@@ -27,16 +27,17 @@ public class UtenteGatewayDb {
                 + " VALUES('"+password+"', '"+nome+"', '"+cognome+"', '"+sesso+"','"+datanascita.toString()+"','"+dipartimento+"','"+tipologia+"')";
         stmt.executeUpdate(insertSql);
     }
+    /*controlla se è gia presente un utente nel db dopodichè lo inserisce nella tabella Utente e UtenteInterno*/
     public void InsertUtenteInterno(int matricola, String password,String nome,String cognome, String sesso, Date datanascita, String dipartimento, String tipo) throws SQLException {
         stmt=con.createStatement();
-        String idUtente = null;
+        int idUtente = 0;
         String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='interno' AND password='"+password+"'";
         ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
         if(resultSet.next()==false) {
             InsertUtente(password,nome,cognome,sesso,datanascita,dipartimento,"interno");
             ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
             resultSet2.next();
-            idUtente = resultSet2.getString("idUtente");
+            idUtente = resultSet2.getInt("idUtente");
         }
         else{
             throw new SQLException("Utente già presente");
@@ -44,6 +45,7 @@ public class UtenteGatewayDb {
         String insertSql = "INSERT INTO UtenteInterno(idUtente, matricola,tipo)" + " VALUES('"+idUtente+"', '"+matricola+"', '"+tipo+"')";
         stmt.executeUpdate(insertSql);
     }
+    /*controlla se è gia presente un utente nel db dopodichè lo inserisce nella tabella Utente e UtenteEsterno*/
     public void InsertUtenteEsterno(int idEsterno,String password, String nome,String cognome, String sesso, Date datanascita, String dipartimento) throws SQLException {
         stmt=con.createStatement();
         int idUtente = 0;
@@ -63,18 +65,18 @@ public class UtenteGatewayDb {
                 + " VALUES('"+idUtente+"', '"+idEsterno+"')";
         stmt.executeUpdate(insertSql);
     }
-
+    /*inserisce certificazione CFU*/
     public void insertCreditoFormativo(int idRischio, String certificazione) throws SQLException {
         stmt=con.createStatement();
         String insertCredito="INSERT INTO CreditoFormativo(idRischio, CertificazioneEsterna) " +
                 "VALUES('"+idRischio+"', '"+certificazione+"')";
         stmt.executeUpdate(insertCredito);
     }
-
+    /*inserisce CFU sostenuto senza certificazione*/
     public void insertCreditoFormativo(int idRischio) throws SQLException {
         insertCreditoFormativo(idRischio, "");
     }
-
+    /* inserisce CFU nel db*/
     public void sostieniCreditoFormativo(int idUtente, int idCredito, String certificazione) throws SQLException {
         stmt=con.createStatement();
         String insertCredito="INSERT INTO CreditoFormativoSostenuto(idCreditoFormativo,idUtente, CertificazioneEsterna) " +
