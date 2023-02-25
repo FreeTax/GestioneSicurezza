@@ -44,14 +44,14 @@ public class LuoghiGatewayDB {
 
     public Dipartimento getDipartimento(int codice) throws SQLException{
         try{
-            String selectSql = "SELECT * FROM Dipartimenti WHERE codice = '"+codice+"'";
+            String selectSql = "SELECT * FROM Dipartimenti WHERE codice='"+codice+"'";
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery(selectSql);
 
             if(rs.next()){
                 Dipartimento d= new Dipartimento(rs.getInt("codice"), rs.getString("nome"), rs.getInt("responsabile"));
-                d.setLuoghi(null);
-                d.setRischi(null);
+                //d.setLuoghi(null);
+                //d.setRischi(null);
                 return d;
             }
             return null;
@@ -129,6 +129,40 @@ public class LuoghiGatewayDB {
             System.out.println(rs.getString("nome"));
         }
         return null;
+    }
+
+    public void insertRischioDipartimento(int idDipartimento, int idRischio) throws SQLException {
+        String insertSql = "INSERT INTO RischiDipartimento(dipartimento, rischioGenerico)"
+                + " VALUES('"+idDipartimento+"', '"+idRischio+"')";
+        Statement stmt=con.createStatement();
+        stmt.executeUpdate(insertSql);
+    }
+
+    public void insertRischioLuogo(int idLuogo, int idRischio) throws SQLException {
+        String insertSql = "INSERT INTO RischiLuogo(luogo, rischioSpecifico)"
+                + " VALUES('"+idLuogo+"', '"+idRischio+"')";
+        Statement stmt=con.createStatement();
+        stmt.executeUpdate(insertSql);
+    }
+    public ArrayList<Integer> getRischiDipartimento(int idDipartimento) throws SQLException {
+        ArrayList<Integer> rischi = new ArrayList<>();
+        String getRischiSql = "SELECT * FROM RischiDipartimento rd WHERE rd.dipartimento="+idDipartimento;
+        Statement stmt=con.createStatement();
+        ResultSet rs=stmt.executeQuery(getRischiSql);
+        while(rs.next()){
+            rischi.add(rs.getInt("rischioGenerico"));
+        }
+        return rischi;
+    }
+    public ArrayList<Integer> getRischiLuogo(int idLuogo) throws SQLException {
+        ArrayList<Integer> rischi = new ArrayList<>();
+        String getRischiSql = "SELECT * FROM RischiLuogo rl WHERE rl.luogo="+idLuogo;
+        Statement stmt=con.createStatement();
+        ResultSet rs=stmt.executeQuery(getRischiSql);
+        while(rs.next()){
+            rischi.add(rs.getInt("rischioSpecifico"));
+        }
+        return rischi;
     }
 
 }

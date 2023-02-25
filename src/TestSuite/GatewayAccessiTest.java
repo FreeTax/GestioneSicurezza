@@ -1,55 +1,80 @@
 package TestSuite;
 import GatewayIPC.GatewayAccessi;
+import GatewayIPC.GatewayLuoghi;
 import GatewayIPC.GatewayUtente;
+import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
 
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayAccessiTest {
     GatewayAccessi gatewayAccessi;
 
     @Test
-    public void insertAccessoDipartimento() throws SQLException {
+    public void _01insertAccessoDipartimento() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         GatewayUtente gu = new GatewayUtente();
-        gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
-        gu.aggiornaUtenteInterno(2, "password", "nome2", "cognome2", "maschile", "2000-10-03", "1","avanzato");
-        assertEquals(true, gatewayAccessi.inserAccessoDipartimento(1, 1, 2)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
-
+        //gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
+        //gu.aggiornaUtenteInterno(2, "password", "nome2", "cognome2", "maschile", "2000-10-03", "1","avanzato");
+        assertEquals(true, gatewayAccessi.insertAccessoDipartimento(1, 1, 4)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
-
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     @Test
-    public void insertAccessoLuogo() throws SQLException {
+    public void _02insertAccessoDipartimentoNonAut() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
-        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 1, 2)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        GatewayLuoghi gl = new GatewayLuoghi();
+        gl.addDipartimento(2, "nome", 1);
+        gl.insertRischioDipartimento(2,1);
+        thrown.expectMessage("l'utente non ha i crediti formativi necessari per accedere al dipartimento");
+        assertEquals(false, gatewayAccessi.insertAccessoDipartimento(1, 2, 4)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+    }
+    @Test
+    public void _03insertAccessoLuogo() throws SQLException {
+        gatewayAccessi = new GatewayAccessi();
+        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 1, 3)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+    }
+    @Test
+    public void _04insertAccessoLuogoNonAut() throws SQLException {
+        gatewayAccessi = new GatewayAccessi();
+        GatewayLuoghi gl = new GatewayLuoghi();
+        gl.addLuogo(2, "nome", "aula", 1234567, 1);
+        gl.insertRischioLuogo(2,1);
+        thrown.expect(java.lang.RuntimeException.class);
+        thrown.expectMessage("l'utente non ha i crediti formativi necessari per accedere al luogo");
+        //gatewayAccessi.insertAccessoLuogo(1, 2, 3);
+        assertEquals(false, gatewayAccessi.insertAccessoLuogo(1, 2, 3)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
     @Test
-    public void updateAccessoDipartimento() throws SQLException {
+    public void _05updateAccessoDipartimento() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         gatewayAccessi.updateAccessoDipartimento(1, 2);
     }
 
     @Test
-    public void updateAccessoLuogo() throws SQLException {
+    public void _06updateAccessoLuogo() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         gatewayAccessi.updateAccessoLuogo(1,  2);
     }
 
     @Test
-    public void deleteAccessoDipartimento() throws SQLException {
+    public void _07deleteAccessoDipartimento() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         gatewayAccessi.deleteAccessoDipartimento(1,  2);
     }
 
     @Test
-    public void deleteAccessoLuogo() throws SQLException {
+    public void _08deleteAccessoLuogo() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         gatewayAccessi.deleteAccessoLuogo(1,  2);
     }

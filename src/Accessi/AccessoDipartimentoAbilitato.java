@@ -6,7 +6,6 @@ import Luoghi.Dipartimento;
 import java.sql.SQLException;
 
 public class AccessoDipartimentoAbilitato extends Accesso {
-    private int idUtente;
     private int idDipartimento;
 
     public AccessoDipartimentoAbilitato(int utente, int dipartimento) throws SQLException {

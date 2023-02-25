@@ -4,7 +4,7 @@ import AccessiGatewayDb.AccessoLuogoAbilitatoGatewayDb;
 import java.sql.SQLException;
 
 public abstract class Accesso {
-    private int idUtente;
+    protected int idUtente;
     protected AccessoLuogoAbilitatoGatewayDb gatewayDb;
 
     protected Accesso(int utente) throws SQLException {

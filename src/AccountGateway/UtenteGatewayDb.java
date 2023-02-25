@@ -64,14 +64,14 @@ public class UtenteGatewayDb {
         stmt.executeUpdate(insertSql);
     }
 
-    public void insertCreditoFormativo(String idRischio, String certificazione) throws SQLException {
+    public void insertCreditoFormativo(int idRischio, String certificazione) throws SQLException {
         stmt=con.createStatement();
         String insertCredito="INSERT INTO CreditoFormativo(idRischio, CertificazioneEsterna) " +
                 "VALUES('"+idRischio+"', '"+certificazione+"')";
         stmt.executeUpdate(insertCredito);
     }
 
-    public void insertCreditoFormativo(String idRischio) throws SQLException {
+    public void insertCreditoFormativo(int idRischio) throws SQLException {
         insertCreditoFormativo(idRischio, "");
     }
 
@@ -152,7 +152,7 @@ public class UtenteGatewayDb {
         ArrayList<CreditoFormativo> risultati=new ArrayList<CreditoFormativo>();
         while (resultSet.next()) {
             int idCreditoFormativo = resultSet.getInt("idCreditoFormativo");
-            String idRischio = resultSet.getString("idRischio");
+            int idRischio = resultSet.getInt("idRischio");
             String certificazioneEsterna = resultSet.getString("CertificazioneEsterna");
             risultati.add(new CreditoFormativo(idCreditoFormativo, idRischio, certificazioneEsterna));
         }

@@ -3,8 +3,10 @@ package Luoghi;
 import Account.Utente;
 import LuoghiGatewayDb.LuoghiGatewayDB;
 import Rischi.Rischio;
+import Rischi.RischioSpecifico;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Luogo{
     //FIX ME: dipartiento and referente should be of type Dipartimento and Utente
@@ -13,9 +15,9 @@ public class Luogo{
     private String nome;
     private String tipo;
     private int referente;
-    private Rischio rischi[];
+    private ArrayList<Integer> rischi=new ArrayList<>();
     private int dipartimento;
-    public Luogo(int codice, String nome, String tipo, int referente, Rischio[] rischi, int dipartimento) throws SQLException {
+    public Luogo(int codice, String nome, String tipo, int referente, ArrayList<Integer>rischi, int dipartimento) throws SQLException {
         this.codice = codice;
         this.nome = nome;
         this.tipo = tipo;
@@ -85,7 +87,7 @@ public class Luogo{
         return referente;
     }
 
-    public Rischio[] getRischi() {
+    public ArrayList<Integer> getRischi() {
         return rischi;
     }
 
@@ -93,5 +95,13 @@ public class Luogo{
         return dipartimento;
     }
 
+    public void addRischio(int codiceRischio) throws SQLException {
+        try{
+           rischi.add(codiceRischio);
+           new LuoghiGatewayDB().insertRischioLuogo(this.codice, codiceRischio);
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
 
 }

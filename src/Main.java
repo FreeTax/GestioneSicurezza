@@ -31,17 +31,18 @@ public class Main {
         Utente u3= new UtenteInterno(3); //avanzato
         Utente u4= new UtenteEsterno(4);//esterno
         System.out.println(u3.getType());
-        if(gA.inserAccessoDipartimento(4, 2, u3.getCodice()))
-            System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
-        if(gA.insertAccessoLuogo(1,1,u2.getCodice()))
-            System.out.println("utente" + u2.getCodice() + " ha accesso al luogo 1");
-
-        if(gA.inserAccessoDipartimento(4,1,u2.getCodice()))
-            System.out.println("utente" + u2.getCodice() + " ha accesso al dipartimento 2");
-        if(gA.insertAccessoLuogo(4,1,u1.getCodice()))
-            System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
-
-
+        try {
+            if(gA.insertAccessoDipartimento(4, 2, u3.getCodice()))
+                System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
+            if(gA.insertAccessoLuogo(1,1,u2.getCodice()))
+                System.out.println("utente" + u2.getCodice() + " ha accesso al luogo 1");
+            if(gA.insertAccessoDipartimento(4,1,u2.getCodice()))
+                System.out.println("utente" + u2.getCodice() + " ha accesso al dipartimento 2");
+            if(gA.insertAccessoLuogo(4,1,u1.getCodice())) //FIXME: non viene eseguito perchè il metodo prima lancia eccezione
+                System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
+        }catch (RuntimeException e){
+            System.out.println(e);
+        }
     }
     public static void main(String[] args) throws SQLException {
         GatewayUtente gU = new GatewayUtente();
@@ -51,6 +52,5 @@ public class Main {
         GatewayVisite gV = new GatewayVisite();
         initData(gA, gR, gV, gU, gL);
         test(gA, gR, gV, gU, gL);
-
     }
 }

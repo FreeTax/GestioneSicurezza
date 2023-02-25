@@ -32,7 +32,7 @@ public class GatewayUtente {
         }
     }
 
-    public void insertCreditoFormativo(int codice, String idRischio) throws SQLException {
+    public void insertCreditoFormativo(int codice, int idRischio) throws SQLException {
         try{
             cf=new CreditoFormativo(codice, idRischio,"");
             cf.insertCreditoFormativo(idRischio);
@@ -139,9 +139,9 @@ public class GatewayUtente {
                 return cfusString;
             }
             else{
-                throw new SQLException("Utente non autorizzato");
+                throw new RuntimeException("Utente non autorizzato");
             }
-        }catch (Exception e) {
+        }catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
     }
@@ -156,9 +156,9 @@ public class GatewayUtente {
                 return richiesteLuogoString;
             }
             else{
-                throw new SQLException("Utente non autorizzato");
+                throw new RuntimeException("Utente non autorizzato");
             }
-        }catch (Exception e) {
+        }catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
     }
@@ -173,9 +173,9 @@ public class GatewayUtente {
                 return richiesteDipartimentoString;
             }
             else{
-                throw new SQLException("Utente non autorizzato");
+                throw new RuntimeException("Utente non autorizzato");
             }
-        }catch (Exception e) {
+        }catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
     }

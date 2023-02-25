@@ -49,4 +49,22 @@ public class GatewayLuoghi {
             throw new SQLException("Responsabile non trovato");
         }
     }
+
+    public void insertRischioLuogo(int codiceLuogo, int codiceRischio) throws SQLException {
+        try{
+            Luogo l = new Luogo(codiceLuogo);
+            l.addRischio(codiceRischio);
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
+
+    public void insertRischioDipartimento(int codiceDipartimento, int codiceRischio) throws SQLException {
+        try{
+            Dipartimento d = new Dipartimento(codiceDipartimento);
+            d.addRischio(codiceRischio);
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+    }
 }

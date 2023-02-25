@@ -42,7 +42,7 @@ public class GatewayUtenteTest {
 
     @Test
     public void _03insertCreditoFormativo() throws SQLException {
-        gU.insertCreditoFormativo(1, "FE123");
+        gU.insertCreditoFormativo(1, 10123);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class GatewayUtenteTest {
     @Test
     public void _13getRichiesteLuogoNonAut() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
-        thrown.expect(java.sql.SQLException.class);
+        thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
         ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(idUtente);
         //assert richiesteluogo.size()==1;
@@ -114,7 +114,7 @@ public class GatewayUtenteTest {
     }
     @Test
     public void _15getRichiesteDipartimentoNonAut() throws SQLException {
-        thrown.expect(java.sql.SQLException.class);
+        thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
         int idUtente=uDb.getIdUtente(19029420,false);
         ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(idUtente);
@@ -137,14 +137,14 @@ public class GatewayUtenteTest {
         int idAutorizzato=uDb.getIdUtente(8912345,true);
         ArrayList<String> creditisostenuti=gU.getCFUSostenuti(idAutorizzato, idUtente);
         assert creditisostenuti.size()==1;
-        assertArrayEquals(creditisostenuti.toArray(),new String[]{"codice=1, idRischio=FE123, certificaEsterna=http:certificazione"});
+        assertArrayEquals(creditisostenuti.toArray(),new String[]{"codice=1, idRischio=10123, certificaEsterna=http:certificazione"});
     }
 
     @Test
     public void _18getCFUSostenutiNonAut() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
         int idAutorizzato=uDb.getIdUtente(1234567,true);
-        thrown.expect(java.sql.SQLException.class);
+        thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
         ArrayList<String> creditisostenuti=gU.getCFUSostenuti(idAutorizzato, idUtente);
     }

@@ -11,8 +11,8 @@ public class Dipartimento {
     private int codice;
     private String nome;
     private int responsabile;
-    private ArrayList<Integer> luoghi;
-    private ArrayList<Integer> rischi;
+    private ArrayList<Integer> luoghi=new ArrayList<>();
+    private ArrayList<Integer> rischi=new ArrayList<Integer>();
     private LuoghiGatewayDB luoghiGatewayDB;
     public Dipartimento(int codice, String nome, int responsabile, ArrayList<Integer> luoghi, ArrayList<Integer> rischi) throws SQLException {
         luoghiGatewayDB=new LuoghiGatewayDB();
@@ -30,9 +30,22 @@ public class Dipartimento {
         this.responsabile = responsabile;
     }
     public Dipartimento(int id) throws SQLException {
-        luoghiGatewayDB=new LuoghiGatewayDB();
+        try {
+            luoghiGatewayDB = new LuoghiGatewayDB();
+            Dipartimento d=luoghiGatewayDB.getDipartimento(id);
+
+            this.codice = d.getCodice();
+            this.nome = d.getNome();
+            this.responsabile = d.getResponsabile();
+            this.luoghi = d.getLuoghi();
+            this.rischi=d.getRischi();
+        }
+        catch (SQLException e){
+            throw new SQLException("Luogo non trovato");
+        }
+       /* luoghiGatewayDB=new LuoghiGatewayDB();
         Dipartimento d=luoghiGatewayDB.getDipartimento(id);
-        if(d==null){
+        if(d!=null){
             this.codice = d.getCodice();
             this.nome = d.getNome();
             this.responsabile = d.getResponsabile();
@@ -41,7 +54,7 @@ public class Dipartimento {
         }
         else{
             throw  new SQLException("Dipartimento non trovato");
-        }
+        }*/
     }
 
     public int getCodice() {
@@ -86,8 +99,13 @@ public class Dipartimento {
 
 
 
-    public void addRischio(Integer r) throws SQLException {
-        rischi.add(r);
+    public void addRischio(int r) throws SQLException {
+        try{
+            rischi.add(r);
+            new LuoghiGatewayDB().insertRischioDipartimento(this.codice, r);
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 
     public void setLuoghi(ArrayList<Integer> luoghi) {

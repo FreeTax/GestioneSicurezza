@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS CreditoFormativo;
 
 CREATE TABLE IF NOT EXISTS CreditoFormativo (
   idCreditoFormativo INT PRIMARY KEY AUTO_INCREMENT,
-  idRischio VARCHAR(45) NOT NULL,
+  idRischio INT NOT NULL,
   CertificazioneEsterna VARCHAR(45) NULL
 );
 
