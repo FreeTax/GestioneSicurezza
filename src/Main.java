@@ -5,10 +5,13 @@ import GatewayIPC.*;
 import TestSuite.InitDB;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Main {
 
-    public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL){
+    public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
         try{
             gU.insertUtenteInterno(1,"password","nome","cognome","sesso","1999-01-01","1","base");
@@ -19,6 +22,17 @@ public class Main {
             gL.addDipartimento(2,"dipartimento2", 1);
             gL.addLuogo(1,"luogo1", "laboratorio", 1,1);
             gL.addLuogo(2,"luogo2", "ufficio", 2,2);
+            gU.insertCreditoFormativo(1,1);
+            gU.insertCreditoFormativo(2,2);
+            gU.insertCreditoFormativo(3,3);
+            gCS.addCorsoType(1,"sicurezza","  ",1,3);
+            gCS.addCorso("corsoSicurezza1"," ",1, LocalDate.now(),LocalDate.now(),3);
+            gV.addVisitaType("visita medica", " ", "2 anno");
+            gV.addSchedaVisita(1);
+            gV.addVisitaUtente(1,1,"dott.Mario Rossi","visita medica",Timestamp.valueOf(LocalDateTime.now()),"non effettuata",1);
+            gL.insertRischioLuogo(1,1);
+            gL.insertRischioLuogo(1,2);
+            gL.insertRischioLuogo(1,3);
         }
         catch (SQLException e){
             System.out.println(e);
@@ -44,13 +58,38 @@ public class Main {
             System.out.println(e);
         }
     }
+
+    public static void test2(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL) throws SQLException {
+        if(gU.loginInterno(1,"password")){
+            gU.sostieniCredito(1,1,"");
+            gU.sostieniCredito(1,2,"");
+            gU.sostieniCredito(1,3,"certificazione");
+        }
+        if(gU.loginEsterno(4,"password")){
+            gU.sostieniCredito(4,1,"");
+            gU.sostieniCredito(4,3,"certificazione");
+        }
+        if(gU.loginInterno(2,"password")) { //login utente supervisore
+            ArrayList<String> CFUsostenuti = gU.getCFUSostenuti(2, 1);
+            System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+            if(gA.insertAccessoLuogo(1,1,2)){
+                System.out.println("utente con codice 1 ha accesso al luogo 1");
+            }
+            if(gA.insertAccessoLuogo(4,1,2)){
+                System.out.println("utente con codice 2 ha accesso al luogo 1");
+            }
+        }
+
+    }
     public static void main(String[] args) throws SQLException {
         GatewayUtente gU = new GatewayUtente();
         GatewayLuoghi gL = new GatewayLuoghi();
         GatewayRischi gR = new GatewayRischi();
         GatewayAccessi gA = new GatewayAccessi();
         GatewayVisite gV = new GatewayVisite();
-        initData(gA, gR, gV, gU, gL);
+        GatewayCorsiSicurezza gCS= new GatewayCorsiSicurezza();
+        initData(gA, gR, gV, gU, gL,gCS);
+        test2(gA,gR,gV,gU,gL);
         test(gA, gR, gV, gU, gL);
     }
 }

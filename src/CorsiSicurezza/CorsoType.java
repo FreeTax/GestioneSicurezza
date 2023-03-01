@@ -10,14 +10,14 @@ public class CorsoType {
     private int id;
     private String nome;
     private String descrizione;
-    private Rischio rischioAssociato; //problema, penso vada fatta una nuova tabella che associa Rischi a CorsoType. Discuterne con Marco
+    private int idRischioAssociato; //problema, penso vada fatta una nuova tabella che associa Rischi a CorsoType. Discuterne con Marco
     private CorsiSicurezzaGatewayDb db;
 
-    public CorsoType(int id, String nome, String descrizione, Rischio rischioAssociato) throws SQLException {
+    public CorsoType(int id, String nome, String descrizione, int rischioAssociato) throws SQLException {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
-        this.rischioAssociato = rischioAssociato;
+        this.idRischioAssociato = rischioAssociato;
         db=new CorsiSicurezzaGatewayDb();
     }
 

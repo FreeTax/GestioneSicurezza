@@ -89,7 +89,7 @@ public class GatewayUtenteTest {
     @Test
     public void _12caricaCertificazione() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
-        gU.caricaCertificazione(idUtente,1,"http:certificazione");
+        gU.sostieniCredito(idUtente,1,"http:certificazione");
     }
     @Rule
     public ExpectedException thrown = ExpectedException.none();

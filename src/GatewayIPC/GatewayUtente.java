@@ -120,7 +120,7 @@ public class GatewayUtente {
         }
     }
     /* caricamento certificazione*/
-    public void caricaCertificazione( int idUtente, int codice, String certificazione) throws SQLException {
+    public void sostieniCredito( int idUtente, int codice, String certificazione) throws SQLException {
         try{
             UtenteGatewayDb uGateway=new UtenteGatewayDb();
             uGateway.sostieniCreditoFormativo(idUtente, codice, certificazione);

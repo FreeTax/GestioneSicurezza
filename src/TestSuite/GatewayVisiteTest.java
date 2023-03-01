@@ -25,7 +25,7 @@ public class GatewayVisiteTest {
     }
     @Test
     public void insertSchedaVisita() throws SQLException {
-        gV.aggiungiNuovaSchedaVisita(1234567);
+        gV.addSchedaVisita(1234567);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class GatewayVisiteTest {
     }
     @Test
     public void insertVisita() throws SQLException{
-        gV.aggiungiVisistaUtente(1234567, 1, "dottore", "descrizione", Timestamp.valueOf("2020-10-03 10:10:10"), "effettuata", 1);
+        gV.addVisitaUtente(1234567, 1, "dottore", "descrizione", Timestamp.valueOf("2020-10-03 10:10:10"), "effettuata", 1);
     }
 
     @Test
