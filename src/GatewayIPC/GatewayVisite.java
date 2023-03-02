@@ -3,6 +3,7 @@ package GatewayIPC;
 import CorsiSicurezza.CorsoType;
 import Visite.Visita;
 import Visite.SchedaVisita;
+import Visite.VisitaType;
 import VisiteGateway.VisiteGatewayDb;
 
 import java.sql.SQLException;
@@ -10,9 +11,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class GatewayVisite {
-    public void addVisitaType(String nome, String descrizione, String frequenza) throws SQLException { //FIXME: gestire inserimento: passo dal package visite o vado direttamente al gatewayFB? inserisco anche l'id del tipo?
-        VisiteGatewayDb gV = new VisiteGatewayDb();
-        gV.addVisitaType(nome, descrizione, frequenza);
+    public void addVisitaType(int id,String nome, String descrizione, String frequenza) throws SQLException { //FIXME: gestire inserimento: passo dal package visite o vado direttamente al gatewayFB? inserisco anche l'id del tipo?
+        VisitaType vT=new VisitaType( id,nome, descrizione, frequenza);
+        vT.saveToDb();
     }
 
     public void addVisitaUtente(int idUtente, int codiceVisita, String dottore, String descrizione, Timestamp data, String stato, int idType) throws SQLException {

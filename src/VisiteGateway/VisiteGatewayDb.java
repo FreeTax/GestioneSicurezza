@@ -2,6 +2,7 @@ package VisiteGateway;
 
 import Visite.SchedaVisita;
 import Visite.Visita;
+import Visite.VisitaType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,19 +35,6 @@ public class VisiteGatewayDb {
             con.close();
         }
 
-    }
-
-
-    public void InsertVisitaType(String nome, String descrizione, String frequenza) throws SQLException {
-        try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
-            stmt = con.createStatement();
-            String insertSql = "INSERT INTO VisitaType(nome, descrizione, frequenza)"
-                    + " VALUES('" + nome + "', '" + descrizione + "','" + frequenza + "')";
-            stmt.executeUpdate(insertSql);
-        }finally {
-            con.close();
-        }
     }
 
     public void InsertPatologia(String descrizione) throws SQLException {
@@ -188,13 +176,28 @@ public class VisiteGatewayDb {
         }
     }
 
-    public void addVisitaType(String nome, String descrizione, String frequenza) throws SQLException {
+    public void addVisitaType(int id,String nome, String descrizione, String frequenza) throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
                 stmt = con.createStatement();
-            String insertSql = "INSERT INTO VisitaType(nome,descrizione, frequenza)"
-                    + " VALUES('"+nome+"', '"+descrizione+"', '"+frequenza+"')";
+            String insertSql = "INSERT INTO VisitaType(idVisitaType,nome,descrizione, frequenza)"
+                    + " VALUES('"+id+"', '"+nome+"', '"+descrizione+"', '"+frequenza+"')";
             stmt.executeUpdate(insertSql);
+        }finally {
+            con.close();
+        }
+    }
+
+    public VisitaType getVisitaType(int id) throws SQLException {
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
+            stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery("SELECT * FROM VisitaType WHERE idVisitaType="+id);
+            if(resultSet.next()){
+                VisitaType vT= new VisitaType(resultSet.getInt("idVisitaType"),resultSet.getString("nome"), resultSet.getString("descrizione"), resultSet.getString("frequenza"));
+                return vT;
+            }
+            return null;
         }finally {
             con.close();
         }

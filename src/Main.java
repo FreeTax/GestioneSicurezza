@@ -27,7 +27,7 @@ public class Main {
             gU.insertCreditoFormativo(3,3);
             gCS.addCorsoType(1,"sicurezza","  ",1,3);
             gCS.addCorso("corsoSicurezza1"," ",1, LocalDate.now(),LocalDate.now(),3);
-            gV.addVisitaType("visita medica", " ", "2 anno");
+            gV.addVisitaType(1,"visita medica", " ", "2 anno");
             gV.addSchedaVisita(1);
             gV.addVisitaUtente(1,1,"dott.Mario Rossi","visita medica",Timestamp.valueOf(LocalDateTime.now()),"non effettuata",1);
             gL.insertRischioLuogo(1,1);

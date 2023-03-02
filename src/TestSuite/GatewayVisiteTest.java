@@ -30,7 +30,7 @@ public class GatewayVisiteTest {
 
     @Test
     public void insertVisitaType() throws SQLException{
-        vG.addVisitaType("visita1", "descrizione1", "tipo1");
+        vG.addVisitaType(1,"visita1", "descrizione1", "tipo1");
     }
     @Test
     public void insertVisita() throws SQLException{

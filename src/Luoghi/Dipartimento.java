@@ -33,7 +33,6 @@ public class Dipartimento {
         try {
             luoghiGatewayDB = new LuoghiGatewayDB();
             Dipartimento d=luoghiGatewayDB.getDipartimento(id);
-
             this.codice = d.getCodice();
             this.nome = d.getNome();
             this.responsabile = d.getResponsabile();
@@ -41,7 +40,7 @@ public class Dipartimento {
             this.rischi=d.getRischi();
         }
         catch (SQLException e){
-            throw new SQLException("Luogo non trovato");
+            throw new SQLException("Dipartimento non trovato");
         }
        /* luoghiGatewayDB=new LuoghiGatewayDB();
         Dipartimento d=luoghiGatewayDB.getDipartimento(id);

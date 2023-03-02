@@ -36,10 +36,12 @@ public class LuoghiGatewayDB {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/LuoghiDB", "root", "root");
             stmt = con.createStatement();
-            String selectSql = "SELECT * FROM Luoghi WHERE codice = '" + codice + "'";
+            String selectSql = "SELECT * FROM Luoghi WHERE codice =" + codice;
             ResultSet rs = stmt.executeQuery(selectSql);
             if (rs.next()) {
-                return new Luogo(rs.getInt("codice"), rs.getString("nome"), rs.getString("tipo"), rs.getInt("referente"), rs.getInt("dipartimento"));
+                Luogo l=new Luogo(rs.getInt("codice"), rs.getString("nome"), rs.getString("tipo"), rs.getInt("referente"), rs.getInt("dipartimento"));
+                l.setRischi(getRischiLuogo(codice));
+                return l;
             }
             return null;
         } finally {
@@ -51,13 +53,13 @@ public class LuoghiGatewayDB {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/LuoghiDB", "root", "root");
             stmt = con.createStatement();
-            String selectSql = "SELECT * FROM Dipartimenti WHERE codice='" + codice + "'";
+            String selectSql = "SELECT * FROM Dipartimenti WHERE codice=" + codice;
             ResultSet rs = stmt.executeQuery(selectSql);
 
             if (rs.next()) {
                 Dipartimento d = new Dipartimento(rs.getInt("codice"), rs.getString("nome"), rs.getInt("responsabile"));
-                //d.setLuoghi(null);
-                //d.setRischi(null);
+                d.setLuoghi(getLuoghiFromDipartimento(codice));
+                d.setRischi(getRischiDipartimento(codice));
                 return d;
             }
             return null;
@@ -174,7 +176,7 @@ public class LuoghiGatewayDB {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/LuoghiDB", "root", "root");
             stmt = con.createStatement();
             String insertSql = "INSERT INTO RischiLuogo(luogo, rischioSpecifico)"
-                    + " VALUES('" + idLuogo + "', '" + idRischio + "')";
+                    + " VALUES(" + idLuogo + ", " + idRischio + ")";
             stmt.executeUpdate(insertSql);
         } finally {
             con.close();

@@ -45,6 +45,7 @@ public class Luogo{
             this.tipo = l.getTipo();
             this.referente = l.getReferente();
             this.dipartimento = l.getDipartimento();
+            this.rischi=l.getRischi();
         }
         catch (SQLException e){
             throw new SQLException("Luogo non trovato");
@@ -102,6 +103,10 @@ public class Luogo{
         }catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
+    }
+
+    public void setRischi(ArrayList<Integer> rischi) {
+        this.rischi = rischi;
     }
 
 }

@@ -8,6 +8,8 @@ import AccessiGatewayDb.AccessoLuogoAbilitatoGatewayDb;
 import Account.CreditoFormativo;
 import AccountGateway.UtenteGatewayDb;
 import GatewayIPC.GatewayUtente;
+import Luoghi.Dipartimento;
+import Luoghi.Luogo;
 import LuoghiGatewayDb.LuoghiGatewayDB;
 
 import java.sql.SQLException;
@@ -15,17 +17,18 @@ import java.util.ArrayList;
 
 
 public class GatewayAccessi {
-    private AccessoLuogoAbilitatoGatewayDb accessoLuogoAbilitatoGatewayDb;
+    //private AccessoLuogoAbilitatoGatewayDb accessoLuogoAbilitatoGatewayDb;
 
     public GatewayAccessi() throws SQLException {
-        accessoLuogoAbilitatoGatewayDb = new AccessoLuogoAbilitatoGatewayDb();
+        //accessoLuogoAbilitatoGatewayDb = new AccessoLuogoAbilitatoGatewayDb();
     }
 
     public boolean insertAccessoDipartimento(int utente, int dipartimento, int authorizerUser) throws RuntimeException, SQLException {  //TODO: CreditiFromativi check is missing
             if(!GatewayUtente.checkAvanzato(authorizerUser)) throw new  RuntimeException("la persona che tenta di abilitare l'utente non è un utente avanzato");
             else {
                 Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
-                ArrayList<Integer> rischiDipartimento = new LuoghiGatewayDB().getRischiDipartimento(dipartimento);
+                Dipartimento d=new Dipartimento(dipartimento);
+                ArrayList<Integer> rischiDipartimento = d.getRischi();
                 ArrayList<CreditoFormativo> cfuUtente = new UtenteGatewayDb().GetCFUSostenuti(utente);
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
@@ -45,7 +48,8 @@ public class GatewayAccessi {
             if(!GatewayUtente.checkSupervisore(authorizerUser)) throw new RuntimeException("la persona che tenta di abilitare l'utente non è un utente avanzato o un supervisore");
             else {
                 Accesso a = new AccessoLuogoAbilitato(utente, luogo);
-                ArrayList<Integer> rischiLuogo = new LuoghiGatewayDB().getRischiLuogo(luogo);
+                Luogo l=new Luogo(luogo);
+                ArrayList<Integer> rischiLuogo = l.getRischi();
                 ArrayList<CreditoFormativo> cfuUtente = new UtenteGatewayDb().GetCFUSostenuti(utente);
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 

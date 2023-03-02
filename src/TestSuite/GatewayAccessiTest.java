@@ -23,6 +23,8 @@ public class GatewayAccessiTest {
     public void _01insertAccessoDipartimento() throws SQLException {
         gatewayAccessi = new GatewayAccessi();
         GatewayUtente gu = new GatewayUtente();
+        GatewayLuoghi gL = new GatewayLuoghi();
+        gL.addDipartimento(1, "nomeDipartimento", 1);
         //gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
         //gu.aggiornaUtenteInterno(2, "password", "nome2", "cognome2", "maschile", "2000-10-03", "1","avanzato");
         assertEquals(true, gatewayAccessi.insertAccessoDipartimento(1, 1, 4)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
@@ -40,6 +42,8 @@ public class GatewayAccessiTest {
     }
     @Test
     public void _03insertAccessoLuogo() throws SQLException {
+        GatewayLuoghi gL = new GatewayLuoghi();
+        gL.addLuogo(1,"nome", "aula", 1234567, 1);
         gatewayAccessi = new GatewayAccessi();
         assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 1, 3)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
