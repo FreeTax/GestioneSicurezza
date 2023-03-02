@@ -339,6 +339,5 @@ public class UtenteGatewayDb {
             con.close();
         }
     }
-
 }
 

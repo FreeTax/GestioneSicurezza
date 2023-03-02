@@ -34,7 +34,7 @@ public class Main {
             gL.insertRischioLuogo(1,2);
             gL.insertRischioLuogo(1,3);
         }
-        catch (SQLException e){
+        catch (Exception e){
             System.out.println(e);
         }
     }
@@ -48,36 +48,60 @@ public class Main {
         try {
             if(gA.insertAccessoDipartimento(4, 2, u3.getCodice()))
                 System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try{
             if(gA.insertAccessoLuogo(1,1,u2.getCodice()))
                 System.out.println("utente" + u2.getCodice() + " ha accesso al luogo 1");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try{
             if(gA.insertAccessoDipartimento(4,1,u2.getCodice()))
                 System.out.println("utente" + u2.getCodice() + " ha accesso al dipartimento 2");
-            if(gA.insertAccessoLuogo(4,1,u1.getCodice())) //FIXME: non viene eseguito perchè il metodo prima lancia eccezione
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            if (gA.insertAccessoLuogo(4, 1, u1.getCodice())) //FIXME: non viene eseguito perchè il metodo prima lancia eccezione
                 System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
-        }catch (RuntimeException e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     public static void test2(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL) throws SQLException {
-        if(gU.loginInterno(1,"password")){
-            gU.sostieniCredito(1,1,"");
-            gU.sostieniCredito(1,2,"");
-            gU.sostieniCredito(1,3,"certificazione");
-        }
-        if(gU.loginEsterno(4,"password")){
-            gU.sostieniCredito(4,1,"");
-            gU.sostieniCredito(4,3,"certificazione");
-        }
-        if(gU.loginInterno(2,"password")) { //login utente supervisore
-            ArrayList<String> CFUsostenuti = gU.getCFUSostenuti(2, 1);
-            System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
-            if(gA.insertAccessoLuogo(1,1,2)){
-                System.out.println("utente con codice 1 ha accesso al luogo 1");
+        try {
+            if (gU.loginInterno(1, "password")) {
+                gU.sostieniCredito(1, 1, "");
+                gU.sostieniCredito(1, 2, "");
+                gU.sostieniCredito(1, 3, "certificazione");
             }
-            if(gA.insertAccessoLuogo(4,1,2)){
-                System.out.println("utente con codice 2 ha accesso al luogo 1");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            if (gU.loginEsterno(4, "password")) {
+                gU.sostieniCredito(4, 1, "");
+                gU.sostieniCredito(4, 3, "certificazione");
             }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            if (gU.loginInterno(2, "password")) { //login utente supervisore
+                ArrayList<String> CFUsostenuti = gU.getCFUSostenuti(2, 1);
+                System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+                if (gA.insertAccessoLuogo(1, 1, 2)) {
+                    System.out.println("utente con codice 1 ha accesso al luogo 1");
+                }
+                if (gA.insertAccessoLuogo(4, 1, 2)) {
+                    System.out.println("utente con codice 2 ha accesso al luogo 1");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
     }
