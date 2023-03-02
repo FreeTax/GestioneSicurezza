@@ -81,6 +81,7 @@ public class Main {
         }
 
     }
+
     public static void main(String[] args) throws SQLException {
         GatewayUtente gU = new GatewayUtente();
         GatewayLuoghi gL = new GatewayLuoghi();

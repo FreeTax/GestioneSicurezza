@@ -45,7 +45,6 @@ public abstract class Utente{
     }
 
     public void insertUtente() throws SQLException {
-        uGateway.InsertUtente(password,nome,cognome,sesso,dataNascita,dipartimento,"");
     }
 
     public ArrayList<CreditoFormativo> getCfu_sostenuti() {
