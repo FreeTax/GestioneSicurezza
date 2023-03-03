@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Main {
-
+    //TODO: test cross department and role update
+    //FIXME: UserIPC access directly to DBGateway
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
         try{
