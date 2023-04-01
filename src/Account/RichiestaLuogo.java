@@ -16,6 +16,10 @@ public class RichiestaLuogo extends Richiesta {
         super.insertRichiesta(idLuogo, "luogo");
     }
 
+    public int getIdLuogo() {
+        return idLuogo;
+    }
+
     @Override
     public String toString() {
         return super.toString()+", idLuogo=" + idLuogo;

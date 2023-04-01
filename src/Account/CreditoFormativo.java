@@ -19,6 +19,14 @@ public class CreditoFormativo {
         uGateway=new UtenteGatewayDb();
     }
 
+    public CreditoFormativo(int idRischio) throws SQLException {
+        uGateway=new UtenteGatewayDb();
+        CreditoFormativo cf=uGateway.getCreditoFormativo(idRischio);
+        this.codice= cf.getCodice();
+        this.idRischio=cf.getIdRischio();
+        this.certificaEsterna=cf.getCertificaEsterna();
+    }
+
     public void insertCreditoFormativo(int idRischio) throws SQLException {
         //String idRischio="FE123"; //rischio.getCodice()
         uGateway.insertCreditoFormativo(idRischio);
@@ -30,6 +38,14 @@ public class CreditoFormativo {
 
     public Integer getIdRischio() {
         return idRischio;
+    }
+
+    public Integer getCodice() {
+        return codice;
+    }
+
+    public String getCertificaEsterna() {
+        return certificaEsterna;
     }
 
 }

@@ -107,8 +107,6 @@ public class UtenteGatewayDb {
         }finally {
             con.close();
         }
-        
-
     }
 
     public void InsertRichiesta(int idUtente, int idRiferimento, String tipo) throws SQLException {
@@ -121,8 +119,6 @@ public class UtenteGatewayDb {
         }finally {
             con.close();
         }
-        
-
     }
 
     public UtenteInterno GetUtenteInterno(int matricola) throws SQLException {
@@ -236,6 +232,27 @@ public class UtenteGatewayDb {
         }
     }
 
+    public ArrayList<RichiestaLuogo> getRichiesteLuogo(int idUtente) throws SQLException {
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+            stmt=con.createStatement();
+            String getSql="SELECT * FROM Richiesta r WHERE  r.tipo='luogo' AND r.idUtente="+idUtente;
+            ResultSet resultSet = stmt.executeQuery(getSql);
+            ArrayList<RichiestaLuogo> risultati=new ArrayList<RichiestaLuogo>();
+            while (resultSet.next()) {
+                //int idRichiesta = resultSet.getInt("idRichiesta");
+                int stato = resultSet.getInt("stato");
+                int idRiferimento = resultSet.getInt("idRiferimento");
+                int utente = resultSet.getInt("idUtente");
+                //String tipo = resultSet.getString("tipo");
+                risultati.add(new RichiestaLuogo(utente, stato, idRiferimento));
+            }
+            return risultati;
+        } finally {
+            con.close();
+        }
+    }
+
     public ArrayList<RichiestaDipartimento> GetRichiesteDipartimento() throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
@@ -257,6 +274,24 @@ public class UtenteGatewayDb {
         }
     }
 
+    public ArrayList<RichiestaDipartimento> getRichiesteDipartimento(int utente) throws SQLException{
+        try{
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+            stmt=con.createStatement();
+            String getSql="SELECT * FROM Richiesta r WHERE r.tipo='dipartimento' and r.idUtente="+utente;
+            ResultSet resultSet = stmt.executeQuery(getSql);
+            ArrayList<RichiestaDipartimento> risultati=new ArrayList<RichiestaDipartimento>();
+            while (resultSet.next()) {
+                int stato = resultSet.getInt("stato");
+                int idRiferimento = resultSet.getInt("idRiferimento");
+                int idUtente = resultSet.getInt("idUtente");
+                risultati.add(new RichiestaDipartimento(idUtente, stato, idRiferimento));
+            }
+            return risultati;
+        } finally {
+            con.close();
+        }
+    }
     public void updateUtenteInterno(int matricola, String nome, String cognome, String sesso, String datanascita, String dipartimento, String tipo) throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
@@ -336,6 +371,46 @@ public class UtenteGatewayDb {
             }
             return false;
         } finally {
+            con.close();
+        }
+    }
+
+    public CreditoFormativo getCreditoFormativo(int rischio) throws SQLException {
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+            stmt=con.createStatement();
+            String getSql="SELECT * FROM CreditoFormativo cf WHERE idRischio="+rischio;
+            ResultSet resultSet = stmt.executeQuery(getSql);
+            CreditoFormativo creditoFormativo=null;
+            while (resultSet.next()) {
+                int idCreditoFormativo = resultSet.getInt("idCreditoFormativo");
+                int idRischio = resultSet.getInt("idRischio");
+                String Certificazione = resultSet.getString("CertificazioneEsterna");
+                creditoFormativo= new CreditoFormativo(idCreditoFormativo, idRischio, Certificazione);
+            }
+            return creditoFormativo;
+
+        }finally {
+            con.close();
+        }
+    }
+
+    public ArrayList<String> getUtenti() throws SQLException {
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+            stmt=con.createStatement();
+            String getSql="SELECT * FROM Utente";
+            ResultSet resultSet = stmt.executeQuery(getSql);
+            ArrayList<String> infoUtenti=new ArrayList<String>();
+            while (resultSet.next()) {
+                int idCreditoFormativo = resultSet.getInt("idUtente");
+                String nome = resultSet.getString("nome");
+                String cognome = resultSet.getString("cognome");
+                infoUtenti.add(idCreditoFormativo+" "+nome+" "+cognome);
+            }
+            return infoUtenti;
+
+        }finally {
             con.close();
         }
     }

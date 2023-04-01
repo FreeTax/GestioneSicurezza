@@ -102,7 +102,8 @@ CREATE TABLE IF NOT EXISTS VisitaType (
   idVisitaType INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
   descrizione VARCHAR(45) NOT NULL,
-  frequenza VARCHAR(45) NOT NULL
+  frequenza VARCHAR(45) NOT NULL,
+  rischio INT NOT NULL
 );
 
 DROP TABLE IF EXISTS Visita;
@@ -112,7 +113,7 @@ CREATE TABLE IF NOT EXISTS Visita (
   idMedico VARCHAR(45) NOT NULL,
   descrizione VARCHAR(45) NULL,
   data DATETIME NOT NULL,
-  stato ENUM('effettuata', 'non effettuata') NOT NULL,
+  stato ENUM('sostenuta', 'da sostenere') NOT NULL,
   esito VARCHAR(45) NOT NULL,
   idSchedaVisita INT NOT NULL,
   idVisitaType INT NOT NULL,
@@ -166,7 +167,8 @@ DROP TABLE IF EXISTS CorsoType;
 CREATE TABLE IF NOT EXISTS CorsoType (
   idCorsoType INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) NOT NULL,
-  descrizione VARCHAR(45) NOT NULL
+  descrizione VARCHAR(45) NOT NULL,
+  rischio INT NOT NULL
 );
 
 DROP TABLE IF EXISTS Corso;
@@ -219,12 +221,13 @@ CREATE TABLE IF NOT EXISTS RischiDipartimento(
 /*RischiDB*/
 CREATE DATABASE IF NOT EXISTS RischiDB; /*check me with Marco*/
 USE RischiDB;
-DROP TABLE IF EXISTS RischioSpecifico;
-CREATE TABLE IF NOT EXISTS RischioSpecifico(
-    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30), tipologia varchar(30), corso int, visita int);
-DROP TABLE IF EXISTS RischioGenerico;
-CREATE TABLE IF NOT EXISTS RischioGenerico(
-    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30), descrizione varchar(30), tipologia varchar(30), corso int, visita int);
+DROP TABLE IF EXISTS Rischio;
+CREATE TABLE IF NOT EXISTS Rischio(
+    codice int PRIMARY KEY AUTO_INCREMENT, nome varchar(30),
+    descrizione varchar(30),
+    tipo ENUM('generico', 'specifico') NOT NULL
+);
+
 
 
 

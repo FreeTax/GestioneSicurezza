@@ -30,11 +30,11 @@ public class GatewayVisiteTest {
 
     @Test
     public void insertVisitaType() throws SQLException{
-        vG.addVisitaType(1,"visita1", "descrizione1", "tipo1");
+        vG.addVisitaType(1,"visita1", "descrizione1", "tipo1", 1);
     }
     @Test
     public void insertVisita() throws SQLException{
-        gV.addVisitaUtente(1234567, 1, "dottore", "descrizione", Timestamp.valueOf("2020-10-03 10:10:10"), "effettuata", 1);
+        gV.addVisitaUtente(1234567, 1, "dottore", "descrizione", Timestamp.valueOf("2020-10-03 10:10:10"), "da sostenere", 1);
     }
 
     @Test

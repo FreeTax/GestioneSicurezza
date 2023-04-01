@@ -1,3 +1,4 @@
+import Account.CreditoFormativo;
 import Account.Utente;
 import Account.UtenteEsterno;
 import Account.UtenteInterno;
@@ -10,8 +11,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Main {
-    //TODO: test cross department and role update, getCrediti da sostenere, dashboard: crediti da soostenre, crediti sostenuti, visite da effettuare, visite effettuate,luoghi frequentati
-    //FIXME: UserIPC access directly to DBGateway
+    //TODO: test cross department and role update, getCrediti da sostenere,
+    // dashboard: crediti da soostenre, crediti sostenuti, visite da effettuare, visite effettuate,luoghi frequentati
+    //FIXME: UserIPC access directly to DBGateway, <-metodi che usano costruttori per id di Rischio e Utente  vanno resi generici
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
         try{
@@ -28,12 +30,19 @@ public class Main {
             gU.insertCreditoFormativo(3,3);
             gCS.addCorsoType(1,"sicurezza","  ",1,3);
             gCS.addCorso("corsoSicurezza1"," ",1, LocalDate.now(),LocalDate.now(),3);
-            gV.addVisitaType(1,"visita medica", " ", "2 anno");
+            gV.addVisitaType(1,"visita oculistica", " ", "2 anno",2);
             gV.addSchedaVisita(1);
-            gV.addVisitaUtente(1,1,"dott.Mario Rossi","visita medica",Timestamp.valueOf(LocalDateTime.now()),"non effettuata",1);
+
+            gV.addVisitaUtente(1,1,"dott.Mario Rossi","visita oculistica",Timestamp.valueOf(LocalDateTime.now()),"da sostenere",1);
+            gV.addVisitaUtente(1,2,"dott.Mario Rossi","visita controllo",Timestamp.valueOf(LocalDateTime.now()),"da sostenere",1);
+            gV.sostieniVisita(1, "superata",1);
             gL.insertRischioLuogo(1,1);
             gL.insertRischioLuogo(1,2);
             gL.insertRischioLuogo(1,3);
+            gR.insertRischioSpecifico(1,"chimico","hhjljhl");
+            gR.insertRischioSpecifico(2,"computer","hhjljhl");
+            gR.insertRischioSpecifico(3,"laser","hhjljhl");
+            gR.insertRischioSpecifico(4,"ustione","hhjljhl");
         }
         catch (Exception e){
             System.out.println(e);
@@ -92,8 +101,10 @@ public class Main {
         }
         try {
             if (gU.loginInterno(2, "password")) { //login utente supervisore
-                ArrayList<String> CFUsostenuti = gU.getCFUSostenuti(2, 1);
-                System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+                ArrayList<CreditoFormativo> CFUsostenuti = gU.getCFUSostenuti(2, 1);
+                ArrayList<String> cfusString = new ArrayList<>();
+                CFUsostenuti.forEach(cf -> cfusString.add(cf.toString()));
+                System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + cfusString);
                 if (gA.insertAccessoLuogo(1, 1, 2)) {
                     System.out.println("utente con codice 1 ha accesso al luogo 1");
                 }
@@ -107,6 +118,14 @@ public class Main {
 
     }
 
+    public static void testDashboard(GatewayUtente gU, GatewayLuoghi gL) throws SQLException {
+        gL.insertRischioLuogo(2,4);
+        gU.insertRichiestaLuogo(1,2);
+        for(String s: gU.getDashboard(3)){
+            System.out.println(s);
+        }
+    }
+
     public static void main(String[] args) throws SQLException {
         GatewayUtente gU = new GatewayUtente();
         GatewayLuoghi gL = new GatewayLuoghi();
@@ -117,5 +136,6 @@ public class Main {
         initData(gA, gR, gV, gU, gL,gCS);
         test2(gA,gR,gV,gU,gL);
         test(gA, gR, gV, gU, gL);
+        testDashboard(gU, gL);
     }
 }

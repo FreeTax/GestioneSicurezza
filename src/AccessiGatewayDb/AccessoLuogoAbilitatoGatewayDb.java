@@ -1,6 +1,7 @@
 package AccessiGatewayDb;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AccessoLuogoAbilitatoGatewayDb {
     private Connection con;
@@ -30,8 +31,7 @@ public class AccessoLuogoAbilitatoGatewayDb {
         try{
             con=DriverManager.getConnection("jdbc:mysql://localhost:3306/AccessiDB", "root", "root");
             stmt=con.createStatement();
-            String insertSql = "INSERT INTO AccessoLuogoAbilitato(utente, luogo)"
-                    + " VALUES("+utente+", "+luogo+")";
+            String insertSql = "INSERT INTO AccessoLuogoAbilitato(utente, luogo)" + " VALUES("+utente+", "+luogo+")";
             stmt.executeUpdate(insertSql);
         } finally {
             con.close();
@@ -78,6 +78,38 @@ public class AccessoLuogoAbilitatoGatewayDb {
             String deleteSql = "DELETE FROM AccessoLuogoAbilitato WHERE utente = "+utente;
             stmt.executeUpdate(deleteSql);
         } finally {
+            con.close();
+        }
+    }
+
+    public ArrayList<Integer> getLuoghiFrequentati(int utente) throws SQLException{
+        try {
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/AccessiDB", "root", "root");
+            stmt=con.createStatement();
+            String getLuoghi = "SELECT luogo FROM AccessoLuogoAbilitato WHERE utente = "+utente;
+            ResultSet resultSet=stmt.executeQuery(getLuoghi);
+            ArrayList<Integer> luoghi = new ArrayList<>();
+            while (resultSet.next()){
+                luoghi.add(resultSet.getInt("luogo"));
+            }
+            return luoghi;
+        }finally {
+            con.close();
+        }
+    }
+
+    public ArrayList<Integer> getDipartimentiFrequentati(int utente) throws SQLException{
+        try {
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/AccessiDB", "root", "root");
+            stmt=con.createStatement();
+            String getDipartimenti = "SELECT dipartimento FROM AccessoDipartimentoAbilitato WHERE utente = "+utente;
+            ResultSet resultSet=stmt.executeQuery(getDipartimenti);
+            ArrayList<Integer> dipartimenti = new ArrayList<>();
+            while (resultSet.next()){
+                dipartimenti.add(resultSet.getInt("dipartimento"));
+            }
+            return dipartimenti;
+        }finally {
             con.close();
         }
     }

@@ -40,4 +40,6 @@ public class GatewayLuoghi {
         Dipartimento d = new Dipartimento(codiceDipartimento);
         d.addRischio(codiceRischio);
     }
+
+
 }

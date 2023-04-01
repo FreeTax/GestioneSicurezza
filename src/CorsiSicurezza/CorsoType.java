@@ -22,6 +22,6 @@ public class CorsoType {
     }
 
     public void saveToDB() throws SQLException {
-        db.InsertCorsoType(nome, descrizione);
+        db.InsertCorsoType(nome, descrizione, idRischioAssociato);
     }
 }

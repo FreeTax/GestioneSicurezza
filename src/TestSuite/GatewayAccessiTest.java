@@ -27,7 +27,7 @@ public class GatewayAccessiTest {
         gL.addDipartimento(1, "nomeDipartimento", 1);
         //gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
         //gu.aggiornaUtenteInterno(2, "password", "nome2", "cognome2", "maschile", "2000-10-03", "1","avanzato");
-        assertEquals(true, gatewayAccessi.insertAccessoDipartimento(1, 1, 4)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        assertEquals(true, gatewayAccessi.insertAccessoDipartimento(1, 1, 9123456)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -38,14 +38,14 @@ public class GatewayAccessiTest {
         gl.addDipartimento(2, "nome", 1);
         gl.insertRischioDipartimento(2,1);
         thrown.expectMessage("l'utente non ha i crediti formativi necessari per accedere al dipartimento");
-        assertEquals(false, gatewayAccessi.insertAccessoDipartimento(1, 2, 4)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        assertEquals(false, gatewayAccessi.insertAccessoDipartimento(1, 2, 9123456)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
     @Test
     public void _03insertAccessoLuogo() throws SQLException {
         GatewayLuoghi gL = new GatewayLuoghi();
         gL.addLuogo(1,"nome", "aula", 1234567, 1);
         gatewayAccessi = new GatewayAccessi();
-        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 1, 3)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 1, 8912345)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
     @Test
     public void _04insertAccessoLuogoNonAut() throws SQLException {
@@ -56,7 +56,7 @@ public class GatewayAccessiTest {
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("l'utente non ha i crediti formativi necessari per accedere al luogo");
         //gatewayAccessi.insertAccessoLuogo(1, 2, 3);
-        assertEquals(false, gatewayAccessi.insertAccessoLuogo(1, 2, 3)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        assertEquals(false, gatewayAccessi.insertAccessoLuogo(1, 2, 8912345)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
     @Test

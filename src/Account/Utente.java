@@ -47,10 +47,13 @@ public abstract class Utente{
     public void insertUtente() throws SQLException {
     }
 
-    public ArrayList<CreditoFormativo> getCfu_sostenuti() {
+    public ArrayList<CreditoFormativo> getCfuSostenuti() {
         return cfuSostenuti;
     }
 
+    public ArrayList<CreditoFormativo> getCfuSostenuti(int idUtente) throws SQLException {
+        return uGateway.GetCFUSostenuti(idUtente);
+    }
     public void setCfu_sostenuti(CreditoFormativo cfu_sostenuti) {
         this.cfuSostenuti = cfuSostenuti;
     }
@@ -91,6 +94,13 @@ public abstract class Utente{
         return codice;
     }
 
+    public void sostieniCredito(int idUtente, int idCredito,  String certificazione) throws SQLException {
+        uGateway.sostieniCreditoFormativo(idUtente, idCredito, certificazione);
+    }
+
+    public ArrayList<String> getUtenti() throws SQLException {
+        return uGateway.getUtenti();
+    }
 
 }
 

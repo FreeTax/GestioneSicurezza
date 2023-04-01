@@ -1,6 +1,7 @@
 package Accessi;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class AccessoLuogoAbilitato extends Accesso {
     private int luogo;
@@ -23,5 +24,9 @@ public class AccessoLuogoAbilitato extends Accesso {
     @Override
     public void deleteAccesso() throws SQLException {
         gatewayDb.deleteAccessoLuogo(idUtente, luogo);
+    }
+
+    public ArrayList<Integer> getLuoghiFrequentati(int idUtente) throws SQLException{
+        return gatewayDb.getLuoghiFrequentati(idUtente);
     }
 }

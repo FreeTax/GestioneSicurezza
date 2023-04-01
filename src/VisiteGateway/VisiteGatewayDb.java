@@ -49,12 +49,12 @@ public class VisiteGatewayDb {
         }
     }
 
-    public void insertVisita(String idMedico,String descrizione, Timestamp data, String stato, String esito, int idSchedaVisita, int idVisitaType) throws SQLException {
+    public void insertVisita(int id,String idMedico,String descrizione, Timestamp data, String stato, String esito, int idSchedaVisita, int idVisitaType) throws SQLException {
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
             stmt = con.createStatement();
-            String insertSql = "INSERT INTO Visita(idMedico,descrizione,data,stato,esito,idSchedaVisita,idVisitaType)"
-                    + " VALUES('" + idMedico + "', '" + descrizione + "', '" + data + "', '" + stato + "', '" + esito + "'," + idSchedaVisita + "," + idVisitaType + ")";
+            String insertSql = "INSERT INTO Visita(idVisita,idMedico,descrizione,data,stato,esito,idSchedaVisita,idVisitaType)"
+                    + " VALUES("+id+", '" + idMedico + "', '" + descrizione + "', '" + data + "', '" + stato + "', '" + esito + "'," + idSchedaVisita + "," + idVisitaType + ")";
             stmt.executeUpdate(insertSql);
         } finally {
             con.close();
@@ -80,7 +80,7 @@ public class VisiteGatewayDb {
             ResultSet resultSet = stmt.executeQuery("SELECT * FROM Visita WHERE idSchedaVisita=" + idSchedaVisita + " AND stato='da sostenere'");
             ArrayList<Visita> visite = new ArrayList<>();
             while (resultSet.next()) {
-                visite.add(new Visita(resultSet.getInt("idVisita"), resultSet.getString("idMedico"), resultSet.getString("descrizione"), Timestamp.valueOf(resultSet.getString("data")), resultSet.getString("stato"), resultSet.getString("esito"), resultSet.getInt("idVisitaType")));
+                visite.add(new Visita(resultSet.getInt("idVisita"), resultSet.getString("idMedico"), resultSet.getString("descrizione"), Timestamp.valueOf(resultSet.getString("data")), resultSet.getString("stato"), resultSet.getString("esito"),resultSet.getInt("idSchedaVisita") ,resultSet.getInt("idVisitaType")));
             }
             return visite;
         } finally {
@@ -94,13 +94,14 @@ public class VisiteGatewayDb {
             ResultSet resultSet = stmt.executeQuery("SELECT * FROM Visita WHERE idSchedaVisita=" + idSchedaVisita + " AND stato='sostenuta'");
             ArrayList<Visita> visite = new ArrayList<>();
             while (resultSet.next()) {
-                visite.add(new Visita(resultSet.getInt("idVisita"), resultSet.getString("idMedico"), resultSet.getString("descrizione"), Timestamp.valueOf(resultSet.getString("data")), resultSet.getString("stato"), resultSet.getString("esito"), resultSet.getInt("idVisitaType")));
+                visite.add(new Visita(resultSet.getInt("idVisita"), resultSet.getString("idMedico"), resultSet.getString("descrizione"), Timestamp.valueOf(resultSet.getString("data")), resultSet.getString("stato"), resultSet.getString("esito"),resultSet.getInt("idSchedaVisita"), resultSet.getInt("idVisitaType")));
             }
             return visite;
         } finally {
             con.close();
         }
     }
+
 
     public void updateVisita(int idVisita, String descrizione, Timestamp data, String stato, String esito, int idVisitaType) throws SQLException {
         try {
@@ -176,12 +177,12 @@ public class VisiteGatewayDb {
         }
     }
 
-    public void addVisitaType(int id,String nome, String descrizione, String frequenza) throws SQLException {
+    public void addVisitaType(int id,String nome, String descrizione, String frequenza, int rischio) throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
                 stmt = con.createStatement();
-            String insertSql = "INSERT INTO VisitaType(idVisitaType,nome,descrizione, frequenza)"
-                    + " VALUES('"+id+"', '"+nome+"', '"+descrizione+"', '"+frequenza+"')";
+            String insertSql = "INSERT INTO VisitaType(idVisitaType,nome,descrizione, frequenza, rischio)"
+                    + " VALUES('"+id+"', '"+nome+"', '"+descrizione+"', '"+frequenza+"', "+rischio+")";
             stmt.executeUpdate(insertSql);
         }finally {
             con.close();
@@ -194,7 +195,7 @@ public class VisiteGatewayDb {
             stmt = con.createStatement();
             ResultSet resultSet = stmt.executeQuery("SELECT * FROM VisitaType WHERE idVisitaType="+id);
             if(resultSet.next()){
-                VisitaType vT= new VisitaType(resultSet.getInt("idVisitaType"),resultSet.getString("nome"), resultSet.getString("descrizione"), resultSet.getString("frequenza"));
+                VisitaType vT= new VisitaType(resultSet.getInt("idVisitaType"),resultSet.getString("nome"), resultSet.getString("descrizione"), resultSet.getString("frequenza"), resultSet.getInt("rischio"));
                 return vT;
             }
             return null;

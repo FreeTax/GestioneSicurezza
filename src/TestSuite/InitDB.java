@@ -72,10 +72,10 @@ public class InitDB {
         try{
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             Statement stmt = con.createStatement();
-            stmt.executeUpdate("DELETE FROM RischioGenerico");
-            stmt.executeUpdate("DELETE FROM RischioSpecifico");
-            stmt.executeUpdate("ALTER TABLE RischioGenerico AUTO_INCREMENT = 1");
-            stmt.executeUpdate("ALTER TABLE RischioSpecifico AUTO_INCREMENT = 1");
+            stmt.executeUpdate("DELETE FROM Rischio/*Generico*/");
+            //stmt.executeUpdate("DELETE FROM RischioSpecifico");
+            stmt.executeUpdate("ALTER TABLE Rischio/*Generico*/ AUTO_INCREMENT = 1");
+            //stmt.executeUpdate("ALTER TABLE RischioSpecifico AUTO_INCREMENT = 1");
         }catch (SQLException e){
             throw new RuntimeException(e);
         }

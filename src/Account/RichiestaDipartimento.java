@@ -18,6 +18,9 @@ public class RichiestaDipartimento extends Richiesta {
         this.idDipartimento = idDipartimento;
     }*/
 
+    public int getIdDipartimento() {
+        return idDipartimento;
+    }
     @Override
     public String toString() {
         return super.toString()+", idDipartimento=" + idDipartimento;

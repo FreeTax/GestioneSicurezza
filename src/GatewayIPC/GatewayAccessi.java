@@ -4,32 +4,30 @@ import Accessi.Accesso;
 import Accessi.AccessoDipartimentoAbilitato;
 import Accessi.AccessoLuogoAbilitato;
 
-import AccessiGatewayDb.AccessoLuogoAbilitatoGatewayDb;
 import Account.CreditoFormativo;
-import AccountGateway.UtenteGatewayDb;
+import Account.Utente;
+import Account.UtenteEsterno;
+import Account.UtenteInterno;
 import GatewayIPC.GatewayUtente;
 import Luoghi.Dipartimento;
 import Luoghi.Luogo;
-import LuoghiGatewayDb.LuoghiGatewayDB;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 public class GatewayAccessi {
-    //private AccessoLuogoAbilitatoGatewayDb accessoLuogoAbilitatoGatewayDb;
 
     public GatewayAccessi() throws SQLException {
-        //accessoLuogoAbilitatoGatewayDb = new AccessoLuogoAbilitatoGatewayDb();
     }
 
-    public boolean insertAccessoDipartimento(int utente, int dipartimento, int authorizerUser) throws RuntimeException, SQLException {  //TODO: CreditiFromativi check is missing
+    public boolean insertAccessoDipartimento(int utente, int dipartimento, int authorizerUser) throws RuntimeException, SQLException {
             if(!GatewayUtente.checkAvanzato(authorizerUser)) throw new  RuntimeException("la persona che tenta di abilitare l'utente non è un utente avanzato");
             else {
                 Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
                 Dipartimento d=new Dipartimento(dipartimento);
                 ArrayList<Integer> rischiDipartimento = d.getRischi();
-                ArrayList<CreditoFormativo> cfuUtente = new UtenteGatewayDb().GetCFUSostenuti(utente);
+                ArrayList<CreditoFormativo> cfuUtente = new UtenteInterno().getCfuSostenuti(utente);// FIXME: shouldn't use gatewayDb
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
                 cfuUtente.forEach(cfu ->cfuUtenteId.add(cfu.getIdRischio()));
@@ -50,7 +48,7 @@ public class GatewayAccessi {
                 Accesso a = new AccessoLuogoAbilitato(utente, luogo);
                 Luogo l=new Luogo(luogo);
                 ArrayList<Integer> rischiLuogo = l.getRischi();
-                ArrayList<CreditoFormativo> cfuUtente = new UtenteGatewayDb().GetCFUSostenuti(utente);
+                ArrayList<CreditoFormativo> cfuUtente = new UtenteInterno().getCfuSostenuti(utente);//FIXME: shouldn't use gatewayDb
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
                 cfuUtente.forEach(cfu ->cfuUtenteId.add(cfu.getIdRischio()));
@@ -85,5 +83,14 @@ public class GatewayAccessi {
             a.deleteAccesso();
     }
 
+    public ArrayList<Integer> getLuoghiFrequentati(int idUtente) throws SQLException{
+         AccessoLuogoAbilitato a = new AccessoLuogoAbilitato(idUtente, 0);
+         return a.getLuoghiFrequentati(idUtente);
+    }
+
+    public ArrayList<Integer> getDipartimentiFrequentati(int idUtente) throws SQLException{
+        AccessoDipartimentoAbilitato a = new AccessoDipartimentoAbilitato(idUtente, 0);
+        return a.getDipartimentiFrequentati(idUtente);
+    }
 
 }

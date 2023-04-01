@@ -1,5 +1,8 @@
 package Visite;
 
+import VisiteGateway.VisiteGatewayDb;
+
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
@@ -11,7 +14,9 @@ public class Visita {
     private String esito;
     private Timestamp data;
     private int idType;
-    public Visita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int idType) {
+
+    private int schedaVisita;
+    public Visita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int idType, int schedaVisita) {
         this.id = id;
         this.dottore = dottore;
         this.descrizione = descrizione;
@@ -19,6 +24,7 @@ public class Visita {
         this.stato = stato;
         this.esito = esito;
         this.idType = idType;
+        this.schedaVisita = schedaVisita;
     }
 
     public int getId() {
@@ -75,6 +81,11 @@ public class Visita {
 
     public void setIdType(int idType) {
         this.idType = idType;
+    }
+
+    public void saveToDB() throws SQLException {
+        VisiteGatewayDb vG = new VisiteGatewayDb();
+        vG.insertVisita(id, dottore, descrizione, data, stato, esito,schedaVisita, idType);
     }
 
 

@@ -23,15 +23,20 @@ public class UtenteInterno extends Utente{
 
     public UtenteInterno(int matricola) throws SQLException {
             UtenteInterno ui=uGateway.GetUtenteInterno(matricola);
-            this.matricola=ui.matricola;
-            this.codice=ui.codice;
-            this.password=ui.password;
-            this.nome=ui.nome;
-            this.cognome=ui.cognome;
-            this.sesso=ui.sesso;
-            this.dipartimento=ui.dipartimento;
-            this.dataNascita=ui.dataNascita;
-            this.tipo=ui.tipo;
+            if(ui!=null){
+                this.matricola=ui.matricola;
+                this.codice=ui.codice;
+                this.password=ui.password;
+                this.nome=ui.nome;
+                this.cognome=ui.cognome;
+                this.sesso=ui.sesso;
+                this.dipartimento=ui.dipartimento;
+                this.dataNascita=ui.dataNascita;
+                this.tipo=ui.tipo;
+            }
+            else {
+                new UtenteInterno();
+            }
     }
 
     public void insertUtente() throws SQLException {
@@ -54,6 +59,29 @@ public class UtenteInterno extends Utente{
     public void updateUtenteDb() throws SQLException {
         uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,tipo);
     }
+    public ArrayList<CreditoFormativo> getCfuSostenuti(int idUtente) throws SQLException {
+        return super.getCfuSostenuti(idUtente);
+    }
 
+    public boolean loginInterno(int matricola, String password) throws SQLException {
+        return uGateway.loginInterno(matricola, password);
+    }
 
+    public ArrayList<RichiestaLuogo> getRichiesteLuogoUtenti() throws SQLException {
+        return uGateway.GetRichiesteLuogo();
+    }
+
+    public ArrayList<RichiestaLuogo> getRichiesteLuogo() throws SQLException {
+        int idUtente= uGateway.getIdUtente(this.matricola, true);
+        return uGateway.getRichiesteLuogo(idUtente);
+    }
+
+    public ArrayList<RichiestaDipartimento> getRichiesteDipartimentoUtenti() throws SQLException {
+        return uGateway.GetRichiesteDipartimento();
+    }
+
+    public ArrayList<RichiestaDipartimento> getRichiesteDipartimento() throws SQLException {
+        int idUtente= uGateway.getIdUtente(this.matricola, true);
+        return uGateway.getRichiesteDipartimento(idUtente);
+    }
 }

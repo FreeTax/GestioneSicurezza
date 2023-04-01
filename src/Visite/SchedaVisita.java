@@ -51,15 +51,22 @@ public class SchedaVisita {
 
     public void insertVisitaDaSostentere(Visita visita) throws SQLException {
        visiteDaSostentere.add(visita);
-       vGateway.insertVisita(visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(),  this.codice, visita.getIdType());
+       vGateway.insertVisita(visita.getId(),visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(),  this.codice, visita.getIdType());
     }
 
     public void insertVisitaEffettuata(Visita visita) throws SQLException {
         visiteEffettuate.add(visita);
-        vGateway.insertVisita(visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType(), this.codice);
+        vGateway.insertVisita(visita.getId(),visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType(), this.codice);
     }
 
-    public void sostieniVisita(Visita visita) throws SQLException {
+    public void sostieniVisita(int idVisita, String esito) throws SQLException {
+        Visita visita=null;
+        for (Visita v:visiteDaSostentere) {
+            if(v.getId()==idVisita)
+                visita=v;
+        }
+        visita.setEsito(esito);
+        visita.setStato("sostenuta");
         visiteEffettuate.add(visita);
         visiteDaSostentere.remove(visita);
         vGateway.updateVisita(visita.getId(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType());

@@ -25,16 +25,13 @@ public class GatewayCorsiSicurezzaTest {
 
     @Test
     public void _1addNewCorsoType() throws SQLException {
-        int idU=gU.getIdUtente(9123456,true);
-        gC.addCorsoType(1, "nome", "descrizione", 1,idU);
+        gC.addCorsoType(1, "nome", "descrizione", 1,9123456);
     }
 
     @Test
     public void _2addNewCorso() throws SQLException {
         LocalDate inizio = LocalDate.of(2022, 12, 03);
         LocalDate fine = LocalDate.of(2023, 03, 24);
-        int idU=gU.getIdUtente(9123456,true);
-        gC.addCorso("nomeCorso", "descrizione del corso", 1, inizio, fine, idU);
-
+        gC.addCorso("nomeCorso", "descrizione del corso", 1, inizio, fine, 9123456);
     }
 }

@@ -1,5 +1,6 @@
 package TestSuite;
 
+import Account.CreditoFormativo;
 import AccountGateway.UtenteGatewayDb;
 import GatewayIPC.GatewayUtente;
 import org.junit.Before;
@@ -95,10 +96,9 @@ public class GatewayUtenteTest {
     public ExpectedException thrown = ExpectedException.none();
     @Test
     public void _13getRichiesteLuogoNonAut() throws SQLException {
-        int idUtente=uDb.getIdUtente(1234567,true);
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
-        ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(idUtente);
+        ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(1234567);
         //assert richiesteluogo.size()==1;
         //assertArrayEquals(richiesteluogo.toArray(),new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
     }
@@ -106,9 +106,9 @@ public class GatewayUtenteTest {
     @Test
     public void _14getRichiesteLuogoAut() throws SQLException {
         gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
-        int idUtente=uDb.getIdUtente(8912345,true);
+        //int idUtente=uDb.getIdUtente(8912345,true);
 
-        ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(idUtente);
+        ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(8912345);
         assert richiesteluogo.size()==1;
         assertArrayEquals(richiesteluogo.toArray(),new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
     }
@@ -116,8 +116,8 @@ public class GatewayUtenteTest {
     public void _15getRichiesteDipartimentoNonAut() throws SQLException {
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
-        int idUtente=uDb.getIdUtente(19029420,false);
-        ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(idUtente);
+        //int idUtente=uDb.getIdUtente(19029420,false);
+        ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(19029420);
         //assert richiestedipartimento.size()==1;
         //assertArrayEquals(richiestedipartimento.toArray(),new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
     }
@@ -125,8 +125,8 @@ public class GatewayUtenteTest {
     @Test
     public void _16getRichiesteDipartimentoAut() throws SQLException {
         gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
-        int idUtente=uDb.getIdUtente(9123456,true);
-        ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(idUtente);
+        //int idUtente=uDb.getIdUtente(9123456,true);
+        ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(9123456);
         assert richiestedipartimento.size()==1;
         assertArrayEquals(richiestedipartimento.toArray(),new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
     }
@@ -134,18 +134,21 @@ public class GatewayUtenteTest {
     @Test
     public void _17getCFUSostenuti() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
-        int idAutorizzato=uDb.getIdUtente(8912345,true);
-        ArrayList<String> creditisostenuti=gU.getCFUSostenuti(idAutorizzato, idUtente);
+        //int idAutorizzato=uDb.getIdUtente(8912345,true);
+        ArrayList<CreditoFormativo> creditisostenuti=gU.getCFUSostenuti(8912345, idUtente);
+        ArrayList<String> cfusString = new ArrayList<>();
+        creditisostenuti.forEach(cf -> cfusString.add(cf.toString()));
         assert creditisostenuti.size()==1;
-        assertArrayEquals(creditisostenuti.toArray(),new String[]{"codice=1, idRischio=10123, certificaEsterna=http:certificazione"});
+        assertArrayEquals(cfusString.toArray(),new String[]{"codice=1, idRischio=10123, certificaEsterna=http:certificazione"});
     }
 
     @Test
     public void _18getCFUSostenutiNonAut() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
-        int idAutorizzato=uDb.getIdUtente(1234567,true);
+        //int idAutorizzato=uDb.getIdUtente(1234567,true);
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
-        ArrayList<String> creditisostenuti=gU.getCFUSostenuti(idAutorizzato, idUtente);
+        ArrayList<CreditoFormativo> creditisostenuti=gU.getCFUSostenuti(1234567, idUtente);
+
     }
 }

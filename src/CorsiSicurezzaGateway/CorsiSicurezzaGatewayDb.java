@@ -15,11 +15,11 @@ public class CorsiSicurezzaGatewayDb {
         }
     }
 
-    public void InsertCorsoType(String nome, String descrizione) throws SQLException {
+    public void InsertCorsoType(String nome, String descrizione, int rischio) throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CorsiSicurezzaDB", "root", "root");
             stmt= con.createStatement();
-            String insertSql = "INSERT INTO CorsoType(nome, descrizione)" + " VALUES('"+nome+"', '"+descrizione+"')";
+            String insertSql = "INSERT INTO CorsoType(nome, descrizione, rischio)" + " VALUES('"+nome+"', '"+descrizione+"' ,"+ rischio+")";
             stmt.executeUpdate(insertSql);
         }finally {
             con.close();

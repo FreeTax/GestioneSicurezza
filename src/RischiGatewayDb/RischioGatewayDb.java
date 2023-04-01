@@ -20,8 +20,8 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String insertSql = "INSERT INTO RischioGenerico(codice, nome, descrizione, tipologia, corso, visita)"
-                    + " VALUES('"+r.getCodice()+"', '"+r.getNome()+"', '"+r.getDescrizione()+"', '"+r.getTipologia()+"', '"+0+"', '"+0+"')"; //wating that Corso and Visita classes are implemented
+            String insertSql = "INSERT INTO Rischio/*Generico*/(codice, nome, descrizione, tipo)"
+                    + " VALUES('"+r.getCodice()+"', '"+r.getNome()+"', '"+r.getDescrizione()+"', 'generico' )"; //wating that Corso and Visita classes are implemented
             
             stmt.executeUpdate(insertSql);
         } finally {
@@ -34,8 +34,8 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String insertSql = "INSERT INTO RischioSpecifico(codice, nome, descrizione, tipologia, corso, visita)"
-                    + " VALUES('"+r.getCodice()+"', '"+r.getNome()+"', '"+r.getDescrizione()+"', '"+r.getTipologia()+"', '"+0+"', '"+0+"')"; //wating that Corso and Visita classes are implemented
+            String insertSql = "INSERT INTO Rischio/*Specifico*/ (codice, nome, descrizione, tipo)"
+                    + " VALUES('"+r.getCodice()+"', '"+r.getNome()+"', '"+r.getDescrizione()+"', 'specifico' )"; //wating that Corso and Visita classes are implemented
             
             stmt.executeUpdate(insertSql);
         } finally {
@@ -47,11 +47,11 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String selectSql = "SELECT * FROM RischioGenerico WHERE codice="+id;
+            String selectSql = "SELECT * FROM Rischio/*Generico*/ WHERE tipo='generico' AND codice="+id;
             
             ResultSet rs=stmt.executeQuery(selectSql);
             if(rs.next()){
-                return new RischioGenerico(rs.getInt("codice"), rs.getString("nome"), rs.getString("descrizione"), rs.getString("tipologia"));
+                return new RischioGenerico(rs.getInt("codice"), rs.getString("nome"), rs.getString("descrizione")/*, rs.getString("tipologia")*/);
             }
             return null;
         } finally {
@@ -63,11 +63,11 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String selectSql = "SELECT * FROM RischioSpecifico WHERE codice="+id;
+            String selectSql = "SELECT * FROM Rischio/*Specifico*/  WHERE tipo='specifico' AND codice="+id;
             
             ResultSet rs=stmt.executeQuery(selectSql);
             if(rs.next()){
-                return new RischioSpecifico(rs.getInt("codice"), rs.getString("nome"), rs.getString("descrizione"), rs.getString("tipologia"));
+                return new RischioSpecifico(rs.getInt("codice"), rs.getString("nome"), rs.getString("descrizione")/*, rs.getString("tipologia")*/);
             }
             return null;
         } finally {
@@ -79,7 +79,7 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String deleteSql = "DELETE FROM RischioGenerico WHERE codice="+id;
+            String deleteSql = "DELETE FROM Rischio/*Generico*/ WHERE codice="+id;
             
             stmt.executeUpdate(deleteSql);
             return true;
@@ -92,7 +92,7 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String deleteSql = "DELETE FROM RischioSpecifico WHERE codice="+id;
+            String deleteSql = "DELETE FROM Rischio/*Specifico*/  WHERE codice="+id;
             
             stmt.executeUpdate(deleteSql);
             return true;
@@ -104,7 +104,7 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String updateSql = "UPDATE RischioGenerico SET nome='"+r.getNome()+"', descrizione='"+r.getDescrizione()+"', tipologia='"+r.getTipologia()+"' WHERE codice="+r.getCodice();
+            String updateSql = "UPDATE Rischio/*Generico*/ SET nome='"+r.getNome()+"', descrizione='"+r.getDescrizione()+"', tipologia='"+r.getTipologia()+"' WHERE codice="+r.getCodice();
             
             stmt.executeUpdate(updateSql);
         } finally {
@@ -115,7 +115,7 @@ public class RischioGatewayDb {
         try{
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             stmt=con.createStatement();
-            String updateSql = "UPDATE RischioSpecifico SET nome='"+r.getNome()+"', descrizione='"+r.getDescrizione()+"', tipologia='"+r.getTipologia()+"' WHERE codice="+r.getCodice();
+            String updateSql = "UPDATE Rischio/*Specifico*/ SET nome='"+r.getNome()+"', descrizione='"+r.getDescrizione()+"', tipologia='"+r.getTipologia()+"' WHERE codice="+r.getCodice();
             stmt.executeUpdate(updateSql);
         } finally {
             con.close();

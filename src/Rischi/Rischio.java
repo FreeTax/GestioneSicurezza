@@ -15,11 +15,11 @@ public abstract class Rischio {
     public Rischio() throws SQLException { //wating that Corso and Visita classes are implemented
 
     }
-    public Rischio(int codice, String nome, String descrizione, String tipologia /*, Corso corso, Visita visita*/) throws SQLException { //wating that Corso and Visita classes are implemented
+    public Rischio(int codice, String nome, String descrizione/*, String tipologia /*, Corso corso, Visita visita*/) throws SQLException { //wating that Corso and Visita classes are implemented
         this.codice = codice;
         this.nome = nome;
         this.descrizione = descrizione;
-        this.tipologia = tipologia;
+        //this.tipologia = tipologia;
 /*        this.corso = corso;
         this.visita = visita;*/
     }
@@ -47,6 +47,7 @@ public abstract class Rischio {
     public Visita getVisita() {
         return visita;
     }
+
 
     public void setCodice(int codice) {
         this.codice = codice;

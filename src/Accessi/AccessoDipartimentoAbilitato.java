@@ -4,6 +4,7 @@ import Account.Utente;
 import Luoghi.Dipartimento;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class AccessoDipartimentoAbilitato extends Accesso {
     private int idDipartimento;
@@ -36,5 +37,9 @@ public class AccessoDipartimentoAbilitato extends Accesso {
 
     public int getIdDipartimento() {
         return idDipartimento;
+    }
+
+    public ArrayList<Integer> getDipartimentiFrequentati(int idUtente) throws SQLException{
+        return gatewayDb.getDipartimentiFrequentati(idUtente);
     }
 }
