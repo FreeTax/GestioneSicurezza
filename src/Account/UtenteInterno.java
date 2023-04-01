@@ -33,6 +33,7 @@ public class UtenteInterno extends Utente{
                 this.dipartimento=ui.dipartimento;
                 this.dataNascita=ui.dataNascita;
                 this.tipo=ui.tipo;
+                this.cfuSostenuti=uGateway.GetCFUSostenuti(this.codice);
             }
             else {
                 new UtenteInterno();

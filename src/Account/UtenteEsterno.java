@@ -30,6 +30,7 @@ public class UtenteEsterno extends Utente{
            this.sesso=ue.sesso;
            this.dipartimento=ue.dipartimento;
            this.dataNascita=ue.dataNascita;
+           this.cfuSostenuti=uGateway.GetCFUSostenuti(this.codice);
        }
          else {
               new UtenteEsterno();

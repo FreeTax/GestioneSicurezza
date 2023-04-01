@@ -27,7 +27,7 @@ public class GatewayAccessi {
                 Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
                 Dipartimento d=new Dipartimento(dipartimento);
                 ArrayList<Integer> rischiDipartimento = d.getRischi();
-                ArrayList<CreditoFormativo> cfuUtente = new UtenteInterno().getCfuSostenuti(utente);// FIXME: shouldn't use gatewayDb
+                ArrayList<CreditoFormativo> cfuUtente = new UtenteInterno().getCfuSostenuti(utente);
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
                 cfuUtente.forEach(cfu ->cfuUtenteId.add(cfu.getIdRischio()));
@@ -48,7 +48,7 @@ public class GatewayAccessi {
                 Accesso a = new AccessoLuogoAbilitato(utente, luogo);
                 Luogo l=new Luogo(luogo);
                 ArrayList<Integer> rischiLuogo = l.getRischi();
-                ArrayList<CreditoFormativo> cfuUtente = new UtenteInterno().getCfuSostenuti(utente);//FIXME: shouldn't use gatewayDb
+                ArrayList<CreditoFormativo> cfuUtente = new UtenteInterno().getCfuSostenuti(utente);
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
                 cfuUtente.forEach(cfu ->cfuUtenteId.add(cfu.getIdRischio()));

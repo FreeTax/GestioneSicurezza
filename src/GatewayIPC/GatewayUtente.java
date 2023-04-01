@@ -1,14 +1,12 @@
 package GatewayIPC;
 
 import Account.*;
-import AccountGateway.UtenteGatewayDb;
 import Luoghi.Dipartimento;
 import Luoghi.Luogo;
 import Rischi.Rischio;
 import Rischi.RischioGenerico;
 import Rischi.RischioSpecifico;
 import Visite.Visita;
-import VisiteGateway.VisiteGatewayDb;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -51,7 +49,11 @@ public class GatewayUtente {
 
     public static boolean checkSupervisore(int matricola) throws SQLException {
         UtenteInterno u = new UtenteInterno(matricola);
-        return u.getType().equals("supervisore");
+        if(u.getType()==null){
+            return false;
+        }else{
+            return u.getType().equals("supervisore");
+        }
     }
 
     public static boolean checkAvanzato(int matricola) throws SQLException {
@@ -131,14 +133,19 @@ public class GatewayUtente {
     public ArrayList<String> getCFUdaSostenere(int idUtente) throws SQLException{
         ArrayList<RichiestaLuogo> richiesteLuogo=null;
         ArrayList<RichiestaDipartimento> richiesteDipartimento=null;
+        ArrayList<CreditoFormativo> cfuUtente;
 
         if(new UtenteInterno(idUtente).getNome()!=null){
-            richiesteLuogo =new UtenteInterno(idUtente).getRichiesteLuogo();
-            richiesteDipartimento =new UtenteInterno().getRichiesteDipartimento();
+            UtenteInterno ui=new UtenteInterno(idUtente);
+            richiesteLuogo = ui.getRichiesteLuogo();
+            richiesteDipartimento =ui.getRichiesteDipartimento();
+            cfuUtente=ui.getCfuSostenuti();
         }
         else {
-            richiesteLuogo =new UtenteEsterno(idUtente).getRichiesteLuogo();
-            richiesteDipartimento =new UtenteEsterno().getRichiesteDipartimento();
+            UtenteEsterno ue=new UtenteEsterno(idUtente);
+            richiesteLuogo =ue.getRichiesteLuogo();
+            richiesteDipartimento =ue.getRichiesteDipartimento();
+            cfuUtente=ue.getCfuSostenuti();
         }
 
         ArrayList<Integer> rischi = new ArrayList<>();
@@ -161,7 +168,7 @@ public class GatewayUtente {
             }
         }
 
-        ArrayList<CreditoFormativo> cfuUtente = new UtenteGatewayDb().GetCFUSostenuti(idUtente);
+        //ArrayList<CreditoFormativo> cfuUtente = new UtenteGatewayDb().GetCFUSostenuti(idUtente);
         ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
         cfuUtente.forEach(cfu ->cfuUtenteId.add(cfu.getIdRischio()));
