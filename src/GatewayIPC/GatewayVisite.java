@@ -4,7 +4,6 @@ import CorsiSicurezza.CorsoType;
 import Visite.Visita;
 import Visite.SchedaVisita;
 import Visite.VisitaType;
-import VisiteGateway.VisiteGatewayDb;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;

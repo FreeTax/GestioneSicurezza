@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class Main {
     //TODO: test cross department and role update, getCrediti da sostenere,
     // dashboard: crediti da soostenre, crediti sostenuti, visite da effettuare, visite effettuate,luoghi frequentati
-    //FIXME: UserIPC access directly to DBGateway, <-metodi che usano costruttori per id di Rischio e Utente  vanno resi generici
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
         try{
