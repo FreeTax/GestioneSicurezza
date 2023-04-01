@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class UtenteGatewayDb {
     private Connection con;
