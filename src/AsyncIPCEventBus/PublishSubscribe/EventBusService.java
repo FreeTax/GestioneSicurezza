@@ -82,12 +82,8 @@ public class EventBusService implements Runnable{
 
     @Override
     public void run() {
+        //TODO: gestire con wait e notify per evitare busy waiting
         while (!Thread.currentThread().isInterrupted()) {
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
             //System.out.println("Broadcasting...");
             try {
                 broadcast();

@@ -131,11 +131,6 @@ public class AccountSubscriber extends Subscriber implements Runnable{
     @Override
     public void run() {
         while(!Thread.currentThread().isInterrupted()){
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
             //System.out.println("SubscriberConcr is running");
             if(getSubscriberMessages().size()!=0) {
                 Message m = getSubscriberMessages().remove(0);

@@ -86,12 +86,8 @@ public class VisiteSubscriber extends Subscriber implements Runnable{
 
     @Override
     public void run() {
+        //TODO: gestire con wait e notify per evitare busy waiting
         while(!Thread.currentThread().isInterrupted()){
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
             //System.out.println("SubscriberConcr is running");
             if(getSubscriberMessages().size()!=0) {
                 Message m = getSubscriberMessages().remove(0);
