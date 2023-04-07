@@ -1,39 +1,54 @@
-package GatewayIPC;
+package AsyncIPCEventBus;
 
 import Account.*;
+import AsyncIPCEventBus.PublishSubscribe.*;
 import Luoghi.Dipartimento;
 import Luoghi.Luogo;
-import Rischi.Rischio;
 import Rischi.RischioGenerico;
 import Rischi.RischioSpecifico;
 import Visite.Visita;
 
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class GatewayUtente {
     private Utente u;
     private CreditoFormativo cf;
 
+    private EventBusService eventBusService;
+    private Subscriber sub;
+    private Publisher pub;
+
+    public GatewayUtente(EventBusService eventBusService) {
+        this.eventBusService = eventBusService;
+        this.sub=new SubscriberConcr("Account", eventBusService);
+        this.pub=new PublisherConcr();
+    }
     public void insertUtenteInterno(int matricola, String password, String nome, String cognome, String sesso, String datanascita, String Dipartimento, String tipo) throws SQLException {
         Date date = Date.valueOf(datanascita);
         u = new UtenteInterno(matricola, password, nome, cognome, sesso, Dipartimento, date, matricola, tipo);
-        u.insertUtente();
+        //u.insertUtente();
+        pub.publish(new Message("Account", "insertUtente",u), eventBusService);
+        System.out.println("Utente"+matricola+"creato");
     }
 
     public void insertUtenteEsterno(int idEsterno, String password, String nome, String cognome, String sesso, String datanascita, String Dipartimento) throws SQLException {
         Date date = Date.valueOf(datanascita);
         u = new UtenteEsterno(1, password, nome, cognome, sesso, Dipartimento, date, idEsterno);
-        u.insertUtente();
+        pub.publish(new Message("Account", "insertUtente",u), eventBusService);
+        System.out.println("Utente"+idEsterno+"creato");
+        //u.insertUtente();
     }
 
     public void insertCreditoFormativo(int codice, int idRischio) throws SQLException {
         cf = new CreditoFormativo(codice, idRischio, "");
-        cf.insertCreditoFormativo(idRischio);
+        pub.publish(new Message("Account", "insertCreditoFormativo",cf), eventBusService);
+        System.out.println("Credito formativo creato");
+        //cf.insertCreditoFormativo(idRischio);
     }
 
     /*login utente interno e esterno*/
@@ -68,37 +83,50 @@ public class GatewayUtente {
     /* inserimento richiesta accesso a luogo e dipartimento*/
     public void insertRichiestaLuogo(int idUtente, int idLuogo) throws SQLException {
         RichiestaLuogo rl = new RichiestaLuogo(idUtente, 0, idLuogo);
-        rl.insertRichiesta(idLuogo);
+        pub.publish(new Message("Account", "insertRichiestaLuogo",rl), eventBusService);
+        System.out.println("Richiesta utente"+idUtente+"luogo creato");
+        //rl.insertRichiesta(idLuogo);
     }
 
     public void insertRichiestaDipartimento(int idUtente, int idDipartimento) throws SQLException {
         RichiestaDipartimento rd = new RichiestaDipartimento(idUtente, 0, idDipartimento);
-        rd.insertRichiesta(idDipartimento);
+        pub.publish(new Message("Account", "insertRichiestaDipartimento",rd), eventBusService);
+        System.out.println("Richiesta utente"+idUtente+"dipartimento creato");
+        //rd.insertRichiesta(idDipartimento);
     }
 
     /* aggiorna dati utente interno e esterno*/
     public void aggiornaUtenteInterno(int matricola, String password, String nome, String cognome, String sesso, String datanascita, String Dipartimento, String tipo) throws SQLException {
         Date date = Date.valueOf(datanascita);
         UtenteInterno u = new UtenteInterno(1, password, nome, cognome, sesso, Dipartimento, date, matricola, tipo);
-        u.updateUtenteDb();
+        pub.publish(new Message("Account", "updateUtenteInterno",u), eventBusService);
+        System.out.println("Utente"+matricola+"aggiornato");
+        //u.updateUtenteDb();
     }
 
     public void aggiornaUtenteEsterno(int idEsterno, String password, String nome, String cognome, String sesso, String datanascita, String Dipartimento) throws SQLException {
         Date date = Date.valueOf(datanascita);
         UtenteEsterno u = new UtenteEsterno(1, password, nome, cognome, sesso, Dipartimento, date, idEsterno);
-        u.updateUtenteDb();
+        pub.publish(new Message("Account", "updateUtenteEsterno",u), eventBusService);
+        System.out.println("Utente"+idEsterno+"aggiornato");
+        //u.updateUtenteDb();
     }
 
     /* caricamento certificazione*/
     public void sostieniCredito(int idUtente, int codice, String certificazione) throws SQLException {
         Utente u = new UtenteInterno();//FIXME not good
-        u.sostieniCredito(idUtente, codice, certificazione);
+        List<Object> param =  Arrays.asList(idUtente, codice, certificazione);
+        pub.publish(new Message("Account", "sostieniCredito",u,param), eventBusService);
+        System.out.println("Utente"+idUtente+" ha sostenuto il credito");
+
+        //u.sostieniCredito(idUtente, codice, certificazione);
     }
 
     public ArrayList<CreditoFormativo> getCFUSostenuti(int idAutorizzato, int idUtente) throws SQLException {
         Utente u=new UtenteInterno();//FIXME not good
         if (checkSupervisore(idAutorizzato) || checkAvanzato(idAutorizzato)) {
             ArrayList<CreditoFormativo> cfus = u.getCfuSostenuti(idUtente);
+            pub.publish(new Message("Account", "getCfuSostenuti",null,Arrays.asList(idUtente),"CFUsostenuti"), eventBusService);
             //ArrayList<String> cfusString = new ArrayList<>();
             //cfus.forEach(cf -> cfusString.add(cf.toString()));
             return cfus;

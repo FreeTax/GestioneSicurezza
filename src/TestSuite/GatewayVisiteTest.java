@@ -1,6 +1,6 @@
 package TestSuite;
 
-import GatewayIPC.GatewayVisite;
+import AsyncIPCEventBus.GatewayVisite;
 import org.junit.Test;
 import org.junit.jupiter.api.*;
 

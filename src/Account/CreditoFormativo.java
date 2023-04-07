@@ -27,7 +27,7 @@ public class CreditoFormativo {
         this.certificaEsterna=cf.getCertificaEsterna();
     }
 
-    public void insertCreditoFormativo(int idRischio) throws SQLException {
+    public void insertCreditoFormativo() throws SQLException {
         //String idRischio="FE123"; //rischio.getCodice()
         uGateway.insertCreditoFormativo(idRischio);
     }

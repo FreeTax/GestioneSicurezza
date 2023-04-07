@@ -1,8 +1,9 @@
 package TestSuite;
 
 import AccountGateway.UtenteGatewayDb;
-import GatewayIPC.GatewayCorsiSicurezza;
-import GatewayIPC.GatewayUtente;
+
+import AsyncIPCEventBus.GatewayCorsiSicurezza;
+import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class GatewayCorsiSicurezzaTest {
-    GatewayCorsiSicurezza gC = new GatewayCorsiSicurezza();
+    GatewayCorsiSicurezza gC = new GatewayCorsiSicurezza(EventBusService.getIstance());
     UtenteGatewayDb gU=new UtenteGatewayDb();
 
     public GatewayCorsiSicurezzaTest() throws SQLException {

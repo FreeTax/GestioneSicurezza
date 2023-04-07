@@ -45,7 +45,7 @@ public class UtenteEsterno extends Utente{
     }
 
     public void updateUtenteDb() throws SQLException {
-        uGateway.updateUtenteEsterno(idEsterno,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento);
+        uGateway.updateUtenteEsterno(idEsterno,password,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UtenteEsterno extends Utente{
     }
 
     @Override
-    public ArrayList<CreditoFormativo> getCfuSostenuti(int idUtente) throws SQLException {
+    public ArrayList<CreditoFormativo> getCfuSostenuti(Integer idUtente) throws SQLException {
         return super.getCfuSostenuti(idUtente);
     }
 

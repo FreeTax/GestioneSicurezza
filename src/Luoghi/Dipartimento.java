@@ -98,7 +98,7 @@ public class Dipartimento {
 
 
 
-    public void addRischio(int r) throws SQLException {
+    public void addRischio(Integer r) throws SQLException {
         try{
             rischi.add(r);
             new LuoghiGatewayDB().insertRischioDipartimento(this.codice, r);

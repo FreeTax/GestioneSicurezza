@@ -1,16 +1,28 @@
-package GatewayIPC;
+package AsyncIPCEventBus;
 
-import CorsiSicurezza.CorsoType;
-import Visite.Visita;
+import AsyncIPCEventBus.PublishSubscribe.*;
 import Visite.SchedaVisita;
+import Visite.Visita;
 import Visite.VisitaType;
-import VisiteGateway.VisiteGatewayDb;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GatewayVisite {
+    private EventBusService eventBusService;
+    private Subscriber sub;
+    private Publisher pub;
+    public GatewayVisite(EventBusService service) {
+        eventBusService = service;
+        sub = new SubscriberConcr("Visite", service );
+        pub = new PublisherConcr();
+    }
+
+    public GatewayVisite() {
+    }
     public void addVisitaType(int id,String nome, String descrizione, String frequenza, int rischioAssociato) throws SQLException { //FIXME: gestire inserimento: passo dal package visite o vado direttamente al gatewayFB? inserisco anche l'id del tipo?
         VisitaType vT=new VisitaType( id,nome, descrizione, frequenza, rischioAssociato);
         vT.saveToDb();
@@ -44,6 +56,9 @@ public class GatewayVisite {
 
     public void sostieniVisita(int idVisita, String esito, int idUtente) throws SQLException {
         SchedaVisita sv = new SchedaVisita(idUtente);
-        sv.sostieniVisita(idVisita, esito);
+        List<Object> parameters = Arrays.asList(idVisita, esito);
+        pub.publish(new Message("Visite", "sostieniVisita", sv, parameters), eventBusService);
+        System.out.println("Utente"+idUtente+"ha sostenuto la visita");
+        //sv.sostieniVisita(idVisita, esito);
     }
 }

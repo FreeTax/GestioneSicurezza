@@ -58,9 +58,9 @@ public class UtenteInterno extends Utente{
     }
 
     public void updateUtenteDb() throws SQLException {
-        uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,tipo);
+        uGateway.updateUtenteInterno(matricola,password,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,tipo);
     }
-    public ArrayList<CreditoFormativo> getCfuSostenuti(int idUtente) throws SQLException {
+    public ArrayList<CreditoFormativo> getCfuSostenuti(Integer idUtente) throws SQLException {
         return super.getCfuSostenuti(idUtente);
     }
 
@@ -85,4 +85,5 @@ public class UtenteInterno extends Utente{
         int idUtente= uGateway.getIdUtente(this.matricola, true);
         return uGateway.getRichiesteDipartimento(idUtente);
     }
+
 }

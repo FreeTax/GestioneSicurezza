@@ -12,7 +12,7 @@ public class RichiestaLuogo extends Richiesta {
         this.idLuogo = idLuogo;
     }
 
-    public void insertRichiesta(int idLuogo) throws SQLException {
+    public void insertRichiesta() throws SQLException {
         super.insertRichiesta(idLuogo, "luogo");
     }
 

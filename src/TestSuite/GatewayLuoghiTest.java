@@ -1,7 +1,8 @@
 package TestSuite;
 
 import Account.UtenteInterno;
-import GatewayIPC.GatewayLuoghi;
+import AsyncIPCEventBus.GatewayLuoghi;
+import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import Luoghi.Luogo;
 import LuoghiGatewayDb.LuoghiGatewayDB;
 import org.junit.FixMethodOrder;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayLuoghiTest {
-    GatewayLuoghi gL=new GatewayLuoghi();
+    GatewayLuoghi gL=new GatewayLuoghi(EventBusService.getIstance());
     @Test
     public void _01addDipartimento() throws SQLException {
         gL.addDipartimento(1, "nomeDipartimento", 1);

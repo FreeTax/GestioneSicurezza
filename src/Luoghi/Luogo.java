@@ -96,7 +96,7 @@ public class Luogo{
         return dipartimento;
     }
 
-    public void addRischio(int codiceRischio) throws SQLException {
+    public void addRischio(Integer codiceRischio) throws SQLException {
         try{
            rischi.add(codiceRischio);
            new LuoghiGatewayDB().insertRischioLuogo(this.codice, codiceRischio);

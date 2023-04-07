@@ -59,7 +59,7 @@ public class SchedaVisita {
         vGateway.insertVisita(visita.getId(),visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType(), this.codice);
     }
 
-    public void sostieniVisita(int idVisita, String esito) throws SQLException {
+    public void sostieniVisita(Integer idVisita, String esito) throws SQLException {
         Visita visita=null;
         for (Visita v:visiteDaSostentere) {
             if(v.getId()==idVisita)

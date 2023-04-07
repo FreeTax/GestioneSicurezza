@@ -1,13 +1,18 @@
-package GatewayIPC;
+package AsyncIPCEventBus;
 
+import AsyncIPCEventBus.PublishSubscribe.EventBusService;
+import AsyncIPCEventBus.PublishSubscribe.Subscriber;
+import AsyncIPCEventBus.PublishSubscribe.SubscriberConcr;
 import CorsiSicurezza.Corso;
 import CorsiSicurezza.CorsoType;
-import Rischi.Rischio;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class GatewayCorsiSicurezza {
+    public GatewayCorsiSicurezza(EventBusService service) {
+        Subscriber subscriber = new SubscriberConcr("CorsiSicurezza", service );
+    }
     public void addCorsoType(int id, String nome, String descrizione, int rischioAssociato, int authorizerUser) throws SQLException {
             if(!GatewayUtente.checkAvanzato(authorizerUser)) throw new RuntimeException("l'utente che tenta di inserire il corsotype non è avanzato");
             else {

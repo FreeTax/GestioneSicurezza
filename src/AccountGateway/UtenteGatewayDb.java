@@ -291,22 +291,22 @@ public class UtenteGatewayDb {
             con.close();
         }
     }
-    public void updateUtenteInterno(int matricola, String nome, String cognome, String sesso, String datanascita, String dipartimento, String tipo) throws SQLException {
+    public void updateUtenteInterno(int matricola,String password, String nome, String cognome, String sesso, String datanascita, String dipartimento, String tipo) throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
             stmt=con.createStatement();
-            String updateSql = "UPDATE UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente SET nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"', tipo='"+tipo+"' WHERE matricola='"+matricola+"'";
+            String updateSql = "UPDATE UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente SET password='"+password+"', nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"', tipo='"+tipo+"' WHERE matricola='"+matricola+"'";
             stmt.executeUpdate(updateSql);
         }finally {
             con.close();
         }
     }
 
-    public void updateUtenteEsterno(int idEsterno, String nome, String cognome, String sesso, String datanascita, String dipartimento) throws SQLException {
+    public void updateUtenteEsterno(int idEsterno, String password,String nome, String cognome, String sesso, String datanascita, String dipartimento) throws SQLException {
         try{
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
             stmt=con.createStatement();
-            String updateSql = "UPDATE UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente SET nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"' WHERE idEsterno='"+idEsterno+"'";
+            String updateSql = "UPDATE UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente SET password='"+password+"', nome='"+nome+"', cognome='"+cognome+"', sesso='"+sesso+"', datanascita='"+datanascita+"', dipartimento='"+dipartimento+"' WHERE idEsterno='"+idEsterno+"'";
             stmt.executeUpdate(updateSql);
         }finally {
             con.close();

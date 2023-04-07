@@ -2,7 +2,8 @@ package TestSuite;
 
 import Account.CreditoFormativo;
 import AccountGateway.UtenteGatewayDb;
-import GatewayIPC.GatewayUtente;
+import AsyncIPCEventBus.GatewayUtente;
+import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -23,7 +24,7 @@ public class GatewayUtenteTest {
     UtenteGatewayDb uDb;
 
     public GatewayUtenteTest() throws SQLException {
-        gU = new GatewayUtente();
+        gU = new GatewayUtente(EventBusService.getIstance());
         uDb=new UtenteGatewayDb()   ;
     }
     @Test
