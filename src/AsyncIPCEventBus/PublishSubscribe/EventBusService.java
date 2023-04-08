@@ -2,6 +2,7 @@ package AsyncIPCEventBus.PublishSubscribe;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Thread.sleep;
 
@@ -21,8 +22,13 @@ public class EventBusService implements Runnable{
         }
         return eventBusService;
     }
-    public void addMessage(Message message) throws SQLException {
-        MessageQueue.add(message);
+    public synchronized void addMessage(Message message) throws SQLException {
+        synchronized (MessageQueue) {
+            MessageQueue.add(message);
+            MessageQueue.notifyAll();
+        }
+        //MessageQueue.add(message);
+        //sendMessage(message);
         //broadcast();
     }
 
@@ -49,15 +55,17 @@ public class EventBusService implements Runnable{
         }
     }
 
-    public void broadcast() throws SQLException {
+    public synchronized void broadcast() throws SQLException {
         while (!MessageQueue.isEmpty()) {
             Message message=MessageQueue.remove();
             if (TopicSubscribers.containsKey(message.getTopic())) {
                 for (Subscriber subscriber : TopicSubscribers.get(message.getTopic())) {
                     List<Message> subscriberMessages = subscriber.getSubscriberMessages();
                     subscriberMessages.add(message);
-                    //subscriber.setSubscriberMessages(subscriberMessages);
-                    //subscriber.receiveMessage(message, this);
+                    //subscriber.addMessage(message);
+                    //notifyAll();
+                    subscriber.setSubscriberMessages(subscriberMessages);
+                    //subscriber.receiveMessage(message,this);
                 }
             }
         }
@@ -83,13 +91,24 @@ public class EventBusService implements Runnable{
     @Override
     public void run() {
         //TODO: gestire con wait e notify per evitare busy waiting
-        while (!Thread.currentThread().isInterrupted()) {
-            //System.out.println("Broadcasting...");
+        synchronized (MessageQueue) {
             try {
-                broadcast();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                   // Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 5000));
+                    while (MessageQueue.isEmpty()) {
+                        MessageQueue.wait();
+                    }
+                    broadcast();
+                    //System.out.println("Broadcasting...");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        }catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         }
     }
 }

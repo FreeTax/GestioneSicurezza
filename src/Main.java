@@ -16,6 +16,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 import static java.lang.Thread.sleep;
 
@@ -51,7 +52,7 @@ public class Main {
             gR.insertRischioSpecifico(2,"computer","hhjljhl");
             gR.insertRischioSpecifico(3,"laser","hhjljhl");
             gR.insertRischioSpecifico(4,"ustione","hhjljhl");
-            sleep(3000);
+            //sleep(3000);
             gCS.addCorsoType(1,"sicurezza","  ",1,3);
             gCS.addCorso("corsoSicurezza1"," ",1, LocalDate.now(),LocalDate.now(),3);
         }
@@ -112,11 +113,17 @@ public class Main {
         }
         try {
             if (gU.loginInterno(2, "password")) { //login utente supervisore
-                gU.getCFUSostenuti(2, 1);
-                SubscriberConcr subscriber = new SubscriberConcr("CFUsostenuti", eventBusService);
-                sleep(27000);
-                subscriber.receiveMessage(subscriber.getSubscriberMessages().remove(0), eventBusService);
+                ArrayList<CreditoFormativo> CFUsostenuti=gU.getCFUSostenuti(2, 1);
+                /*SubscriberConcr subscriber = new SubscriberConcr("CFUsostenuti", eventBusService);
+                synchronized (subscriber.getSubscriberMessages()) {
+                    while (subscriber.getSubscriberMessages().isEmpty()) {
+                        subscriber.getSubscriberMessages().wait();
+                    }
+                    subscriber.receiveMessage(subscriber.getSubscriberMessages().remove(0),eventBusService);
+                }
                 ArrayList<CreditoFormativo> CFUsostenuti = (ArrayList<CreditoFormativo>) subscriber.getResponse();
+                /*subscriber.receiveMessage(subscriber.getSubscriberMessages().remove(0), eventBusService);
+                ArrayList<CreditoFormativo> CFUsostenuti = (ArrayList<CreditoFormativo>) subscriber.getResponse();*/
                 ArrayList<String> cfusString = new ArrayList<>();
                 CFUsostenuti.forEach(cf -> cfusString.add(cf.toString()));
                 System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + cfusString);
@@ -152,6 +159,14 @@ public class Main {
         GatewayVisite gV = new GatewayVisite(eventBusService);
         GatewayCorsiSicurezza gCS= new GatewayCorsiSicurezza(eventBusService);
 
+        CompletableFuture.runAsync(()->eventBusService.run());
+        CompletableFuture.runAsync(()->accountSubscriber.run());
+        CompletableFuture.runAsync(()->new AccessiSubscriber(eventBusService).run());
+        CompletableFuture.runAsync(()->new LuoghiSubscriber(eventBusService).run());
+        CompletableFuture.runAsync(()->new RischiSubscriber(eventBusService).run());
+        CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
+
+/*
         ArrayList<Thread> threads = new ArrayList<Thread>();
         threads.add(new Thread(eventBusService));
         threads.add(new Thread(accountSubscriber));
@@ -163,16 +178,16 @@ public class Main {
         for (Thread t : threads) {
             t.start();
         }
-
+*/
         System.out.println("_______________INIT DB_______________");
         initData(gA, gR, gV, gU, gL,gCS);
-        sleep(7000);
+        //sleep(7000);
         System.out.println("_______________TEST2_______________");
         test2(gA,gR,gV,gU,gL,eventBusService);
-        sleep(3000);
+        //sleep(3000);
         System.out.println("_______________TEST1_______________");
         test(gA, gR, gV, gU, gL);
-        sleep(3000);
+        //sleep(3000);
         System.out.println("_______________TEST DASHBOARD_______________");
         testDashboard(gU, gL);
 
@@ -186,7 +201,8 @@ public class Main {
         System.out.println("Accessi creato");
         publisher.publish(new Message("Visite", "create"), eventBusService);
         System.out.println("Visite creato");
-        publisher.publish(new Message("CorsiSicurezza", "create"), eventBusService);
+        publisher.publish(new Message("CorsiSicurezza", "create"), eventBusService);*/
+/*
         gU.insertUtenteInterno(1,"password", "Mario", "Rossi", "M", "1999-01-01", "1", "base");
         gU.insertUtenteInterno(2,"password", "Mario", "Bianchi", "M", "1999-01-01", "1", "base");
         gU.insertUtenteInterno(3,"password", "Mario", "Verdi", "M", "1999-01-01", "1", "base");
@@ -203,6 +219,9 @@ public class Main {
         gU.sostieniCredito(2,1,"");
         gU.sostieniCredito(2,2,"");
 
+        ArrayList<CreditoFormativo> cfus = gU.getCFUSostenuti(1,2);
+        System.out.println(cfus.toString());
+
         //eventBusService.broadcast();
 
         gV.addVisitaType(1,"visita oculistica", " ", "2 anno",2);
@@ -218,7 +237,7 @@ public class Main {
         gL.insertRischioLuogo(1,2);
         gL.insertRischioDipartimento(1,1);
 
-        sleep(27000);
+        //sleep(27000);
 
         gA.insertAccessoDipartimento(2,1,4);
         gA.insertAccessoLuogo(2,1,1);
@@ -227,23 +246,39 @@ public class Main {
         gA.deleteAccessoDipartimento(2,1);
         gA.deleteAccessoLuogo(2,1);
 
-
-        gU.getCFUSostenuti(1,2);
         SubscriberConcr subscriber = new SubscriberConcr("CFUsostenuti", eventBusService);
-        //eventBusService.broadcast();
-        sleep(27000);
-        subscriber.receiveMessage(subscriber.getSubscriberMessages().remove(0), eventBusService);
-        ArrayList<CreditoFormativo> cf = (ArrayList<CreditoFormativo>) subscriber.getResponse();
+        ArrayList<CreditoFormativo> cf=gU.getCFUSostenuti(1,2);
         System.out.println(cf.toString());
-        */
-        for (Thread t : threads) {
-            t.interrupt();
-            t.join();
+
+        //eventBusService.broadcast();
+        //sleep(27000);
+        /*
+        synchronized (subscriber.getSubscriberMessages()) {
+                //System.out.println("SubscriberConcr is running");
+                while (subscriber.getSubscriberMessages().isEmpty()) {
+                    //System.out.println(subscriber.getSubscriberMessages().toString());
+                    subscriber.getSubscriberMessages().wait();
+                }
+                subscriber.receiveMessage(subscriber.getSubscriberMessages().remove(0),eventBusService);
+            ArrayList<CreditoFormativo> cf = (ArrayList<CreditoFormativo>) subscriber.getResponse();
+            System.out.println(cf.toString());
+        }*
+        //subscriber.receiveMessage(subscriber.getSubscriberMessages().remove(0), eventBusService);
+
+        try {
+            for (Thread t : threads) {
+                t.interrupt();
+                t.join();
+            }
+        }catch (InterruptedException e){
+            System.out.println(e);
         }
+*/
         /*
         initData(gA, gR, gV, gU, gL,gCS);
         test2(gA,gR,gV,gU,gL);
         test(gA, gR, gV, gU, gL);
         testDashboard(gU, gL);*/
+       //sleep(10000);
     }
 }

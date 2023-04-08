@@ -4,48 +4,51 @@ import Account.*;
 import AsyncIPCEventBus.PublishSubscribe.*;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class AccountSubscriber extends Subscriber implements Runnable{
-
-    Object response=null;
-    EventBusService service;
+public class AccountSubscriber extends Subscriber {
     public AccountSubscriber(/*String topic,*/ EventBusService service) {
         this.service=service;
         addSubscriber("Account", service);
     }
 
-    public void addSubscriber(String topic, EventBusService service) {
-        service.registerSubscriber(topic, this);
-    }
+    /*@Override
+    public void addMessage(Message message) {
+        synchronized (subscriberMessages) {
+            super.addMessage(message);
+            subscriberMessages.notifyAll();
+        }
+    }*/
+/*
+    public synchronized void executeMessage(){
 
-    public void unSubscribe(String topic, EventBusService service) {
-        service.removeSubscriber(topic, this);
-    }
-
-    public void getMessagesForTopicSuscriber(String topic, EventBusService service) {
-        service.getMessagesForTopicSuscriber(topic, this);
-    }
-
-    @Override
-    public void setSubscriberMessages(List<Message> subscriberMessages) {
-        super.setSubscriberMessages(subscriberMessages);
-    }
-
+        Message message=getSubscriberMessages().remove(0);
+        receiveMessage(message,service);
+    }*/
     public Object getResponse(){
         return response;
     }
-    public void receiveMessage(Message message, EventBusService service) {
+    public synchronized void receiveMessage(Message message, EventBusService service) {
+       // Message message=getSubscriberMessages().remove(0);
+        /*while (getSubscriberMessages().isEmpty()){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Message message=getSubscriberMessages().remove(0);*/
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
-            //Object obj = message.getData();
+            /*//Object obj = message.getData();
             Object data;
             List<Object> parameters = message.getParameters();
             Method method = null;
             Object returnObj;
-            /*if (!message.getMessage().equals("response")) {
+            if (!message.getMessage().equals("response")) {
                 if (parameters != null) {
                     Class[] cls = new Class[parameters.size()];
                     int i = 0;
@@ -69,8 +72,7 @@ public class AccountSubscriber extends Subscriber implements Runnable{
             }*/
             switch (message.getMessage()){
             case "insertUtente":
-                data = message.getData();
-                Utente u = (Utente) data;
+                Utente u = (Utente) message.getData();
                 u.insertUtente();
                 break;
 
@@ -80,14 +82,12 @@ public class AccountSubscriber extends Subscriber implements Runnable{
                 break;
 
             case "insertRichiestaLuogo":
-                data = message.getData();
-                RichiestaLuogo rl = (RichiestaLuogo) data;
+                RichiestaLuogo rl = (RichiestaLuogo) message.getData();
                 rl.insertRichiesta();
                 break;
 
             case "insertRichiestaDipartimento":
-                data = message.getData();
-                RichiestaDipartimento rd = (RichiestaDipartimento) data;
+                RichiestaDipartimento rd = (RichiestaDipartimento) message.getData();
                 rd.insertRichiesta();
                 break;
 
@@ -125,17 +125,6 @@ public class AccountSubscriber extends Subscriber implements Runnable{
         }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void run() {
-        while(!Thread.currentThread().isInterrupted()){
-            //System.out.println("SubscriberConcr is running");
-            if(getSubscriberMessages().size()!=0) {
-                Message m = getSubscriberMessages().remove(0);
-                receiveMessage(m, service);
-            }
         }
     }
 }

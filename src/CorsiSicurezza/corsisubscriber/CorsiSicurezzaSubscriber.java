@@ -30,9 +30,19 @@ public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
 
     @Override
     public void setSubscriberMessages(List<Message> subscriberMessages) {
-        super.setSubscriberMessages(subscriberMessages);
+        synchronized (subscriberMessages){
+            super.setSubscriberMessages(subscriberMessages);
+            subscriberMessages.notifyAll();
+        }
     }
-
+/*
+    @Override
+    public void addMessage(Message message) {
+        synchronized (subscriberMessages) {
+            super.addMessage(message);
+            subscriberMessages.notifyAll();
+        }
+    }*/
     public Object getResponse(){
         return response;
     }
@@ -116,12 +126,18 @@ public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
 
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()){
-            //System.out.println("SubscriberConcr is running");
-            if(getSubscriberMessages().size()!=0) {
-                Message m = getSubscriberMessages().remove(0);
-                receiveMessage(m, service);
+        try {
+            synchronized (subscriberMessages) {
+                while (!Thread.currentThread().isInterrupted()) {
+                    //System.out.println("SubscriberConcr is running");
+                    while (subscriberMessages.isEmpty()) {
+                        subscriberMessages.wait();
+                    }
+                    receiveMessage(subscriberMessages.remove(0),service);
+                }
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

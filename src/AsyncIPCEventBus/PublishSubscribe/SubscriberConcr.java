@@ -26,9 +26,19 @@ public class SubscriberConcr extends Subscriber {
 
     @Override
     public void setSubscriberMessages(List<Message> subscriberMessages) {
-        super.setSubscriberMessages(subscriberMessages);
+        synchronized (subscriberMessages){
+            super.setSubscriberMessages(subscriberMessages);
+            subscriberMessages.notifyAll();
+        }
     }
 
+    @Override
+    public void addMessage(Message message) {
+        synchronized (subscriberMessages) {
+            super.addMessage(message);
+            subscriberMessages.notifyAll();
+        }
+    }
     public Object getResponse(){
         return response;
     }

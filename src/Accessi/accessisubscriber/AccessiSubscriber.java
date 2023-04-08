@@ -9,35 +9,19 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class AccessiSubscriber extends Subscriber implements Runnable{
-
-    Object response=null;
-    EventBusService service;
+public class AccessiSubscriber extends Subscriber{
     public AccessiSubscriber(/*String topic,*/ EventBusService service) {
         this.service=service;
         addSubscriber("Accessi", service);
     }
-
-    public void addSubscriber(String topic, EventBusService service) {
-        service.registerSubscriber(topic, this);
-    }
-
-    public void unSubscribe(String topic, EventBusService service) {
-        service.removeSubscriber(topic, this);
-    }
-
-    public void getMessagesForTopicSuscriber(String topic, EventBusService service) {
-        service.getMessagesForTopicSuscriber(topic, this);
-    }
-
+/*
     @Override
-    public void setSubscriberMessages(List<Message> subscriberMessages) {
-        super.setSubscriberMessages(subscriberMessages);
-    }
-
-    public Object getResponse(){
-        return response;
-    }
+    public void addMessage(Message message) {
+        synchronized (subscriberMessages) {
+            super.addMessage(message);
+            subscriberMessages.notifyAll();
+        }
+    }*/
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
@@ -106,14 +90,5 @@ public class AccessiSubscriber extends Subscriber implements Runnable{
         }
     }
 
-    @Override
-    public void run() {
-        while(!Thread.currentThread().isInterrupted()){
-            //System.out.println("SubscriberConcr is running");
-            if(getSubscriberMessages().size()!=0) {
-                Message m = getSubscriberMessages().remove(0);
-                receiveMessage(m, service);
-            }
-        }
-    }
+
 }

@@ -9,15 +9,15 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class RischiSubscriber extends Subscriber implements Runnable{
-
+public class RischiSubscriber extends Subscriber{
+/*
     Object response=null;
-    EventBusService service;
+    EventBusService service;*/
     public RischiSubscriber(/*String topic,*/ EventBusService service) {
         this.service=service;
         addSubscriber("Rischi", service);
     }
-
+/*
     public void addSubscriber(String topic, EventBusService service) {
         service.registerSubscriber(topic, this);
     }
@@ -32,20 +32,32 @@ public class RischiSubscriber extends Subscriber implements Runnable{
 
     @Override
     public void setSubscriberMessages(List<Message> subscriberMessages) {
-        super.setSubscriberMessages(subscriberMessages);
+        synchronized (subscriberMessages) {
+            super.setSubscriberMessages(subscriberMessages);
+            subscriberMessages.notifyAll();
+        }
     }
-
+/*
+    @Override
+    public void addMessage(Message message) {
+        synchronized (subscriberMessages) {
+            super.addMessage(message);
+            subscriberMessages.notifyAll();
+        }
+    }*/
+    /*
     public Object getResponse(){
         return response;
-    }
+    }*/
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
+            /*
             Object obj = message.getData();
             List<Object> parameters = message.getParameters();
             Method method = null;
             Object returnObj;
-            /*if (!message.getMessage().equals("response")) {
+            if (!message.getMessage().equals("response")) {
                 if (parameters != null) {
                     Class[] cls = new Class[parameters.size()];
                     int i = 0;
@@ -86,15 +98,21 @@ public class RischiSubscriber extends Subscriber implements Runnable{
             e.printStackTrace();
         }
     }
-
+/*
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()){
-            //System.out.println("SubscriberConcr is running");
-            if(getSubscriberMessages().size()!=0) {
-                Message m = getSubscriberMessages().remove(0);
-                receiveMessage(m, service);
+        try {
+            synchronized (subscriberMessages) {
+                while (!Thread.currentThread().isInterrupted()) {
+                    //System.out.println("SubscriberConcr is running");
+                    while (subscriberMessages.isEmpty()) {
+                        subscriberMessages.wait();
+                    }
+                    receiveMessage(subscriberMessages.remove(0),service);
+                }
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    }
+    }*/
 }

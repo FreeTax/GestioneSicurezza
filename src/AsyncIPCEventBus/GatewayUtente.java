@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 
 public class GatewayUtente {
@@ -125,10 +128,20 @@ public class GatewayUtente {
     public ArrayList<CreditoFormativo> getCFUSostenuti(int idAutorizzato, int idUtente) throws SQLException {
         Utente u=new UtenteInterno();//FIXME not good
         if (checkSupervisore(idAutorizzato) || checkAvanzato(idAutorizzato)) {
-            ArrayList<CreditoFormativo> cfus = u.getCfuSostenuti(idUtente);
+           // ArrayList<CreditoFormativo> cfus = u.getCfuSostenuti(idUtente);
+            SubscriberConcr subscriber = new SubscriberConcr("CFUsostenuti", eventBusService);
             pub.publish(new Message("Account", "getCfuSostenuti",null,Arrays.asList(idUtente),"CFUsostenuti"), eventBusService);
+            //CompletableFuture.runAsync(()->subscriber.run());
             //ArrayList<String> cfusString = new ArrayList<>();
             //cfus.forEach(cf -> cfusString.add(cf.toString()));
+            //ArrayList<CreditoFormativo> cfus;
+
+            Executor deleyed=CompletableFuture.delayedExecutor(4, TimeUnit.SECONDS);
+            CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
+                    .supplyAsync(()->(ArrayList<CreditoFormativo>)subscriber.getSubscriberMessages().get(0).getData(),deleyed)
+                    .completeOnTimeout(new ArrayList<>(), 5, TimeUnit.SECONDS);
+            ArrayList<CreditoFormativo> cfus = getCFU.join();
+
             return cfus;
         } else {
             throw new RuntimeException("Utente non autorizzato");
