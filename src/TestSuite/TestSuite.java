@@ -18,7 +18,7 @@ import java.sql.*;
         GatewayVisiteTest.class
 })
 
-//TODO: i test non funzionano bene a un certo punto non comunica più con il subscriber e non inserisce i dati nel db
+//TODO: i test non funzionano bene a un certo punto non comunica più con il subscriber e non inserisce i dati nel db (se eseguiti separatamente funzionano)
 
 class TestSuite {
 

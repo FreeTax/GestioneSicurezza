@@ -3,6 +3,7 @@ package TestSuite;
 import AsyncIPCEventBus.GatewayVisite;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import Visite.visitesubscriber.VisiteSubscriber;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.*;
 
@@ -14,13 +15,18 @@ import VisiteGateway.VisiteGatewayDb;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GatewayVisiteTest {
-    GatewayVisite gV;
-    VisiteGatewayDb vG;
+    static GatewayVisite gV;
+    static VisiteGatewayDb vG;
     public GatewayVisiteTest() throws SQLException {
+
+    }
+
+    @BeforeClass
+    public static void initialize() throws SQLException {
         EventBusService eventBusService = new EventBusService();
         gV=new GatewayVisite(eventBusService);
         vG = new VisiteGatewayDb();
-
+        System.out.println("GatewayVisiteTest: initialize");
         CompletableFuture.runAsync(()->eventBusService.run());
         CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
     }

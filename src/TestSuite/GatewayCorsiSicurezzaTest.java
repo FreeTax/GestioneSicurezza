@@ -5,6 +5,7 @@ import AccountGateway.UtenteGatewayDb;
 import AsyncIPCEventBus.GatewayCorsiSicurezza;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import CorsiSicurezza.corsisubscriber.CorsiSicurezzaSubscriber;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
@@ -20,10 +21,15 @@ import java.util.concurrent.CompletableFuture;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class GatewayCorsiSicurezzaTest {
-    GatewayCorsiSicurezza gC;
+    static GatewayCorsiSicurezza gC;
     UtenteGatewayDb gU=new UtenteGatewayDb();
 
     public GatewayCorsiSicurezzaTest() throws SQLException {
+
+    }
+
+    @BeforeClass
+    public static void initialize() throws SQLException {
         EventBusService eventBusService = new EventBusService();
         gC=new GatewayCorsiSicurezza(eventBusService);
         CompletableFuture.runAsync(()->eventBusService.run());

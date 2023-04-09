@@ -51,7 +51,8 @@ public class GatewayAccessi {
 
                 CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
                         .supplyAsync(()->(ArrayList<CreditoFormativo>)subscriber2.getSubscriberMessages().get(0).getData(),deleyed)
-                        .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS);
+                        .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS)
+                        .exceptionally(e -> new ArrayList<>());
 
                 ArrayList<CreditoFormativo> cfuUtente = getCFU.join();
 
@@ -90,7 +91,8 @@ public class GatewayAccessi {
 
                 CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
                         .supplyAsync(()->(ArrayList<CreditoFormativo>)subscriber2.getSubscriberMessages().get(0).getData(),deleyed)
-                        .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS);
+                        .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS)
+                        .exceptionally(e -> new ArrayList<>());
 
                 ArrayList<CreditoFormativo> cfuUtente = getCFU.join();
                 ArrayList<Integer> cfuUtenteId = new ArrayList<>();

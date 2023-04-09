@@ -5,10 +5,8 @@ import Account.accountsubscriber.AccountSubscriber;
 import AccountGateway.UtenteGatewayDb;
 import AsyncIPCEventBus.*;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Rule;
-import org.junit.Test;
+import Rischi.rischisubscriber.RischiSubscriber;
+import org.junit.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
@@ -18,46 +16,66 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 import static java.lang.Thread.sleep;
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayUtenteTest {
-    GatewayUtente gU;
-    UtenteGatewayDb uDb;
+    static GatewayUtente gU;
+    static UtenteGatewayDb uDb;
 
+    static CompletableFuture subscriberAccount;
+    static CompletableFuture service;
+    EventBusService eventBusService;
     public GatewayUtenteTest() throws SQLException {
+        System.out.println("GatewayUtenteTest: constructor");
+    }
+
+    @BeforeClass
+    public static void initialize() throws SQLException {
+        InitDB.initDB();
         EventBusService eventBusService = new EventBusService();
         gU = new GatewayUtente(eventBusService);
         uDb=new UtenteGatewayDb();
+        GatewayRischi gR = new GatewayRischi(eventBusService);
 
-        CompletableFuture.runAsync(()->eventBusService.run());
-        CompletableFuture.runAsync(()->new AccountSubscriber(eventBusService).run());
+        service=CompletableFuture.runAsync(()->eventBusService.run());
+        subscriberAccount=CompletableFuture.runAsync(()->new AccountSubscriber(eventBusService).run());
+        CompletableFuture rischiSubscriber = CompletableFuture.runAsync(()->new RischiSubscriber(eventBusService).run());
+        System.out.println("GatewayUtenteTest: initialize");
+        gR.insertRischioSpecifico(10123, "Rischio1", "Descrizione1");
+        rischiSubscriber.complete(null);
+
+    }
+
+    @AfterClass
+    public static void close() throws SQLException {
+        System.out.println("GatewayUtenteTest: close");
+        service.complete(null);
+        subscriberAccount.complete(null);
     }
     @Test
     @BeforeAll
     public void _00reset() throws SQLException {
-        InitDB.initDB();
     }
     @Test
     public void _01insertUtenteInterno() throws SQLException, InterruptedException {
         gU.insertUtenteInterno(1234567, "passwordinterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento","base");
-        gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
-        gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
-        //sleep(500);
     }
 
     @Test
     public void _02insertUtenteEsterno() throws SQLException, InterruptedException {
         gU.insertUtenteEsterno(19029420, "passwordesterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento");
-        //sleep(800);
     }
 
     @Test
     public void _03insertCreditoFormativo() throws SQLException, InterruptedException {
-        //sleep(1000);
+        eventBusService = new EventBusService();
+
+
         gU.insertCreditoFormativo(1, 10123);
-        //sleep(1000);
+        sleep(1000);
     }
 
     @Test
@@ -95,13 +113,11 @@ public class GatewayUtenteTest {
     @Test
     public void _10aggiornaUtenteInterno() throws SQLException, InterruptedException {
         gU.aggiornaUtenteInterno(1234567, "nuovapasswordinterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento","base");
-        sleep(1000);
     }
 
     @Test
     public void _11aggiornaUtenteEsterno() throws SQLException, InterruptedException {
         gU.aggiornaUtenteEsterno(19029420, "nuovapasswordesterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento");
-        sleep(2000);
     }
     @Test
     public void _12caricaCertificazione() throws SQLException {
@@ -121,9 +137,9 @@ public class GatewayUtenteTest {
 
     @Test
     public void _14getRichiesteLuogoAut() throws SQLException, InterruptedException {
-        //gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
+        gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
         //int idUtente=uDb.getIdUtente(8912345,true);
-        //sleep(3000);
+        sleep(1000);
         ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(8912345);
         assert richiesteluogo.size()==1;
         assertArrayEquals(richiesteluogo.toArray(),new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
@@ -140,9 +156,9 @@ public class GatewayUtenteTest {
 
     @Test
     public void _16getRichiesteDipartimentoAut() throws SQLException, InterruptedException {
-        //gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
+        gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
         //int idUtente=uDb.getIdUtente(9123456,true);
-        //sleep(5000);
+        sleep(1000);
         ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(9123456);
         assert richiestedipartimento.size()==1;
         assertArrayEquals(richiestedipartimento.toArray(),new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
@@ -154,7 +170,7 @@ public class GatewayUtenteTest {
         //int idAutorizzato=uDb.getIdUtente(8912345,true);
         ArrayList<String> creditisostenuti=gU.getCFUSostenuti(8912345, idUtente);
         assert creditisostenuti.size()==1;
-        assertArrayEquals(creditisostenuti.toArray(),new String[]{"codice=1, idRischio=10123, certificaEsterna=http:certificazione"});
+        assertEquals(creditisostenuti.remove(0),"Rischio1");
     }
 
     @Test

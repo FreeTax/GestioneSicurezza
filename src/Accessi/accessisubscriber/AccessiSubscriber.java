@@ -55,6 +55,7 @@ public class AccessiSubscriber extends Subscriber{
                 AccessoLuogoAbilitato al2 = (AccessoLuogoAbilitato) message.getData();
                 al2.deleteAccesso();
                 break;
+
             case "getLuoghiFrequentati":
                 int idUtente = (int) message.getParameters().get(0);
                 AccessoLuogoAbilitato al3 = (AccessoLuogoAbilitato) message.getData();
