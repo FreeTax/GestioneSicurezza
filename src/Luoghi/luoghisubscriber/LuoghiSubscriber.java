@@ -25,33 +25,6 @@ public class LuoghiSubscriber extends Subscriber{
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
-            /*Object obj = message.getData();
-            List<Object> parameters = message.getParameters();
-            Method method = null;
-            Object returnObj;
-            if (!message.getMessage().equals("response")) {
-                if (parameters != null) {
-                    Class[] cls = new Class[parameters.size()];
-                    int i = 0;
-                    for (Object p : parameters) {
-                        cls[i] = p.getClass();
-                        i++;
-                    }
-                    method = obj.getClass().getMethod(message.getMessage(), cls);
-                    returnObj=method.invoke(obj, parameters.toArray());
-                } else {
-                    method = obj.getClass().getMethod(message.getMessage());
-                    returnObj=method.invoke(obj);
-                }
-                if(message.getReturnAddress()!=null){
-                    Publisher pub=new PublisherConcr();
-                    pub.publish(new Message(message.getReturnAddress(),"response",returnObj,null),service);
-                }
-            }
-            else {
-                response=message.getData();
-            }
-            */
             switch (message.getMessage()){
             case "insertRischioLuogo":
                 Luogo l = (Luogo) message.getData();
@@ -63,6 +36,18 @@ public class LuoghiSubscriber extends Subscriber{
                 Dipartimento d = (Dipartimento) message.getData();
                 int idRischioD = (int) message.getParameters().get(0);
                 d.addRischio(idRischioD);
+                break;
+
+            case "getRischiLuogo":
+                Luogo l1 = (Luogo) message.getData();
+                PublisherConcr publisher = new PublisherConcr();
+                publisher.publish(new Message(message.getReturnAddress(), "response", l1.getRischi(), null), service);
+                break;
+
+            case "getRischiDipartimento":
+                Dipartimento d1 = (Dipartimento) message.getData();
+                PublisherConcr publisher1 = new PublisherConcr();
+                publisher1.publish(new Message(message.getReturnAddress(), "response", d1.getRischi(), null), service);
                 break;
 
             default:

@@ -4,6 +4,7 @@ import Account.UtenteInterno;
 import AsyncIPCEventBus.GatewayLuoghi;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import Luoghi.Luogo;
+import Luoghi.luoghisubscriber.LuoghiSubscriber;
 import LuoghiGatewayDb.LuoghiGatewayDB;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -13,11 +14,21 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runners.MethodSorters;
 
 import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayLuoghiTest {
-    GatewayLuoghi gL=new GatewayLuoghi(EventBusService.getIstance());
+    GatewayLuoghi gL;
+    EventBusService eventBusService;
+    public GatewayLuoghiTest() throws SQLException {
+        eventBusService = new EventBusService();
+        gL=new GatewayLuoghi(eventBusService);
+
+        CompletableFuture.runAsync(()->eventBusService.run());
+        CompletableFuture.runAsync(()->new LuoghiSubscriber(eventBusService).run());
+    }
+
     @Test
     public void _01addDipartimento() throws SQLException {
         gL.addDipartimento(1, "nomeDipartimento", 1);

@@ -1,8 +1,9 @@
 package TestSuite;
 
 import Account.CreditoFormativo;
+import Account.accountsubscriber.AccountSubscriber;
 import AccountGateway.UtenteGatewayDb;
-import AsyncIPCEventBus.GatewayUtente;
+import AsyncIPCEventBus.*;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -14,7 +15,9 @@ import org.junit.runners.MethodSorters;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -24,8 +27,12 @@ public class GatewayUtenteTest {
     UtenteGatewayDb uDb;
 
     public GatewayUtenteTest() throws SQLException {
-        gU = new GatewayUtente(EventBusService.getIstance());
-        uDb=new UtenteGatewayDb()   ;
+        EventBusService eventBusService = new EventBusService();
+        gU = new GatewayUtente(eventBusService);
+        uDb=new UtenteGatewayDb();
+
+        CompletableFuture.runAsync(()->eventBusService.run());
+        CompletableFuture.runAsync(()->new AccountSubscriber(eventBusService).run());
     }
     @Test
     @BeforeAll
@@ -33,22 +40,28 @@ public class GatewayUtenteTest {
         InitDB.initDB();
     }
     @Test
-    public void _01insertUtenteInterno() throws SQLException {
+    public void _01insertUtenteInterno() throws SQLException, InterruptedException {
         gU.insertUtenteInterno(1234567, "passwordinterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento","base");
+        gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
+        gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
+        //sleep(500);
     }
 
     @Test
-    public void _02insertUtenteEsterno() throws SQLException {
+    public void _02insertUtenteEsterno() throws SQLException, InterruptedException {
         gU.insertUtenteEsterno(19029420, "passwordesterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento");
+        //sleep(800);
     }
 
     @Test
-    public void _03insertCreditoFormativo() throws SQLException {
+    public void _03insertCreditoFormativo() throws SQLException, InterruptedException {
+        //sleep(1000);
         gU.insertCreditoFormativo(1, 10123);
+        //sleep(1000);
     }
 
     @Test
-    public void _04loginInterno() throws SQLException {
+    public void _04loginInterno() throws SQLException, InterruptedException {
         assertTrue(gU.loginInterno(1234567, "passwordinterno"));
     }
 
@@ -58,7 +71,7 @@ public class GatewayUtenteTest {
     }
 
     @Test
-    public void _06loginEsterno() throws SQLException {
+    public void _06loginEsterno() throws SQLException, InterruptedException {
         assertTrue(gU.loginEsterno(19029420, "passwordesterno"));
     }
 
@@ -80,13 +93,15 @@ public class GatewayUtenteTest {
     }
 
     @Test
-    public void _10aggiornaUtenteInterno() throws SQLException {
+    public void _10aggiornaUtenteInterno() throws SQLException, InterruptedException {
         gU.aggiornaUtenteInterno(1234567, "nuovapasswordinterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento","base");
+        sleep(1000);
     }
 
     @Test
-    public void _11aggiornaUtenteEsterno() throws SQLException {
+    public void _11aggiornaUtenteEsterno() throws SQLException, InterruptedException {
         gU.aggiornaUtenteEsterno(19029420, "nuovapasswordesterno", "nome", "cognome", "sesso", "2000-10-03", "Dipartimento");
+        sleep(2000);
     }
     @Test
     public void _12caricaCertificazione() throws SQLException {
@@ -105,10 +120,10 @@ public class GatewayUtenteTest {
     }
 
     @Test
-    public void _14getRichiesteLuogoAut() throws SQLException {
-        gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
+    public void _14getRichiesteLuogoAut() throws SQLException, InterruptedException {
+        //gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento","supervisore");
         //int idUtente=uDb.getIdUtente(8912345,true);
-
+        //sleep(3000);
         ArrayList<String> richiesteluogo=gU.getRichiesteLuogo(8912345);
         assert richiesteluogo.size()==1;
         assertArrayEquals(richiesteluogo.toArray(),new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
@@ -124,9 +139,10 @@ public class GatewayUtenteTest {
     }
 
     @Test
-    public void _16getRichiesteDipartimentoAut() throws SQLException {
-        gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
+    public void _16getRichiesteDipartimentoAut() throws SQLException, InterruptedException {
+        //gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento","avanzato");
         //int idUtente=uDb.getIdUtente(9123456,true);
+        //sleep(5000);
         ArrayList<String> richiestedipartimento=gU.getRichiesteDipartimento(9123456);
         assert richiestedipartimento.size()==1;
         assertArrayEquals(richiestedipartimento.toArray(),new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
@@ -136,11 +152,9 @@ public class GatewayUtenteTest {
     public void _17getCFUSostenuti() throws SQLException {
         int idUtente=uDb.getIdUtente(1234567,true);
         //int idAutorizzato=uDb.getIdUtente(8912345,true);
-        ArrayList<CreditoFormativo> creditisostenuti=gU.getCFUSostenuti(8912345, idUtente);
-        ArrayList<String> cfusString = new ArrayList<>();
-        creditisostenuti.forEach(cf -> cfusString.add(cf.toString()));
+        ArrayList<String> creditisostenuti=gU.getCFUSostenuti(8912345, idUtente);
         assert creditisostenuti.size()==1;
-        assertArrayEquals(cfusString.toArray(),new String[]{"codice=1, idRischio=10123, certificaEsterna=http:certificazione"});
+        assertArrayEquals(creditisostenuti.toArray(),new String[]{"codice=1, idRischio=10123, certificaEsterna=http:certificazione"});
     }
 
     @Test
@@ -149,7 +163,7 @@ public class GatewayUtenteTest {
         //int idAutorizzato=uDb.getIdUtente(1234567,true);
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
-        ArrayList<CreditoFormativo> creditisostenuti=gU.getCFUSostenuti(1234567, idUtente);
+        ArrayList<String> creditisostenuti=gU.getCFUSostenuti(1234567, idUtente);
 
     }
 }

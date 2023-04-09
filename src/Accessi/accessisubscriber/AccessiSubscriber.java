@@ -25,32 +25,6 @@ public class AccessiSubscriber extends Subscriber{
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
-            Object obj = message.getData();
-            List<Object> parameters = message.getParameters();
-            Method method = null;
-            Object returnObj;
-            /*if (!message.getMessage().equals("response")) {
-                if (parameters != null) {
-                    Class[] cls = new Class[parameters.size()];
-                    int i = 0;
-                    for (Object p : parameters) {
-                        cls[i] = p.getClass();
-                        i++;
-                    }
-                    method = obj.getClass().getMethod(message.getMessage(), cls);
-                    returnObj=method.invoke(obj, parameters.toArray());
-                } else {
-                    method = obj.getClass().getMethod(message.getMessage());
-                    returnObj=method.invoke(obj);
-                }
-                if(message.getReturnAddress()!=null){
-                    Publisher pub=new PublisherConcr();
-                    pub.publish(new Message(message.getReturnAddress(),"response",returnObj,null),service);
-                }
-            }
-            else {
-                response=message.getData();
-            }*/
             switch (message.getMessage()){
             case "insertAccessoDipartimento":
                 AccessoDipartimentoAbilitato ad = (AccessoDipartimentoAbilitato) message.getData();
@@ -80,6 +54,19 @@ public class AccessiSubscriber extends Subscriber{
             case "deleteAccessoLuogo":
                 AccessoLuogoAbilitato al2 = (AccessoLuogoAbilitato) message.getData();
                 al2.deleteAccesso();
+                break;
+            case "getLuoghiFrequentati":
+                int idUtente = (int) message.getParameters().get(0);
+                AccessoLuogoAbilitato al3 = (AccessoLuogoAbilitato) message.getData();
+                Publisher publisher = new PublisherConcr();
+                publisher.publish(new Message(message.getReturnAddress(),"response", al3.getLuoghiFrequentati(idUtente)), service);
+                break;
+
+            case "getDipartimentiFrequentati":
+                int idUtente1 = (int) message.getParameters().get(0);
+                AccessoDipartimentoAbilitato ad3 = new AccessoDipartimentoAbilitato(idUtente1,0);
+                Publisher publisher1 = new PublisherConcr();
+                publisher1.publish(new Message(message.getReturnAddress(),"response", ad3.getDipartimentiFrequentati(idUtente1)), service);
                 break;
 
             default:

@@ -17,6 +17,9 @@ import java.sql.*;
         GatewayCorsiSicurezzaTest.class,
         GatewayVisiteTest.class
 })
+
+//TODO: i test non funzionano bene a un certo punto non comunica più con il subscriber e non inserisce i dati nel db
+
 class TestSuite {
 
 }

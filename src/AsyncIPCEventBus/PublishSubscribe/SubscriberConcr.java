@@ -50,6 +50,7 @@ public class SubscriberConcr extends Subscriber {
         }
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
+            /*
             Object obj = message.getData();
             List<Object> parameters = message.getParameters();
             Method method = null;
@@ -76,7 +77,9 @@ public class SubscriberConcr extends Subscriber {
             else {
                 response=message.getData();
             }
-            /*switch (message.getMessage()){
+            */
+            switch (message.getMessage()){
+                /*
             case "insertUtente":
                 data = message.getData();
                 Utente u = (Utente) data;
@@ -115,11 +118,14 @@ public class SubscriberConcr extends Subscriber {
                 String certificato=(String)param.get(2);
                 Utente ui=(UtenteInterno)param.get(3);
                 ui.sostieniCredito(idUtente,codice,certificato);
-                break;
+                break;*/
+            case "response":
+               response=message.getData();
+               break;
 
             default:
                 System.out.println("Message not recognized");
-        }*/
+        }
         } catch (Exception e) {
             e.printStackTrace();
         }

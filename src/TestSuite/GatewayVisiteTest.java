@@ -1,20 +1,28 @@
 package TestSuite;
 
 import AsyncIPCEventBus.GatewayVisite;
+import AsyncIPCEventBus.PublishSubscribe.EventBusService;
+import Visite.visitesubscriber.VisiteSubscriber;
 import org.junit.Test;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.concurrent.CompletableFuture;
 
 import VisiteGateway.VisiteGatewayDb;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GatewayVisiteTest {
-    GatewayVisite gV = new GatewayVisite();
+    GatewayVisite gV;
     VisiteGatewayDb vG;
     public GatewayVisiteTest() throws SQLException {
+        EventBusService eventBusService = new EventBusService();
+        gV=new GatewayVisite(eventBusService);
         vG = new VisiteGatewayDb();
+
+        CompletableFuture.runAsync(()->eventBusService.run());
+        CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
     }
 
     @BeforeEach

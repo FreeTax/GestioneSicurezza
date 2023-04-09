@@ -12,7 +12,7 @@ public class SchedaVisita {
     private String elencoPatologie [];
     private int idUtente;
     private ArrayList<Visita> visiteEffettuate;
-    private ArrayList<Visita> visiteDaSostentere;
+    private ArrayList<Visita> visiteDaSostenere;
 
     private VisiteGatewayDb vGateway;
     public SchedaVisita(int codice, int idUtente, String [] elencoPatologie, ArrayList<Visita> visiteEffettuate, ArrayList<Visita> visiteDaSostentere) throws SQLException {
@@ -20,7 +20,7 @@ public class SchedaVisita {
         this.idUtente = idUtente;
         this.elencoPatologie = elencoPatologie;
         this.visiteEffettuate = visiteEffettuate;
-        this.visiteDaSostentere = visiteDaSostentere;
+        this.visiteDaSostenere = visiteDaSostentere;
         this.vGateway=new VisiteGatewayDb();
     }
 
@@ -33,12 +33,12 @@ public class SchedaVisita {
             this.codice = sv.getId();
             this.elencoPatologie = sv.getElencoPatologie();
             this.visiteEffettuate = sv.getVisiteEffettuate();
-            this.visiteDaSostentere = sv.getVisiteDaSostentere();
+            this.visiteDaSostenere = sv.getVisiteDaSostenere();
         }
         else { //i dont like to let ScheduleVisita with null values on codice if this is not save on db yet. Talk whit marco
             this.elencoPatologie = new String[0];
             this.visiteEffettuate = new ArrayList<Visita>();
-            this.visiteDaSostentere = new ArrayList<Visita>();
+            this.visiteDaSostenere = new ArrayList<Visita>();
         }
     }
     public void syncVisiteEffettuate() throws SQLException {
@@ -46,11 +46,11 @@ public class SchedaVisita {
     }
 
     public void syncVisiteDaSostentere() throws SQLException {
-        this.visiteDaSostentere=vGateway.getVisiteDaSostenere(codice);
+        this.visiteDaSostenere=vGateway.getVisiteDaSostenere(codice);
     }
 
     public void insertVisitaDaSostentere(Visita visita) throws SQLException {
-       visiteDaSostentere.add(visita);
+       visiteDaSostenere.add(visita);
        vGateway.insertVisita(visita.getId(),visita.getDottore(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(),  this.codice, visita.getIdType());
     }
 
@@ -61,14 +61,14 @@ public class SchedaVisita {
 
     public void sostieniVisita(Integer idVisita, String esito) throws SQLException {
         Visita visita=null;
-        for (Visita v:visiteDaSostentere) {
+        for (Visita v:visiteDaSostenere) {
             if(v.getId()==idVisita)
                 visita=v;
         }
         visita.setEsito(esito);
         visita.setStato("sostenuta");
         visiteEffettuate.add(visita);
-        visiteDaSostentere.remove(visita);
+        visiteDaSostenere.remove(visita);
         vGateway.updateVisita(visita.getId(), visita.getDescrizione(), visita.getData(), visita.getStato(), visita.getEsito(), visita.getIdType());
     }
 
@@ -81,7 +81,7 @@ public class SchedaVisita {
     }
 
     public void setVisiteDaSostentere(ArrayList<Visita> visiteDaSostentere) {
-        this.visiteDaSostentere = visiteDaSostentere;
+        this.visiteDaSostenere = visiteDaSostentere;
     }
 
     public int getId() {
@@ -96,9 +96,8 @@ public class SchedaVisita {
         return idUtente;
     }
 
-
-    public ArrayList<Visita> getVisiteDaSostentere() {
-        return visiteDaSostentere;
+    public ArrayList<Visita> getVisiteDaSostenere() {
+        return visiteDaSostenere;
     }
 
     public ArrayList<Visita> getVisiteEffettuate() {

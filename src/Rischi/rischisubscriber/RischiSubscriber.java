@@ -52,34 +52,6 @@ public class RischiSubscriber extends Subscriber{
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
-            /*
-            Object obj = message.getData();
-            List<Object> parameters = message.getParameters();
-            Method method = null;
-            Object returnObj;
-            if (!message.getMessage().equals("response")) {
-                if (parameters != null) {
-                    Class[] cls = new Class[parameters.size()];
-                    int i = 0;
-                    for (Object p : parameters) {
-                        cls[i] = p.getClass();
-                        i++;
-                    }
-                    method = obj.getClass().getMethod(message.getMessage(), cls);
-                    returnObj=method.invoke(obj, parameters.toArray());
-                } else {
-                    method = obj.getClass().getMethod(message.getMessage());
-                    returnObj=method.invoke(obj);
-                }
-                if(message.getReturnAddress()!=null){
-                    Publisher pub=new PublisherConcr();
-                    pub.publish(new Message(message.getReturnAddress(),"response",returnObj,null),service);
-                }
-            }
-            else {
-                response=message.getData();
-            }
-            */
             switch (message.getMessage()){
             case "insertRischioGenerico":
                 RischioGenerico rg = (RischioGenerico) message.getData();
@@ -98,21 +70,4 @@ public class RischiSubscriber extends Subscriber{
             e.printStackTrace();
         }
     }
-/*
-    @Override
-    public void run() {
-        try {
-            synchronized (subscriberMessages) {
-                while (!Thread.currentThread().isInterrupted()) {
-                    //System.out.println("SubscriberConcr is running");
-                    while (subscriberMessages.isEmpty()) {
-                        subscriberMessages.wait();
-                    }
-                    receiveMessage(subscriberMessages.remove(0),service);
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
 }

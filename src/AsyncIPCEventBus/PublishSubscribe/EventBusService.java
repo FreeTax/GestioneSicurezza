@@ -90,7 +90,6 @@ public class EventBusService implements Runnable{
 
     @Override
     public void run() {
-        //TODO: gestire con wait e notify per evitare busy waiting
         synchronized (MessageQueue) {
             try {
 

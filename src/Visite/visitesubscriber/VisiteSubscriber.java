@@ -52,33 +52,6 @@ public class VisiteSubscriber extends Subscriber{
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberConcr received message: " + message.getMessage());
         try {
-            /*Object obj = message.getData();
-            List<Object> parameters = message.getParameters();
-            Method method = null;
-            Object returnObj;
-            if (!message.getMessage().equals("response")) {
-                if (parameters != null) {
-                    Class[] cls = new Class[parameters.size()];
-                    int i = 0;
-                    for (Object p : parameters) {
-                        cls[i] = p.getClass();
-                        i++;
-                    }
-                    method = obj.getClass().getMethod(message.getMessage(), cls);
-                    returnObj=method.invoke(obj, parameters.toArray());
-                } else {
-                    method = obj.getClass().getMethod(message.getMessage());
-                    returnObj=method.invoke(obj);
-                }
-                if(message.getReturnAddress()!=null){
-                    Publisher pub=new PublisherConcr();
-                    pub.publish(new Message(message.getReturnAddress(),"response",returnObj,null),service);
-                }
-            }
-            else {
-                response=message.getData();
-            }
-            */
             switch (message.getMessage()){
             case "sostieniVisita":
                 List<Object> param =message.getParameters();
@@ -88,6 +61,18 @@ public class VisiteSubscriber extends Subscriber{
                 sv.sostieniVisita(idVisita,esito);
                 break;
 
+            case "getVisiteDaSostenere":
+                SchedaVisita sv1=(SchedaVisita)message.getData();
+                Publisher pub=new PublisherConcr();
+                pub.publish(new Message(message.getReturnAddress(),"response",sv1.getVisiteDaSostenere(),null),service);
+                break;
+
+            case "getVisiteSostenute":
+                SchedaVisita sv2=(SchedaVisita)message.getData();
+                Publisher pub1=new PublisherConcr();
+                pub1.publish(new Message(message.getReturnAddress(),"response",sv2.getVisiteEffettuate(),null),service);
+                break;
+
             default:
                 System.out.println("Message not recognized");
         }
@@ -95,22 +80,4 @@ public class VisiteSubscriber extends Subscriber{
             e.printStackTrace();
         }
     }
-/*
-    @Override
-    public void run() {
-        //TODO: gestire con wait e notify per evitare busy waiting
-        try {
-            synchronized (subscriberMessages) {
-                while (!Thread.currentThread().isInterrupted()) {
-                    //System.out.println("SubscriberConcr is running");
-                    while (subscriberMessages.isEmpty()) {
-                        subscriberMessages.wait();
-                    }
-                    receiveMessage(subscriberMessages.remove(0),service);
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
 }

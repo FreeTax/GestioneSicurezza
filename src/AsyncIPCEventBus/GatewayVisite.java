@@ -10,11 +10,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 public class GatewayVisite {
     private EventBusService eventBusService;
     private Subscriber sub;
     private Publisher pub;
+
+    private Executor deleyed=CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS);
+
     public GatewayVisite(EventBusService service) {
         eventBusService = service;
         sub = new SubscriberConcr("Visite", service );
@@ -23,7 +29,7 @@ public class GatewayVisite {
 
     public GatewayVisite() {
     }
-    public void addVisitaType(int id,String nome, String descrizione, String frequenza, int rischioAssociato) throws SQLException { //FIXME: gestire inserimento: passo dal package visite o vado direttamente al gatewayFB? inserisco anche l'id del tipo?
+    public void addVisitaType(int id,String nome, String descrizione, String frequenza, int rischioAssociato) throws SQLException {
         VisitaType vT=new VisitaType( id,nome, descrizione, frequenza, rischioAssociato);
         vT.saveToDb();
     }
@@ -41,12 +47,29 @@ public class GatewayVisite {
 
     public ArrayList<Visita> getVisiteSostenute(int idUtente) throws SQLException {
         SchedaVisita sv = new SchedaVisita(idUtente);
-        return sv.getVisiteEffettuate();
+        SubscriberConcr subscriber = new SubscriberConcr("VisiteSostenute", eventBusService);
+        pub.publish(new Message("Visite", "getVisiteSostenute", sv, null, "VisiteSostenute"), eventBusService);
+
+        CompletableFuture<ArrayList<Visita>> getVisiteSostenute = CompletableFuture
+                .supplyAsync(()->(ArrayList<Visita>)subscriber.getSubscriberMessages().get(0).getData(), deleyed)
+                .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
+
+        ArrayList<Visita> visite = getVisiteSostenute.join();
+        return visite;
     }
 
     public ArrayList<Visita> getVisiteDaSostentere(int idUtente) throws SQLException {
         SchedaVisita sv = new SchedaVisita(idUtente);
-        return sv.getVisiteDaSostentere();
+
+        SubscriberConcr subscriber = new SubscriberConcr("VisiteDaSostenere", eventBusService);
+        pub.publish(new Message("Visite", "getVisiteDaSostenere", sv, null, "VisiteDaSostenere"), eventBusService);
+
+        CompletableFuture<ArrayList<Visita>> getVisiteDaSostenere = CompletableFuture
+                .supplyAsync(()->(ArrayList<Visita>)subscriber.getSubscriberMessages().get(0).getData(), deleyed)
+                .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
+
+        ArrayList<Visita> visite = getVisiteDaSostenere.join();
+        return visite;
     }
 
     public void addVisita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int schedavisite, int idType) throws SQLException {

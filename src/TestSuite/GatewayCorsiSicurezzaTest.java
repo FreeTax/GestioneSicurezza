@@ -4,6 +4,7 @@ import AccountGateway.UtenteGatewayDb;
 
 import AsyncIPCEventBus.GatewayCorsiSicurezza;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
+import CorsiSicurezza.corsisubscriber.CorsiSicurezzaSubscriber;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
@@ -13,15 +14,20 @@ import org.junit.runners.MethodSorters;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.concurrent.CompletableFuture;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class GatewayCorsiSicurezzaTest {
-    GatewayCorsiSicurezza gC = new GatewayCorsiSicurezza(EventBusService.getIstance());
+    GatewayCorsiSicurezza gC;
     UtenteGatewayDb gU=new UtenteGatewayDb();
 
     public GatewayCorsiSicurezzaTest() throws SQLException {
+        EventBusService eventBusService = new EventBusService();
+        gC=new GatewayCorsiSicurezza(eventBusService);
+        CompletableFuture.runAsync(()->eventBusService.run());
+        CompletableFuture.runAsync(()->new CorsiSicurezzaSubscriber(eventBusService).run());
     }
 
     @Test
