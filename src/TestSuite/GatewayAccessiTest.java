@@ -28,6 +28,10 @@ import static org.junit.Assert.assertEquals;
 public class GatewayAccessiTest {
     static GatewayAccessi gatewayAccessi;
 
+    static Thread subscriberAccessi;
+    static Thread subscriberLuoghi;
+    static Thread service;
+
     static GatewayLuoghi gl;
 
     public GatewayAccessiTest() throws SQLException {
@@ -42,9 +46,15 @@ public class GatewayAccessiTest {
         gatewayAccessi = new GatewayAccessi(eventBusService);
         gl = new GatewayLuoghi(eventBusService);
         System.out.println("GatewayAccessiTest: initialize");
-        CompletableFuture.runAsync(() -> eventBusService.run());
-        CompletableFuture.runAsync(()->new AccessiSubscriber(eventBusService).run());
-        CompletableFuture subscriberLuoghi=CompletableFuture.runAsync(() -> new LuoghiSubscriber(eventBusService).run());
+        service=new Thread(()->eventBusService.run());
+        service.start();
+        subscriberAccessi=new Thread(()->new AccessiSubscriber(eventBusService).run());
+        subscriberAccessi.start();
+        subscriberLuoghi=new Thread(()->new LuoghiSubscriber(eventBusService).run());
+        subscriberLuoghi.start();
+        //service= CompletableFuture.runAsync(() -> eventBusService.run());
+        //subscriberAccessi=CompletableFuture.runAsync(()->new AccessiSubscriber(eventBusService).run());
+        //subscriberLuoghi=CompletableFuture subscriberLuoghi=CompletableFuture.runAsync(() -> new LuoghiSubscriber(eventBusService).run());
 
         //subscriberLuoghi.complete(null);
     }
@@ -53,6 +63,9 @@ public class GatewayAccessiTest {
     public static void close() throws SQLException, InterruptedException {
         //InitDB.dropDB();
         sleep(3000);
+        service.interrupt();
+        subscriberAccessi.interrupt();
+        subscriberLuoghi.interrupt();
     }
 
     @Test

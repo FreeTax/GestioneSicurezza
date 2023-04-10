@@ -3,6 +3,7 @@ package TestSuite;
 import AsyncIPCEventBus.GatewayVisite;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import Visite.visitesubscriber.VisiteSubscriber;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.*;
@@ -13,10 +14,15 @@ import java.util.concurrent.CompletableFuture;
 
 import VisiteGateway.VisiteGatewayDb;
 
+import static java.lang.Thread.sleep;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GatewayVisiteTest {
     static GatewayVisite gV;
     static VisiteGatewayDb vG;
+
+    static Thread service;
+    static Thread subscriberVisite;
     public GatewayVisiteTest() throws SQLException {
 
     }
@@ -27,8 +33,20 @@ public class GatewayVisiteTest {
         gV=new GatewayVisite(eventBusService);
         vG = new VisiteGatewayDb();
         System.out.println("GatewayVisiteTest: initialize");
-        CompletableFuture.runAsync(()->eventBusService.run());
-        CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
+        //CompletableFuture.runAsync(()->eventBusService.run());
+        //CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
+        service=new Thread(() -> eventBusService.run());
+        service.start();
+        subscriberVisite=new Thread(() -> new VisiteSubscriber(eventBusService).run());
+        subscriberVisite.start();
+    }
+
+    @AfterClass
+    public static void close() throws SQLException, InterruptedException {
+        sleep(1000);
+        System.out.println("GatewayVisiteTest: close");
+        subscriberVisite.interrupt();
+        service.interrupt();
     }
 
     @BeforeEach

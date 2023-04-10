@@ -25,8 +25,8 @@ public class GatewayUtenteTest {
     static GatewayUtente gU;
     static UtenteGatewayDb uDb;
 
-    static CompletableFuture subscriberAccount;
-    static CompletableFuture service;
+    static Thread subscriberAccount;
+    static Thread service;
     EventBusService eventBusService;
     public GatewayUtenteTest() throws SQLException {
         System.out.println("GatewayUtenteTest: constructor");
@@ -40,8 +40,12 @@ public class GatewayUtenteTest {
         uDb=new UtenteGatewayDb();
         GatewayRischi gR = new GatewayRischi(eventBusService);
 
-        service=CompletableFuture.runAsync(()->eventBusService.run());
-        subscriberAccount=CompletableFuture.runAsync(()->new AccountSubscriber(eventBusService).run());
+        //service=CompletableFuture.runAsync(()->eventBusService.run());
+       // subscriberAccount=CompletableFuture.runAsync(()->new AccountSubscriber(eventBusService).run());
+        service=new Thread(()->eventBusService.run());
+        service.start();
+        subscriberAccount=new Thread(()->new AccountSubscriber(eventBusService).run());
+        subscriberAccount.start();
         CompletableFuture rischiSubscriber = CompletableFuture.runAsync(()->new RischiSubscriber(eventBusService).run());
         System.out.println("GatewayUtenteTest: initialize");
         gR.insertRischioSpecifico(10123, "Rischio1", "Descrizione1");
@@ -50,10 +54,13 @@ public class GatewayUtenteTest {
     }
 
     @AfterClass
-    public static void close() throws SQLException {
+    public static void close() throws SQLException, InterruptedException {
         System.out.println("GatewayUtenteTest: close");
-        service.complete(null);
-        subscriberAccount.complete(null);
+        //service.complete(null);
+        //subscriberAccount.cancel(true);
+        sleep(1000);
+        service.interrupt();
+        subscriberAccount.interrupt();
     }
     @Test
     @BeforeAll

@@ -88,6 +88,9 @@ public class EventBusService implements Runnable{
         }
     }
 
+    public void interrupt(){
+        Thread.currentThread().interrupt();
+    }
     @Override
     public void run() {
         synchronized (MessageQueue) {
@@ -106,7 +109,8 @@ public class EventBusService implements Runnable{
                 }
             }
         }catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+                System.out.println("service interrupted");
+                Thread.currentThread().interrupt();
         }
         }
     }

@@ -18,13 +18,14 @@ import org.junit.runners.MethodSorters;
 import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayLuoghiTest {
     static GatewayLuoghi gL;
 
-    static CompletableFuture subscriberLuoghi;
-    static CompletableFuture service;
+    static Thread subscriberLuoghi;
+    static Thread service;
     public GatewayLuoghiTest() throws SQLException {
 
     }
@@ -34,15 +35,22 @@ public class GatewayLuoghiTest {
         System.out.println("GatewayLuoghiTest: initialize");
         EventBusService eventBusService = new EventBusService();
         gL = new GatewayLuoghi(eventBusService);
-        service=CompletableFuture.runAsync(() -> eventBusService.run());
-        subscriberLuoghi=CompletableFuture.runAsync(() -> new LuoghiSubscriber(eventBusService).run());
+        //service=CompletableFuture.runAsync(() -> eventBusService.run());
+        //subscriberLuoghi=CompletableFuture.runAsync(() -> new LuoghiSubscriber(eventBusService).run());
+        service=new Thread(() -> eventBusService.run());
+        service.start();
+        subscriberLuoghi=new Thread(() -> new LuoghiSubscriber(eventBusService).run());
+        subscriberLuoghi.start();
     }
 
     @AfterClass
-    public static void close() throws SQLException {
+    public static void close() throws SQLException, InterruptedException {
         System.out.println("GatewayLuoghiTest: close");
-        subscriberLuoghi.complete(null);
-        service.complete(null);
+        //subscriberLuoghi.complete(null);
+        //service.complete(null);
+        sleep(1000);
+        subscriberLuoghi.interrupt();
+        service.interrupt();
     }
     @Test
     public void _01addDipartimento() throws SQLException {

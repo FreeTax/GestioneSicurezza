@@ -19,7 +19,7 @@ import java.sql.*;
 })
 
 //TODO: i test non funzionano bene a un certo punto non comunica più con il subscriber e non inserisce i dati nel db (se eseguiti separatamente funzionano)
-
+//per ora fixato usando thread
 class TestSuite {
 
 }
