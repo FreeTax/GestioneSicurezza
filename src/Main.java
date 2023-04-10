@@ -20,6 +20,8 @@ import static java.lang.Thread.sleep;
 
 public class Main {
     //TODO: test cross department and role update, getCrediti da sostenere,
+    //TODO: gestire eliminazione nei db e accettazione richieste->eliminazione richiesta (entrambi i branch)
+    //TODO: tracciare output colori
     // dashboard: crediti da soostenre, crediti sostenuti, visite da effettuare, visite effettuate,luoghi frequentati
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
@@ -110,8 +112,18 @@ public class Main {
         }
         try {
             if (gU.loginInterno(2, "password")) { //login utente supervisore
-                ArrayList<String> CFUsostenuti=gU.getCFUSostenuti(2, 1);
-                System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+               /* ArrayList<String> CFUsostenuti=gU.getCFUSostenuti(2, 1);
+                System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);*/
+                CompletableFuture.supplyAsync(() -> {
+                    try {return gU.getCFUSostenuti(2, 1);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }).thenAcceptAsync((CFUsostenuti) -> {
+                    System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+                });
+
                 if (gA.insertAccessoLuogo(1, 1, 2)) {
                     System.out.println("utente con codice 1 ha accesso al luogo 1");
                 }
@@ -125,16 +137,47 @@ public class Main {
 
     }
 
-    public static void testDashboard(GatewayUtente gU, GatewayLuoghi gL) throws SQLException {
+    public static void testDashboard(GatewayUtente gU, GatewayLuoghi gL) throws SQLException, InterruptedException {
         gL.insertRischioLuogo(2,4);
         gU.insertRichiestaLuogo(1,2);
-        ArrayList<String> richiesteLuoghi = gU.getRichiesteLuogo(2);
-        System.out.println("richieste di accesso ai seguenti luoghi: " + richiesteLuoghi);
-        ArrayList<String> richiesteDipartimenti = gU.getRichiesteDipartimento(3);
-        System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);
-        for(String s: gU.getDashboard(3)){
+
+        //usando completableFuture il main va avanti mentre la richiesta è eseguita
+        CompletableFuture.supplyAsync(() -> { //TODO: rendere il tutto più pulito, metodo che returna completableFuture nei gateway?
+            try {return gU.getRichiesteLuogo(2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).thenAcceptAsync((richiesteLuoghi) -> {
+            System.out.println("richieste di accesso ai seguenti luoghi: " + richiesteLuoghi);
+        });
+        /*ArrayList<String> richiesteLuoghi = gU.getRichiesteLuogo(2);
+        System.out.println("richieste di accesso ai seguenti luoghi: " + richiesteLuoghi);*/
+        CompletableFuture.supplyAsync(() -> {
+            try {return gU.getRichiesteDipartimento(3);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).thenAcceptAsync((richiesteDipartimenti) -> {
+            System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);
+        });
+        /*ArrayList<String> richiesteDipartimenti = gU.getRichiesteDipartimento(3);
+        System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);*/
+        CompletableFuture.supplyAsync(() -> {
+            try {return gU.getDashboard(3);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).thenAcceptAsync((dashboard) -> {
+            for(String s: dashboard) {
+                System.out.println(s);
+            }
+        }).join();
+        /*for(String s: gU.getDashboard(3)){
             System.out.println(s);
-        }
+        }*/
     }
     public static void main(String[] args) throws SQLException, InterruptedException {
         InitDB.initDB();
@@ -146,13 +189,24 @@ public class Main {
         GatewayAccessi gA = new GatewayAccessi(eventBusService);
         GatewayVisite gV = new GatewayVisite(eventBusService);
         GatewayCorsiSicurezza gCS= new GatewayCorsiSicurezza(eventBusService);
-
+       /*
         CompletableFuture.runAsync(()->eventBusService.run());
         CompletableFuture.runAsync(()->accountSubscriber.run());
         CompletableFuture.runAsync(()->new AccessiSubscriber(eventBusService).run());
         CompletableFuture.runAsync(()->new LuoghiSubscriber(eventBusService).run());
         CompletableFuture.runAsync(()->new RischiSubscriber(eventBusService).run());
-        CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
+        CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());*/
+
+        ArrayList<Thread> threads = new ArrayList<Thread>();
+        threads.add(new Thread(eventBusService));
+        threads.add(new Thread(accountSubscriber));
+        threads.add(new Thread(new AccessiSubscriber(eventBusService)));
+        threads.add(new Thread(new LuoghiSubscriber(eventBusService)));
+        threads.add(new Thread(new RischiSubscriber(eventBusService)));
+        threads.add(new Thread(new VisiteSubscriber(eventBusService)));
+        for (Thread t : threads) {
+            t.start();
+        }
 
         System.out.println("_______________INIT DB_______________");
         initData(gA, gR, gV, gU, gL,gCS);
@@ -165,5 +219,14 @@ public class Main {
         //sleep(3000);
         System.out.println("_______________TEST DASHBOARD_______________");
         testDashboard(gU, gL);
+
+        try {
+            for (Thread t : threads) {
+                t.interrupt();
+                t.join();
+            }
+        }catch (InterruptedException e){
+            System.out.println(e);
+        }
     }
 }

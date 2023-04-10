@@ -47,7 +47,7 @@ public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
         return response;
     }
     public void receiveMessage(Message message, EventBusService service) {
-        System.out.println("SubscriberConcr received message: " + message.getMessage());
+        System.out.println("SubscriberCorsi received message: " + message.getMessage());
         try {
             Object obj = message.getData();
             List<Object> parameters = message.getParameters();

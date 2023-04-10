@@ -44,7 +44,7 @@ public class AccountSubscriber extends Subscriber {
             }
         }
         Message message=getSubscriberMessages().remove(0);*/
-        System.out.println("SubscriberConcr received message: " + message.getMessage());
+        System.out.println("SubscriberAccount received message: " + message.getMessage());
         try {
             switch (message.getMessage()) {
                 case "insertUtente":

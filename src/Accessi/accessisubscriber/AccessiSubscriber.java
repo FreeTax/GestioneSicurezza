@@ -23,7 +23,7 @@ public class AccessiSubscriber extends Subscriber{
         }
     }*/
     public void receiveMessage(Message message, EventBusService service) {
-        System.out.println("SubscriberConcr received message: " + message.getMessage());
+        System.out.println("SubscriberAccessi received message: " + message.getMessage());
         try {
             switch (message.getMessage()){
             case "insertAccessoDipartimento":

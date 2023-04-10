@@ -50,7 +50,7 @@ public class RischiSubscriber extends Subscriber{
         return response;
     }*/
     public void receiveMessage(Message message, EventBusService service) {
-        System.out.println("SubscriberConcr received message: " + message.getMessage());
+        System.out.println("SubscriberRischi received message: " + message.getMessage());
         try {
             switch (message.getMessage()){
             case "insertRischioGenerico":
