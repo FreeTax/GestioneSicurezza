@@ -69,6 +69,7 @@ public class GatewayAccessi {
                         pub.publish(new Message("Accessi", "insertAccessoDipartimento", a, null), eventBusService);
                         System.out.println("insertAccessoDipartimento creato");
                         //a.insertAccesso();
+                        //pub.publish(new Message("Accessi", "removeRichiesta", utente+dipartimento, null), eventBusService); TODO: controllare con marco
                         return true;
                     } else {
                         throw new RuntimeException("l'utente non ha i crediti formativi necessari per accedere al dipartimento");
@@ -119,10 +120,13 @@ public class GatewayAccessi {
                         pub.publish(new Message("Accessi", "insertAccessoLuogo", a, null), eventBusService);
                         System.out.println("insertAccessoLuogo creato");
                         //a.insertAccesso();
+
+                        //pub.publish(new Message("Accessi", "removeRichiesta", utente+luogo, null), eventBusService); TODO: controllare con marco
                         return true;
                     } else {
                         throw new RuntimeException("l'utente "+utente+" non ha i crediti formativi necessari per accedere al luogo");
                     }
+
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e.getMessage());

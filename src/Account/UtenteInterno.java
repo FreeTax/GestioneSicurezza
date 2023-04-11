@@ -61,6 +61,7 @@ public class UtenteInterno extends Utente {
         return super.getCfuSostenuti(idUtente);
     }
 
+
     public boolean loginInterno(int matricola, String password) throws SQLException {
         return uGateway.loginInterno(matricola, password);
     }

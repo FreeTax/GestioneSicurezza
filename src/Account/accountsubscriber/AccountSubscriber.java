@@ -130,6 +130,17 @@ public class AccountSubscriber extends Subscriber {
                     pub2.publish(new Message(message.getReturnAddress(), "response", new UtenteInterno(idUtente4).getRichiesteDipartimentoUtenti(), null), service);
                     break;
 
+                case "removeRichiesta":
+                    int idUtente5 = (int) message.getParameters().get(0);
+                    int idLuogo = (int) message.getParameters().get(1);
+                    Utente u5;
+                    if (new UtenteInterno(idUtente5).getNome() != null)
+                        u5 = new UtenteInterno(idUtente5);
+                    else
+                        u5 = new UtenteEsterno(idUtente5);
+                    u5.removeRichiesta(idLuogo);
+                    break;
+
                 default:
                     System.out.println("Message not recognized");
             }

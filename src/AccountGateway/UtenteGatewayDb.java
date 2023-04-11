@@ -412,5 +412,10 @@ public class UtenteGatewayDb {
             con.close();
         }
     }
-}
+
+    public void removeRichiesta(int id) throws SQLException {
+        String sql = "DELETE FROM Richiesta WHERE idRichiesta ="+id;
+        stmt.executeUpdate(sql);
+    }
+    }
 

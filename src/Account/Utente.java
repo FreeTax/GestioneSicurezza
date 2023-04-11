@@ -98,6 +98,10 @@ public abstract class Utente {
         uGateway.sostieniCreditoFormativo(idUtente, idCredito, certificazione);
     }
 
+    public void removeRichiesta(Integer idLuogo) throws SQLException{
+        uGateway.removeRichiesta(idLuogo);
+    }
+
     public ArrayList<String> getUtenti() throws SQLException {
         return uGateway.getUtenti();
     }
