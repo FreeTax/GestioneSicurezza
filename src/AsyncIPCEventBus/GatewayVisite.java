@@ -31,19 +31,44 @@ public class GatewayVisite {
     }
 
     public void addVisitaType(int id, String nome, String descrizione, String frequenza, int rischioAssociato) throws SQLException {
-        VisitaType vT = new VisitaType(id, nome, descrizione, frequenza, rischioAssociato);
-        vT.saveToDb();
+        CompletableFuture.runAsync(() -> {
+            try {
+                //VisitaType vT = new VisitaType(id, nome, descrizione, frequenza, rischioAssociato);
+                //vT.saveToDb();
+                pub.publish(new Message("Visite", "addVisitaType", null, Arrays.asList(id,nome,descrizione,frequenza,rischioAssociato)), eventBusService);
+                System.out.println("VisitaType creato");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
 
     public void addVisitaUtente(int idUtente, int codiceVisita, String dottore, String descrizione, Timestamp data, String stato, int idType) throws SQLException {
-        SchedaVisita sv = new SchedaVisita(idUtente);
-        Visita v = new Visita(codiceVisita, dottore, descrizione, data, stato, "", sv.getId(), idType);
-        sv.insertVisitaDaSostentere(v);
+       CompletableFuture.runAsync(() -> {
+            try {
+                //SchedaVisita sv = new SchedaVisita(idUtente);
+                //Visita v = new Visita(codiceVisita, dottore, descrizione, data, stato, "", sv.getId(), idType);
+                //sv.insertVisitaDaSostentere(v);
+                pub.publish(new Message("Visite", "addVisitaUtente", null, Arrays.asList(idUtente,codiceVisita,dottore,descrizione,data,stato,idType)), eventBusService);
+                System.out.println("VisitaUtente creato");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
+
     }
 
     public void addSchedaVisita(int idUtente) throws SQLException {
-        SchedaVisita sv = new SchedaVisita(idUtente);
-        sv.saveNewSchedaVisita();
+        CompletableFuture.runAsync(() -> {
+            try {
+                SchedaVisita sv = new SchedaVisita(idUtente);
+                //sv.saveNewSchedaVisita();
+                pub.publish(new Message("Visite", "addSchedaVisita", sv, Arrays.asList(idUtente)), eventBusService);
+                System.out.println("SchedaVisita creato");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
 
     public CompletableFuture<ArrayList<Visita>> getVisiteSostenute(int idUtente) throws SQLException {
@@ -92,8 +117,16 @@ public class GatewayVisite {
     }
 
     public void addVisita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int schedavisite, int idType) throws SQLException {
-        Visita v = new Visita(id, dottore, descrizione, data, stato, esito, schedavisite, idType);
-        v.saveToDB();
+       CompletableFuture.runAsync(() -> {
+            try {
+                //Visita v = new Visita(id, dottore, descrizione, data, stato, esito, schedavisite, idType);
+                //v.saveToDB();
+                pub.publish(new Message("Visite", "addVisita", null, Arrays.asList(id,dottore,descrizione,data,stato,esito,schedavisite,idType)), eventBusService);
+                System.out.println("Visita creato");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
 
     public void sostieniVisita(int idVisita, String esito, int idUtente) throws SQLException {

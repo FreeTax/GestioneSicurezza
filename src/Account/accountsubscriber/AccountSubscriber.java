@@ -130,6 +130,22 @@ public class AccountSubscriber extends Subscriber {
                     pub2.publish(new Message(message.getReturnAddress(), "response", new UtenteInterno(idUtente4).getRichiesteDipartimentoUtenti(), null), service);
                     break;
 
+                case "loginInternoReq":
+                    int matricola = (int) message.getParameters().get(0);
+                    String password = (String) message.getParameters().get(1);
+                    UtenteInterno ui3 = new UtenteInterno();
+                    Publisher pub3 = new PublisherConcr();
+                    pub3.publish(new Message(message.getReturnAddress(), "response", ui3.loginInterno(matricola, password), null), service);
+                    break;
+
+                case "loginEsternoReq":
+                    int idEsterno = (int) message.getParameters().get(0);
+                    String password1 = (String) message.getParameters().get(1);
+                    UtenteEsterno ue1 = new UtenteEsterno();
+                    Publisher pub4 = new PublisherConcr();
+                    pub4.publish(new Message(message.getReturnAddress(), "response", ue1.loginEsterno(idEsterno, password1), null), service);
+                    break;
+
                 default:
                     System.out.println("Message not recognized");
             }
