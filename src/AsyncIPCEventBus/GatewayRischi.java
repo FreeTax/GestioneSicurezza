@@ -6,6 +6,7 @@ import Rischi.RischioGenerico;
 import Rischi.RischioSpecifico;
 
 import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 public class GatewayRischi {
     private Rischio r;
@@ -20,17 +21,29 @@ public class GatewayRischi {
     }
 
     public void insertRischioGenerico(int codice, String nome, String descrizione/*, String tipologia*/) throws SQLException {
-        r = new RischioGenerico(codice, nome, descrizione/*, tipologia*/);
-        pub.publish(new Message("Rischi", "insertRischioGenerico", r, null), eventBusService);
-        System.out.println("Rischio generico creato");
-        //r.saveToDB();
+        CompletableFuture.runAsync(() -> {
+            try {
+                r = new RischioGenerico(codice, nome, descrizione/*, tipologia*/);
+                pub.publish(new Message("Rischi", "insertRischioGenerico", r, null), eventBusService);
+                System.out.println("Rischio generico creato");
+                //r.saveToDB();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
 
     public void insertRischioSpecifico(int codice, String nome, String descrizione/*, String tipologia*/) throws SQLException {
-        r = new RischioSpecifico(codice, nome, descrizione/*, tipologia*/);
-        pub.publish(new Message("Rischi", "insertRischioSpecifico", r, null), eventBusService);
-        System.out.println("Rischio specifico creato");
-        //r.saveToDB();
+        CompletableFuture.runAsync(() -> {
+            try {
+                r = new RischioSpecifico(codice, nome, descrizione/*, tipologia*/);
+                pub.publish(new Message("Rischi", "insertRischioSpecifico", r, null), eventBusService);
+                System.out.println("Rischio specifico creato");
+                //r.saveToDB();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
 
     public RischioGenerico getRischioGenerico(int codice) throws SQLException {

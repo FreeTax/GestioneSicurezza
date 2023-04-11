@@ -142,7 +142,7 @@ public class GatewayUtenteTest {
     public void _13getRichiesteLuogoNonAut() throws SQLException {
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
-        ArrayList<String> richiesteluogo = gU.getRichiesteLuogo(1234567);
+        ArrayList<String> richiesteluogo = gU.getRichiesteLuogo(1234567).join();
         //assert richiesteluogo.size()==1;
         //assertArrayEquals(richiesteluogo.toArray(),new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
     }
@@ -152,7 +152,7 @@ public class GatewayUtenteTest {
         gU.insertUtenteInterno(8912345, "passwordinterno", "nome", "cognome", "sesso", "2000-11-03", "Dipartimento", "supervisore");
         //int idUtente=uDb.getIdUtente(8912345,true);
         sleep(1000);
-        ArrayList<String> richiesteluogo = gU.getRichiesteLuogo(8912345);
+        ArrayList<String> richiesteluogo = gU.getRichiesteLuogo(8912345).join();
         assert richiesteluogo.size() == 1;
         assertArrayEquals(richiesteluogo.toArray(), new String[]{"idUtente=1, statoRichiesta=0, idLuogo=1"});
     }
@@ -162,7 +162,7 @@ public class GatewayUtenteTest {
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
         //int idUtente=uDb.getIdUtente(19029420,false);
-        ArrayList<String> richiestedipartimento = gU.getRichiesteDipartimento(19029420);
+        ArrayList<String> richiestedipartimento = gU.getRichiesteDipartimento(19029420).join();
         //assert richiestedipartimento.size()==1;
         //assertArrayEquals(richiestedipartimento.toArray(),new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
     }
@@ -172,7 +172,7 @@ public class GatewayUtenteTest {
         gU.insertUtenteInterno(9123456, "passwordinterno", "nome", "cognome", "sesso", "2000-12-03", "Dipartimento", "avanzato");
         //int idUtente=uDb.getIdUtente(9123456,true);
         sleep(1000);
-        ArrayList<String> richiestedipartimento = gU.getRichiesteDipartimento(9123456);
+        ArrayList<String> richiestedipartimento = gU.getRichiesteDipartimento(9123456).join();
         assert richiestedipartimento.size() == 1;
         assertArrayEquals(richiestedipartimento.toArray(), new String[]{"idUtente=2, statoRichiesta=0, idDipartimento=2"});
     }
@@ -181,7 +181,7 @@ public class GatewayUtenteTest {
     public void _17getCFUSostenuti() throws SQLException {
         int idUtente = uDb.getIdUtente(1234567, true);
         //int idAutorizzato=uDb.getIdUtente(8912345,true);
-        ArrayList<String> creditisostenuti = gU.getCFUSostenuti(8912345, idUtente);
+        ArrayList<String> creditisostenuti = gU.getCFUSostenuti(8912345, idUtente).join();
         assert creditisostenuti.size() == 1;
         assertEquals(creditisostenuti.remove(0), "Rischio1");
     }
@@ -192,7 +192,7 @@ public class GatewayUtenteTest {
         //int idAutorizzato=uDb.getIdUtente(1234567,true);
         thrown.expect(java.lang.RuntimeException.class);
         thrown.expectMessage("Utente non autorizzato");
-        ArrayList<String> creditisostenuti = gU.getCFUSostenuti(1234567, idUtente);
+        ArrayList<String> creditisostenuti = gU.getCFUSostenuti(1234567, idUtente).join();
 
     }
 }

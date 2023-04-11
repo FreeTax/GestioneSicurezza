@@ -57,7 +57,7 @@ public class AccountSubscriber extends Subscriber {
                     int idUtente = (int) param.get(0);
                     int codice = (int) param.get(1);
                     String certificato = (String) param.get(2);
-                    Utente ui = (UtenteInterno) message.getData();
+                    Utente ui = (Utente) message.getData();
                     ui.sostieniCredito(idUtente, codice, certificato);
                     break;
 

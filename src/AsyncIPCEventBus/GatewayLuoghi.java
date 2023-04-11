@@ -8,6 +8,7 @@ import Luoghi.Luogo;
 
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 public class GatewayLuoghi {
     private EventBusService eventBusService;
@@ -41,18 +42,28 @@ public class GatewayLuoghi {
     }
 
     public void insertRischioLuogo(int codiceLuogo, int codiceRischio) throws SQLException {
-        Luogo l = new Luogo(codiceLuogo);
-        pub.publish(new Message("Luoghi", "insertRischioLuogo", l, Collections.singletonList(codiceRischio)), eventBusService);
-        System.out.println("Rischio luogo creato");
-        //l.addRischio(codiceRischio);
+        CompletableFuture.runAsync(() -> {
+            try {
+                Luogo l = new Luogo(codiceLuogo);
+                pub.publish(new Message("Luoghi", "insertRischioLuogo", l, Collections.singletonList(codiceRischio)), eventBusService);
+                System.out.println("Rischio luogo creato");
+                //l.addRischio(codiceRischio);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
 
     public void insertRischioDipartimento(int codiceDipartimento, int codiceRischio) throws SQLException {
-        Dipartimento d = new Dipartimento(codiceDipartimento);
-        pub.publish(new Message("Luoghi", "insertRischioDipartimento", d, Collections.singletonList(codiceRischio)), eventBusService);
-        System.out.println("Rischio dipartimento creato");
-        //d.addRischio(codiceRischio);
+        CompletableFuture.runAsync(() -> {
+            try {
+                Dipartimento d = new Dipartimento(codiceDipartimento);
+                pub.publish(new Message("Luoghi", "insertRischioDipartimento", d, Collections.singletonList(codiceRischio)), eventBusService);
+                System.out.println("Rischio dipartimento creato");
+                //d.addRischio(codiceRischio);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).join();
     }
-
-
 }

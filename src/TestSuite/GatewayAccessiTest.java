@@ -79,7 +79,7 @@ public class GatewayAccessiTest {
         //gu.insertUtenteInterno(1, "password", "nome", "cognome", "maschile", "2000-10-03", "1","base");
         //gu.aggiornaUtenteInterno(2, "password", "nome2", "cognome2", "maschile", "2000-10-03", "1","avanzato");
         //gl.addDipartimento(1, "nomeDipartimento", 1);
-        boolean res = gatewayAccessi.insertAccessoDipartimento(1, 3, 9123456);
+        boolean res = gatewayAccessi.insertAccessoDipartimento(1, 3, 9123456).join();
         assertEquals(true, res); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
@@ -89,7 +89,7 @@ public class GatewayAccessiTest {
         /*gl.addDipartimento(2, "nome", 1);
         gl.insertRischioDipartimento(2,1);*/
         thrown.expectMessage("l'utente non ha i crediti formativi necessari per accedere al dipartimento");
-        boolean res = gatewayAccessi.insertAccessoDipartimento(2, 4, 9123456);
+        boolean res = gatewayAccessi.insertAccessoDipartimento(2, 4, 9123456).join();
         assertEquals(false, res); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
@@ -97,7 +97,7 @@ public class GatewayAccessiTest {
     public void _03insertAccessoLuogo() throws SQLException {
         /*GatewayLuoghi gL = new GatewayLuoghi(eventBusService);*/
         //gl.addLuogo(1,"nome", "aula", 1234567, 1);
-        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 3, 8912345)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        assertEquals(true, gatewayAccessi.insertAccessoLuogo(1, 3, 8912345).join()); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
     @Test
@@ -107,9 +107,9 @@ public class GatewayAccessiTest {
         //gl.addLuogo(2, "nome", "aula", 1234567, 1);
         //gl.insertRischioLuogo(2,1);
         thrown.expect(java.lang.RuntimeException.class);
-        thrown.expectMessage("l'utente non ha i crediti formativi necessari per accedere al luogo");
+        thrown.expectMessage("l'utente 1 non ha i crediti formativi necessari per accedere al luogo");
         //gatewayAccessi.insertAccessoLuogo(1, 2, 3);
-        assertEquals(false, gatewayAccessi.insertAccessoLuogo(1, 4, 8912345)); //in a real implementation, the user would be logged in and the type would be taken from the User's object
+        assertEquals(false, gatewayAccessi.insertAccessoLuogo(1, 4, 8912345).join()); //in a real implementation, the user would be logged in and the type would be taken from the User's object
     }
 
     @Test

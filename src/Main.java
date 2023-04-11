@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class Main {
     //TODO: test cross department and role update, getCrediti da sostenere,
     //TODO: gestire eliminazione nei db e accettazione richieste->eliminazione richiesta (entrambi i branch)
-    //TODO: tracciare output colori
+    //TODO: tracciare output colori anche tra vari test
     // dashboard: crediti da soostenre, crediti sostenuti, visite da effettuare, visite effettuate,luoghi frequentati
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS) {
         InitDB.initDB();
@@ -63,6 +63,7 @@ public class Main {
         UtenteInterno u3 = new UtenteInterno(3); //avanzato
         UtenteEsterno u4 = new UtenteEsterno(4);//esterno
         System.out.println(u3.getType());
+        /*
         try {
             if (gA.insertAccessoDipartimento(4, 2, u3.getMatricola()))
                 System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
@@ -86,7 +87,39 @@ public class Main {
                 System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
         } catch (Exception e) {
             System.out.println(e);
-        }
+        }*/
+            gA.insertAccessoDipartimento(4, 2, u3.getMatricola()).thenAcceptAsync((accesso) -> {
+                if (accesso)
+                    System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
+            }).exceptionally((e) -> {
+                System.out.println(e.getMessage());
+                return null;
+            });
+
+            gA.insertAccessoLuogo(1, 1, u2.getMatricola()).thenAcceptAsync((accesso) -> {
+                if (accesso)
+                    System.out.println("utente" + u2.getCodice() + " ha accesso al luogo 1");
+            }).exceptionally((e) -> {
+                System.out.println(e.getMessage());
+                return null;
+            });
+
+            gA.insertAccessoDipartimento(4, 1, u2.getMatricola()).thenAcceptAsync((accesso) -> {
+                if (accesso)
+                    System.out.println("utente" + u2.getCodice() + " ha accesso al dipartimento 2");
+            }).exceptionally((e) -> {
+                System.out.println(e.getMessage());
+                return null;
+            });
+
+            gA.insertAccessoLuogo(4, 1, u1.getMatricola()).thenAcceptAsync((accesso) -> {
+                if (accesso)
+                    System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
+            }).exceptionally((e) -> {
+                System.out.println(e.getMessage());
+                return null;
+            });
+
     }
 
     public static void test2(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, EventBusService eventBusService) throws SQLException {
@@ -97,7 +130,7 @@ public class Main {
                 gU.sostieniCredito(1, 3, "certificazione");
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         try {
             if (gU.loginEsterno(4, "password")) {
@@ -105,13 +138,13 @@ public class Main {
                 gU.sostieniCredito(4, 3, "certificazione");
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         try {
             if (gU.loginInterno(2, "password")) { //login utente supervisore
                /* ArrayList<String> CFUsostenuti=gU.getCFUSostenuti(2, 1);
                 System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);*/
-                CompletableFuture.supplyAsync(() -> {
+                /*CompletableFuture.supplyAsync(() -> {
                     try {
                         return gU.getCFUSostenuti(2, 1);
                     } catch (SQLException e) {
@@ -120,14 +153,35 @@ public class Main {
                     return null;
                 }).thenAcceptAsync((CFUsostenuti) -> {
                     System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+                });*/
+                gU.getCFUSostenuti(2, 1).thenAcceptAsync((CFUsostenuti) -> {
+                    System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
                 });
 
-                if (gA.insertAccessoLuogo(1, 1, 2)) {
+                gA.insertAccessoLuogo(1, 1, 2).thenAcceptAsync((accesso) -> {
+                    if (accesso) {
+                        System.out.println("utente con codice 1 ha accesso al luogo 1");
+                    }
+                }).exceptionally((e) -> {
+                    System.out.println(e);
+                    return null;
+                });
+
+                gA.insertAccessoLuogo(4, 1, 2).thenAcceptAsync((accesso) -> {
+                    if (accesso) {
+                        System.out.println("utente con codice 2 ha accesso al luogo 1");
+                    }
+                }).exceptionally((e) -> {
+                    System.out.println(e);
+                    return null;
+                });
+                /*
+                if (gA.insertAccessoLuogo(1, 1, 2).join()) {
                     System.out.println("utente con codice 1 ha accesso al luogo 1");
                 }
-                if (gA.insertAccessoLuogo(4, 1, 2)) {
+                if (gA.insertAccessoLuogo(4, 1, 2).join()) {
                     System.out.println("utente con codice 2 ha accesso al luogo 1");
-                }
+                }*/
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -139,7 +193,16 @@ public class Main {
         gL.insertRischioLuogo(2, 4);
         gU.insertRichiestaLuogo(1, 2);
 
+        gU.getRichiesteLuogo(2).thenAcceptAsync((richiesteLuoghi) -> {
+            System.out.println("richieste di accesso ai seguenti luoghi: " + richiesteLuoghi);
+        });
+
+        gU.getRichiesteDipartimento(3).thenAcceptAsync((richiesteDipartimenti) -> {
+            System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);
+        });
+
         //usando completableFuture il main va avanti mentre la richiesta è eseguita
+        /*
         CompletableFuture.supplyAsync(() -> { //TODO: rendere il tutto più pulito, metodo che returna completableFuture nei gateway?
             try {
                 return gU.getRichiesteLuogo(2);
@@ -152,6 +215,7 @@ public class Main {
         });
         /*ArrayList<String> richiesteLuoghi = gU.getRichiesteLuogo(2);
         System.out.println("richieste di accesso ai seguenti luoghi: " + richiesteLuoghi);*/
+        /*
         CompletableFuture.supplyAsync(() -> {
             try {
                 return gU.getRichiesteDipartimento(3);
@@ -164,14 +228,7 @@ public class Main {
         });
         /*ArrayList<String> richiesteDipartimenti = gU.getRichiesteDipartimento(3);
         System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);*/
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                return gU.getDashboard(3);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }).thenAcceptAsync((dashboard) -> {
+         gU.getDashboard(3).thenAcceptAsync((dashboard) -> {
             for (String s : dashboard) {
                 System.out.println(s);
             }

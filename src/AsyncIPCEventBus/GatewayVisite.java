@@ -46,35 +46,49 @@ public class GatewayVisite {
         sv.saveNewSchedaVisita();
     }
 
-    public ArrayList<Visita> getVisiteSostenute(int idUtente) throws SQLException {
-        SchedaVisita sv = new SchedaVisita(idUtente);
-        SubscriberConcr subscriber = new SubscriberConcr("VisiteSostenute"+idUtente, eventBusService);
-        pub.publish(new Message("Visite", "getVisiteSostenute", sv, null, "VisiteSostenute"+idUtente), eventBusService);
+    public CompletableFuture<ArrayList<Visita>> getVisiteSostenute(int idUtente) throws SQLException {
+       return CompletableFuture.supplyAsync(() -> {
+            try {
+                SchedaVisita sv = new SchedaVisita(idUtente);
+                SubscriberConcr subscriber = new SubscriberConcr("VisiteSostenute"+idUtente, eventBusService);
+                pub.publish(new Message("Visite", "getVisiteSostenute", sv, null, "VisiteSostenute"+idUtente), eventBusService);
 
-        CompletableFuture<ArrayList<Visita>> getVisiteSostenute = CompletableFuture
-                .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
-                .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
+                CompletableFuture<ArrayList<Visita>> getVisiteSostenute = CompletableFuture
+                        .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
+                        .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
 
-        ArrayList<Visita> visite = getVisiteSostenute.join();
+                ArrayList<Visita> visite = getVisiteSostenute.join();
 
-        subscriber.unSubscribe("VisiteSostenute"+idUtente, eventBusService);
-        return visite;
+                subscriber.unSubscribe("VisiteSostenute"+idUtente, eventBusService);
+                return visite;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
     }
 
-    public ArrayList<Visita> getVisiteDaSostentere(int idUtente) throws SQLException {
-        SchedaVisita sv = new SchedaVisita(idUtente);
+    public CompletableFuture<ArrayList<Visita>> getVisiteDaSostentere(int idUtente) throws SQLException {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                SchedaVisita sv = new SchedaVisita(idUtente);
 
-        SubscriberConcr subscriber = new SubscriberConcr("VisiteDaSostenere"+idUtente, eventBusService);
-        pub.publish(new Message("Visite", "getVisiteDaSostenere", sv, null, "VisiteDaSostenere"+idUtente), eventBusService);
+                SubscriberConcr subscriber = new SubscriberConcr("VisiteDaSostenere"+idUtente, eventBusService);
+                pub.publish(new Message("Visite", "getVisiteDaSostenere", sv, null, "VisiteDaSostenere"+idUtente), eventBusService);
 
-        CompletableFuture<ArrayList<Visita>> getVisiteDaSostenere = CompletableFuture
-                .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
-                .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
+                CompletableFuture<ArrayList<Visita>> getVisiteDaSostenere = CompletableFuture
+                        .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
+                        .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
 
-        ArrayList<Visita> visite = getVisiteDaSostenere.join();
+                ArrayList<Visita> visite = getVisiteDaSostenere.join();
 
-        subscriber.unSubscribe("VisiteDaSostenere"+idUtente, eventBusService);
-        return visite;
+                subscriber.unSubscribe("VisiteDaSostenere"+idUtente, eventBusService);
+                return visite;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
     }
 
     public void addVisita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int schedavisite, int idType) throws SQLException {
@@ -83,10 +97,16 @@ public class GatewayVisite {
     }
 
     public void sostieniVisita(int idVisita, String esito, int idUtente) throws SQLException {
-        SchedaVisita sv = new SchedaVisita(idUtente);
-        List<Object> parameters = Arrays.asList(idVisita, esito);
-        pub.publish(new Message("Visite", "sostieniVisita", sv, parameters), eventBusService);
-        System.out.println("Utente" + idUtente + "ha sostenuto la visita");
-        //sv.sostieniVisita(idVisita, esito);
+        CompletableFuture.runAsync(() -> {
+            try {
+                SchedaVisita sv = new SchedaVisita(idUtente);
+                List<Object> parameters = Arrays.asList(idVisita, esito);
+                pub.publish(new Message("Visite", "sostieniVisita", sv, parameters), eventBusService);
+                System.out.println("Utente" + idUtente + "ha sostenuto la visita");
+                //sv.sostieniVisita(idVisita, esito);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).join();
     }
 }
