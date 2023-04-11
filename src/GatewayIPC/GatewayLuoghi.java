@@ -26,8 +26,8 @@ public class GatewayLuoghi {
         return u;
     }
 
-    public UtenteEsterno getResponsabileDipartimento(Dipartimento d) throws SQLException {
-        UtenteEsterno u = new UtenteEsterno(d.getResponsabile());
+    public UtenteInterno getResponsabileDipartimento(Dipartimento d) throws SQLException {
+        UtenteInterno u = new UtenteInterno(d.getResponsabile());
         return u;
     }
 
