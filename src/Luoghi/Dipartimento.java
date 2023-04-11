@@ -1,7 +1,6 @@
 package Luoghi;
-import Account.Utente;
+
 import LuoghiGatewayDb.LuoghiGatewayDB;
-import Rischi.Rischio;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,35 +10,36 @@ public class Dipartimento {
     private int codice;
     private String nome;
     private int responsabile;
-    private ArrayList<Integer> luoghi=new ArrayList<>();
-    private ArrayList<Integer> rischi=new ArrayList<Integer>();
+    private ArrayList<Integer> luoghi = new ArrayList<>();
+    private ArrayList<Integer> rischi = new ArrayList<Integer>();
     private LuoghiGatewayDB luoghiGatewayDB;
+
     public Dipartimento(int codice, String nome, int responsabile, ArrayList<Integer> luoghi, ArrayList<Integer> rischi) throws SQLException {
-        luoghiGatewayDB=new LuoghiGatewayDB();
+        luoghiGatewayDB = new LuoghiGatewayDB();
         this.codice = codice;
         this.nome = nome;
         this.responsabile = responsabile;
         this.luoghi = luoghi;
-        this.rischi=rischi;
+        this.rischi = rischi;
     }
 
     public Dipartimento(int codice, String nome, int responsabile) throws SQLException {
-        luoghiGatewayDB=new LuoghiGatewayDB();
+        luoghiGatewayDB = new LuoghiGatewayDB();
         this.codice = codice;
         this.nome = nome;
         this.responsabile = responsabile;
     }
+
     public Dipartimento(int id) throws SQLException {
         try {
             luoghiGatewayDB = new LuoghiGatewayDB();
-            Dipartimento d=luoghiGatewayDB.getDipartimento(id);
+            Dipartimento d = luoghiGatewayDB.getDipartimento(id);
             this.codice = d.getCodice();
             this.nome = d.getNome();
             this.responsabile = d.getResponsabile();
             this.luoghi = d.getLuoghi();
-            this.rischi=d.getRischi();
-        }
-        catch (SQLException e){
+            this.rischi = d.getRischi();
+        } catch (SQLException e) {
             throw new SQLException("Dipartimento non trovato");
         }
        /* luoghiGatewayDB=new LuoghiGatewayDB();
@@ -72,8 +72,16 @@ public class Dipartimento {
         return luoghi;
     }
 
+    public void setLuoghi(ArrayList<Integer> luoghi) {
+        this.luoghi = luoghi;
+    }
+
     public ArrayList<Integer> getRischi() {
         return rischi;
+    }
+
+    public void setRischi(ArrayList<Integer> rischi) {
+        this.rischi = rischi;
     }
 
     public LuoghiGatewayDB getLuoghiGatewayDB() {
@@ -96,23 +104,13 @@ public class Dipartimento {
         return codice;
     }
 
-
-
     public void addRischio(Integer r) throws SQLException {
-        try{
+        try {
             rischi.add(r);
             new LuoghiGatewayDB().insertRischioDipartimento(this.codice, r);
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-    }
-
-    public void setLuoghi(ArrayList<Integer> luoghi) {
-        this.luoghi = luoghi;
-    }
-
-    public void setRischi(ArrayList<Integer> rischi) {
-        this.rischi = rischi;
     }
 }
 

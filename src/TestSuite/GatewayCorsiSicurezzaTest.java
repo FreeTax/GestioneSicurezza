@@ -1,16 +1,12 @@
 package TestSuite;
 
 import AccountGateway.UtenteGatewayDb;
-
 import AsyncIPCEventBus.GatewayCorsiSicurezza;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import CorsiSicurezza.corsisubscriber.CorsiSicurezzaSubscriber;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runners.MethodSorters;
 
 import java.sql.SQLException;
@@ -22,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class GatewayCorsiSicurezzaTest {
     static GatewayCorsiSicurezza gC;
-    UtenteGatewayDb gU=new UtenteGatewayDb();
+    UtenteGatewayDb gU = new UtenteGatewayDb();
 
     public GatewayCorsiSicurezzaTest() throws SQLException {
 
@@ -31,14 +27,14 @@ public class GatewayCorsiSicurezzaTest {
     @BeforeClass
     public static void initialize() throws SQLException {
         EventBusService eventBusService = new EventBusService();
-        gC=new GatewayCorsiSicurezza(eventBusService);
-        CompletableFuture.runAsync(()->eventBusService.run());
-        CompletableFuture.runAsync(()->new CorsiSicurezzaSubscriber(eventBusService).run());
+        gC = new GatewayCorsiSicurezza(eventBusService);
+        CompletableFuture.runAsync(() -> eventBusService.run());
+        CompletableFuture.runAsync(() -> new CorsiSicurezzaSubscriber(eventBusService).run());
     }
 
     @Test
     public void _1addNewCorsoType() throws SQLException {
-        gC.addCorsoType(1, "nome", "descrizione", 1,9123456);
+        gC.addCorsoType(1, "nome", "descrizione", 1, 9123456);
     }
 
     @Test

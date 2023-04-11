@@ -19,24 +19,25 @@ public class GatewayVisite {
     private Subscriber sub;
     private Publisher pub;
 
-    private Executor deleyed=CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS);
+    private Executor deleyed = CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS);
 
     public GatewayVisite(EventBusService service) {
         eventBusService = service;
-        sub = new SubscriberConcr("Visite", service );
+        sub = new SubscriberConcr("Visite", service);
         pub = new PublisherConcr();
     }
 
     public GatewayVisite() {
     }
-    public void addVisitaType(int id,String nome, String descrizione, String frequenza, int rischioAssociato) throws SQLException {
-        VisitaType vT=new VisitaType( id,nome, descrizione, frequenza, rischioAssociato);
+
+    public void addVisitaType(int id, String nome, String descrizione, String frequenza, int rischioAssociato) throws SQLException {
+        VisitaType vT = new VisitaType(id, nome, descrizione, frequenza, rischioAssociato);
         vT.saveToDb();
     }
 
     public void addVisitaUtente(int idUtente, int codiceVisita, String dottore, String descrizione, Timestamp data, String stato, int idType) throws SQLException {
         SchedaVisita sv = new SchedaVisita(idUtente);
-        Visita v = new Visita(codiceVisita, dottore, descrizione, data, stato, "",sv.getId(), idType);
+        Visita v = new Visita(codiceVisita, dottore, descrizione, data, stato, "", sv.getId(), idType);
         sv.insertVisitaDaSostentere(v);
     }
 
@@ -51,7 +52,7 @@ public class GatewayVisite {
         pub.publish(new Message("Visite", "getVisiteSostenute", sv, null, "VisiteSostenute"), eventBusService);
 
         CompletableFuture<ArrayList<Visita>> getVisiteSostenute = CompletableFuture
-                .supplyAsync(()->(ArrayList<Visita>)subscriber.getSubscriberMessages().get(0).getData(), deleyed)
+                .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                 .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
 
         ArrayList<Visita> visite = getVisiteSostenute.join();
@@ -65,7 +66,7 @@ public class GatewayVisite {
         pub.publish(new Message("Visite", "getVisiteDaSostenere", sv, null, "VisiteDaSostenere"), eventBusService);
 
         CompletableFuture<ArrayList<Visita>> getVisiteDaSostenere = CompletableFuture
-                .supplyAsync(()->(ArrayList<Visita>)subscriber.getSubscriberMessages().get(0).getData(), deleyed)
+                .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                 .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
 
         ArrayList<Visita> visite = getVisiteDaSostenere.join();
@@ -73,7 +74,7 @@ public class GatewayVisite {
     }
 
     public void addVisita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int schedavisite, int idType) throws SQLException {
-        Visita v = new Visita(id, dottore, descrizione, data, stato, esito, schedavisite,idType);
+        Visita v = new Visita(id, dottore, descrizione, data, stato, esito, schedavisite, idType);
         v.saveToDB();
     }
 
@@ -81,7 +82,7 @@ public class GatewayVisite {
         SchedaVisita sv = new SchedaVisita(idUtente);
         List<Object> parameters = Arrays.asList(idVisita, esito);
         pub.publish(new Message("Visite", "sostieniVisita", sv, parameters), eventBusService);
-        System.out.println("Utente"+idUtente+"ha sostenuto la visita");
+        System.out.println("Utente" + idUtente + "ha sostenuto la visita");
         //sv.sostieniVisita(idVisita, esito);
     }
 }

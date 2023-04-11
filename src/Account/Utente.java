@@ -1,14 +1,13 @@
 package Account;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import AccountGateway.UtenteGatewayDb;
 import Visite.SchedaVisita;
 
-public abstract class Utente{
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public abstract class Utente {
 
     protected int codice;
     protected ArrayList<CreditoFormativo> cfuSostenuti;
@@ -30,18 +29,18 @@ public abstract class Utente{
         this.sesso = sesso;
         this.dipartimento = dipartimento;
         this.dataNascita = dataNascita;
-        this.visite=visite;
-        uGateway=new UtenteGatewayDb();
+        this.visite = visite;
+        uGateway = new UtenteGatewayDb();
+    }
+
+    public Utente() throws SQLException {
+        uGateway = new UtenteGatewayDb();
     }
 
     public abstract String getType();
 
     public SchedaVisita getVisite() {
         return visite;
-    }
-
-    public Utente() throws SQLException {
-        uGateway=new UtenteGatewayDb();
     }
 
     public void insertUtente() throws SQLException {
@@ -54,6 +53,7 @@ public abstract class Utente{
     public ArrayList<CreditoFormativo> getCfuSostenuti(Integer idUtente) throws SQLException {
         return uGateway.GetCFUSostenuti(idUtente);
     }
+
     public void setCfu_sostenuti(CreditoFormativo cfu_sostenuti) {
         this.cfuSostenuti = cfuSostenuti;
     }
@@ -94,7 +94,7 @@ public abstract class Utente{
         return codice;
     }
 
-    public void sostieniCredito(Integer idUtente, Integer idCredito,  String certificazione) throws SQLException {
+    public void sostieniCredito(Integer idUtente, Integer idCredito, String certificazione) throws SQLException {
         uGateway.sostieniCreditoFormativo(idUtente, idCredito, certificazione);
     }
 

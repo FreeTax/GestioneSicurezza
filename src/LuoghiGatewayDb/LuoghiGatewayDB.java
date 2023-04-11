@@ -39,7 +39,7 @@ public class LuoghiGatewayDB {
             String selectSql = "SELECT * FROM Luoghi WHERE codice =" + codice;
             ResultSet rs = stmt.executeQuery(selectSql);
             if (rs.next()) {
-                Luogo l=new Luogo(rs.getInt("codice"), rs.getString("nome"), rs.getString("tipo"), rs.getInt("referente"), rs.getInt("dipartimento"));
+                Luogo l = new Luogo(rs.getInt("codice"), rs.getString("nome"), rs.getString("tipo"), rs.getInt("referente"), rs.getInt("dipartimento"));
                 l.setRischi(getRischiLuogo(codice));
                 return l;
             }

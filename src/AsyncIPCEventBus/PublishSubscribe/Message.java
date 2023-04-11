@@ -1,26 +1,24 @@
 package AsyncIPCEventBus.PublishSubscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Message {
+    String returnAddress;
     private String topic;
     private String message;
-
     private Object data;
-
-    String returnAddress;
-
     private List<Object> parameters;
 
     public Message() {
     }
+
     public Message(String topic, String message, Object data) {
         this.topic = topic;
         this.message = message;
         this.data = data;
 
     }
+
     public Message(String topic, String message, Object data, List<Object> parameters) {
         this.topic = topic;
         this.message = message;
@@ -40,12 +38,12 @@ public class Message {
         return topic;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public void setMessage(String message) {

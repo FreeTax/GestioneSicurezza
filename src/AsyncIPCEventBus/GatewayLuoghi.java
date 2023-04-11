@@ -13,11 +13,13 @@ public class GatewayLuoghi {
     private EventBusService eventBusService;
     private Subscriber sub;
     private Publisher pub;
+
     public GatewayLuoghi(EventBusService service) {
         eventBusService = service;
         sub = new SubscriberConcr("Luoghi", service);
         pub = new PublisherConcr();
     }
+
     public void addLuogo(int codice, String nome, String tipo, int referente, int dipartimento) throws SQLException {
         Luogo l = new Luogo(codice, nome, tipo, referente, dipartimento);
         l.saveToDB();

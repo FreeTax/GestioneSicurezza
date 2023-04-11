@@ -1,17 +1,17 @@
 package Rischi;
 
-import CorsiSicurezza.Corso;
 import RischiGatewayDb.RischioGatewayDb;
-import Visite.Visita;
 
 import java.sql.SQLException;
 
 public class RischioGenerico extends Rischio {
     private RischioGatewayDb rischioGatewayDb;
+
     public RischioGenerico(int codice, String nome, String descrizione/*, String tipologia /*, Corso corso, Visita visita*/) throws SQLException { //wating that Corso and Visita classes are implemented
         super(codice, nome, descrizione/*, tipologia*/);
         rischioGatewayDb = new RischioGatewayDb();
     }
+
     public RischioGenerico() throws SQLException {
         super();
         rischioGatewayDb = new RischioGatewayDb();
@@ -20,14 +20,13 @@ public class RischioGenerico extends Rischio {
     public RischioGenerico(int codice) throws SQLException {
         super();
         rischioGatewayDb = new RischioGatewayDb();
-        RischioGenerico r= rischioGatewayDb.getRischioGenerico(codice);
-        if(r!=null){
-         setCodice(r.getCodice());
-         setNome(r.getNome());
-         setDescrizione(r.getDescrizione());
-         setTipologia(r.getTipologia());
-        }
-        else{
+        RischioGenerico r = rischioGatewayDb.getRischioGenerico(codice);
+        if (r != null) {
+            setCodice(r.getCodice());
+            setNome(r.getNome());
+            setDescrizione(r.getDescrizione());
+            setTipologia(r.getTipologia());
+        } else {
             new RischioGenerico();//if rischioGenerico is null, create an empty rischioGenerico
         }
     }

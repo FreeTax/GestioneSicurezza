@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class InitDB {
-    public static void initAccountDb(){
+    public static void initAccountDb() {
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
             Statement stmt = con.createStatement();
@@ -24,8 +24,8 @@ public class InitDB {
         }
     }
 
-    public static void initAccessiDB(){
-        try{
+    public static void initAccessiDB() {
+        try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccessiDB", "root", "root");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("DELETE FROM AccessoLuogoAbilitato");
@@ -37,8 +37,8 @@ public class InitDB {
         }
     }
 
-    public static void initCorsiSicurezzaDB(){
-        try{
+    public static void initCorsiSicurezzaDB() {
+        try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CorsiSicurezzaDB", "root", "root");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("DELETE FROM Corso");
@@ -50,7 +50,7 @@ public class InitDB {
         }
     }
 
-    public static void initLuoghiDB(){
+    public static void initLuoghiDB() {
         Connection con = null;
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/LuoghiDB", "root", "root");
@@ -68,21 +68,21 @@ public class InitDB {
         }
     }
 
-    public static void initRischiDB(){
-        try{
+    public static void initRischiDB() {
+        try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/RischiDB", "root", "root");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("DELETE FROM Rischio/*Generico*/");
             //stmt.executeUpdate("DELETE FROM RischioSpecifico");
             stmt.executeUpdate("ALTER TABLE Rischio/*Generico*/ AUTO_INCREMENT = 1");
             //stmt.executeUpdate("ALTER TABLE RischioSpecifico AUTO_INCREMENT = 1");
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void initVisiteDB(){
-        try{
+    public static void initVisiteDB() {
+        try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("DELETE FROM Visita");
@@ -94,12 +94,12 @@ public class InitDB {
             stmt.executeUpdate("ALTER TABLE Visita AUTO_INCREMENT = 1");
             stmt.executeUpdate("ALTER TABLE Patologia AUTO_INCREMENT = 1");
             stmt.executeUpdate("ALTER TABLE VisitaType AUTO_INCREMENT = 1");
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void initDB(){
+    public static void initDB() {
         initAccountDb();
         initAccessiDB();
         initRischiDB();

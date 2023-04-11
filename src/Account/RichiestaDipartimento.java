@@ -1,7 +1,5 @@
 package Account;
 
-import Luoghi.Dipartimento;
-
 import java.sql.SQLException;
 
 public class RichiestaDipartimento extends Richiesta {
@@ -11,6 +9,7 @@ public class RichiestaDipartimento extends Richiesta {
         super(idUtente, statoRichiesta);
         this.idDipartimento = idDipartimento;
     }
+
     public void insertRichiesta(/*int idDipartimento*/) throws SQLException {
         super.insertRichiesta(idDipartimento, "dipartimento");
     }
@@ -21,8 +20,9 @@ public class RichiestaDipartimento extends Richiesta {
     public int getIdDipartimento() {
         return idDipartimento;
     }
+
     @Override
     public String toString() {
-        return super.toString()+", idDipartimento=" + idDipartimento;
+        return super.toString() + ", idDipartimento=" + idDipartimento;
     }
 }

@@ -10,22 +10,20 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runners.MethodSorters;
 
 import java.sql.SQLException;
-import java.util.concurrent.CompletableFuture;
 
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayLuoghiTest {
     static GatewayLuoghi gL;
 
     static Thread subscriberLuoghi;
     static Thread service;
+
     public GatewayLuoghiTest() throws SQLException {
 
     }
@@ -37,9 +35,9 @@ public class GatewayLuoghiTest {
         gL = new GatewayLuoghi(eventBusService);
         //service=CompletableFuture.runAsync(() -> eventBusService.run());
         //subscriberLuoghi=CompletableFuture.runAsync(() -> new LuoghiSubscriber(eventBusService).run());
-        service=new Thread(() -> eventBusService.run());
+        service = new Thread(() -> eventBusService.run());
         service.start();
-        subscriberLuoghi=new Thread(() -> new LuoghiSubscriber(eventBusService).run());
+        subscriberLuoghi = new Thread(() -> new LuoghiSubscriber(eventBusService).run());
         subscriberLuoghi.start();
     }
 
@@ -52,6 +50,7 @@ public class GatewayLuoghiTest {
         subscriberLuoghi.interrupt();
         service.interrupt();
     }
+
     @Test
     public void _01addDipartimento() throws SQLException {
         gL.addDipartimento(1, "nomeDipartimento", 1);
@@ -59,13 +58,13 @@ public class GatewayLuoghiTest {
 
     @Test
     public void _02addLuogo() throws SQLException {
-        gL.addLuogo(1,"nome", "aula", 1234567, 1);
+        gL.addLuogo(1, "nome", "aula", 1234567, 1);
     }
 
     @Test
     public void _03getResponsabileLuogo() throws SQLException {
         Luogo l = new Luogo(1);
-        UtenteInterno u =gL.getResponsabileLuogo(l);
+        UtenteInterno u = gL.getResponsabileLuogo(l);
         assertEquals(1, u.getCodice());
     }
 
@@ -81,13 +80,13 @@ public class GatewayLuoghiTest {
 
     @Test
     public void _06deleteLuogo() throws SQLException {
-        LuoghiGatewayDB lgDB= new LuoghiGatewayDB();
+        LuoghiGatewayDB lgDB = new LuoghiGatewayDB();
         lgDB.deleteLuogo(1);
     }
 
     @Test
     public void _07deleteDipartimento() throws SQLException {
-        LuoghiGatewayDB lgDB= new LuoghiGatewayDB();
+        LuoghiGatewayDB lgDB = new LuoghiGatewayDB();
         lgDB.deleteDipartimento(1);
     }
 }

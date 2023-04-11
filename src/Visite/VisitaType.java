@@ -12,7 +12,7 @@ public class VisitaType {
 
     private int rischioAssociato;
 
-    public VisitaType(int id, String nome, String descrizione, String frequenza, int rischioAssociato){
+    public VisitaType(int id, String nome, String descrizione, String frequenza, int rischioAssociato) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
@@ -23,14 +23,13 @@ public class VisitaType {
     public VisitaType(int id) throws SQLException {
         VisiteGatewayDb gV = new VisiteGatewayDb();
         VisitaType v = gV.getVisitaType(id);
-        if(v!=null) {
+        if (v != null) {
             this.id = v.getId();
             this.nome = v.getNome();
             this.descrizione = v.getDescrizione();
             this.frequenza = v.getFrequenza();
             this.rischioAssociato = v.getRischioAssociato();
-        }
-        else{
+        } else {
             throw new SQLException("VisitaType non trovata");
         }
     }
@@ -63,16 +62,16 @@ public class VisitaType {
         return frequenza;
     }
 
-    public int getRischioAssociato() {
-        return rischioAssociato;
-    }
-
     public void setFrequenza(String frequenza) {
         this.frequenza = frequenza;
     }
 
+    public int getRischioAssociato() {
+        return rischioAssociato;
+    }
+
     public void saveToDb() throws SQLException {
         VisiteGatewayDb gV = new VisiteGatewayDb();
-        gV.addVisitaType(id,nome, descrizione, frequenza, rischioAssociato);
+        gV.addVisitaType(id, nome, descrizione, frequenza, rischioAssociato);
     }
 }

@@ -1,4 +1,5 @@
 package AsyncIPCEventBus;
+
 import AsyncIPCEventBus.PublishSubscribe.*;
 import Rischi.Rischio;
 import Rischi.RischioGenerico;
@@ -14,19 +15,20 @@ public class GatewayRischi {
 
     public GatewayRischi(EventBusService service) {
         eventBusService = service;
-        sub = new SubscriberConcr("Rischi", service );
+        sub = new SubscriberConcr("Rischi", service);
         pub = new PublisherConcr();
     }
+
     public void insertRischioGenerico(int codice, String nome, String descrizione/*, String tipologia*/) throws SQLException {
-        r=new RischioGenerico(codice, nome, descrizione/*, tipologia*/);
-        pub.publish(new Message("Rischi","insertRischioGenerico", r, null), eventBusService);
+        r = new RischioGenerico(codice, nome, descrizione/*, tipologia*/);
+        pub.publish(new Message("Rischi", "insertRischioGenerico", r, null), eventBusService);
         System.out.println("Rischio generico creato");
         //r.saveToDB();
     }
 
     public void insertRischioSpecifico(int codice, String nome, String descrizione/*, String tipologia*/) throws SQLException {
-        r=new RischioSpecifico(codice, nome, descrizione/*, tipologia*/);
-        pub.publish(new Message("Rischi","insertRischioSpecifico", r, null), eventBusService);
+        r = new RischioSpecifico(codice, nome, descrizione/*, tipologia*/);
+        pub.publish(new Message("Rischi", "insertRischioSpecifico", r, null), eventBusService);
         System.out.println("Rischio specifico creato");
         //r.saveToDB();
     }

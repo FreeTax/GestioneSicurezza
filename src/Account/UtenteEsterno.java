@@ -1,13 +1,10 @@
 package Account;
 
-import Visite.SchedaVisita;
-
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class UtenteEsterno extends Utente{
+public class UtenteEsterno extends Utente {
     private int idEsterno;
 
     public UtenteEsterno(int codice, String password, String nome, String cognome, String sesso, String dipartimento, Date dataNascita, int idEsterno/*, SchedaVisita visite*/) throws SQLException {
@@ -20,32 +17,33 @@ public class UtenteEsterno extends Utente{
     }
 
     public UtenteEsterno(int idesterno) throws SQLException {
-       UtenteEsterno ue=uGateway.GetUtenteEsterno(idesterno);
-       if(ue!=null){
-           this.idEsterno=ue.idEsterno;
-           this.codice=ue.codice;
-           this.password=ue.password;
-           this.nome=ue.nome;
-           this.cognome=ue.cognome;
-           this.sesso=ue.sesso;
-           this.dipartimento=ue.dipartimento;
-           this.dataNascita=ue.dataNascita;
-           this.cfuSostenuti=uGateway.GetCFUSostenuti(this.codice);
-       }
-         else {
-              new UtenteEsterno();
-         }
+        UtenteEsterno ue = uGateway.GetUtenteEsterno(idesterno);
+        if (ue != null) {
+            this.idEsterno = ue.idEsterno;
+            this.codice = ue.codice;
+            this.password = ue.password;
+            this.nome = ue.nome;
+            this.cognome = ue.cognome;
+            this.sesso = ue.sesso;
+            this.dipartimento = ue.dipartimento;
+            this.dataNascita = ue.dataNascita;
+            this.cfuSostenuti = uGateway.GetCFUSostenuti(this.codice);
+        } else {
+            new UtenteEsterno();
+        }
 
     }
+
     public void insertUtente() throws SQLException {
-        uGateway.InsertUtenteEsterno(idEsterno,password,nome,cognome,sesso,dataNascita,dipartimento);
+        uGateway.InsertUtenteEsterno(idEsterno, password, nome, cognome, sesso, dataNascita, dipartimento);
     }
+
     public int getIdEsterno() {
         return idEsterno;
     }
 
     public void updateUtenteDb() throws SQLException {
-        uGateway.updateUtenteEsterno(idEsterno,password,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento);
+        uGateway.updateUtenteEsterno(idEsterno, password, nome, cognome, sesso, String.valueOf(dataNascita), dipartimento);
     }
 
     @Override
@@ -58,17 +56,17 @@ public class UtenteEsterno extends Utente{
         return super.getCfuSostenuti(idUtente);
     }
 
-    public boolean loginEsterno(int idEsterno,String password) throws SQLException {
-        return uGateway.loginEsterno(idEsterno,password);
+    public boolean loginEsterno(int idEsterno, String password) throws SQLException {
+        return uGateway.loginEsterno(idEsterno, password);
     }
 
     public ArrayList<RichiestaLuogo> getRichiesteLuogo() throws SQLException {
-        int idUtente= uGateway.getIdUtente(idEsterno, false);
+        int idUtente = uGateway.getIdUtente(idEsterno, false);
         return uGateway.getRichiesteLuogo(idUtente);
     }
 
     public ArrayList<RichiestaDipartimento> getRichiesteDipartimento() throws SQLException {
-        int idUtente= uGateway.getIdUtente(idEsterno, false);
+        int idUtente = uGateway.getIdUtente(idEsterno, false);
         return uGateway.getRichiesteDipartimento(idUtente);
     }
 }

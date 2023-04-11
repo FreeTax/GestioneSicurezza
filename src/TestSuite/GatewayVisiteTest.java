@@ -3,16 +3,17 @@ package TestSuite;
 import AsyncIPCEventBus.GatewayVisite;
 import AsyncIPCEventBus.PublishSubscribe.EventBusService;
 import Visite.visitesubscriber.VisiteSubscriber;
+import VisiteGateway.VisiteGatewayDb;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.concurrent.CompletableFuture;
-
-import VisiteGateway.VisiteGatewayDb;
 
 import static java.lang.Thread.sleep;
 
@@ -23,6 +24,7 @@ public class GatewayVisiteTest {
 
     static Thread service;
     static Thread subscriberVisite;
+
     public GatewayVisiteTest() throws SQLException {
 
     }
@@ -30,14 +32,14 @@ public class GatewayVisiteTest {
     @BeforeClass
     public static void initialize() throws SQLException {
         EventBusService eventBusService = new EventBusService();
-        gV=new GatewayVisite(eventBusService);
+        gV = new GatewayVisite(eventBusService);
         vG = new VisiteGatewayDb();
         System.out.println("GatewayVisiteTest: initialize");
         //CompletableFuture.runAsync(()->eventBusService.run());
         //CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());
-        service=new Thread(() -> eventBusService.run());
+        service = new Thread(() -> eventBusService.run());
         service.start();
-        subscriberVisite=new Thread(() -> new VisiteSubscriber(eventBusService).run());
+        subscriberVisite = new Thread(() -> new VisiteSubscriber(eventBusService).run());
         subscriberVisite.start();
     }
 
@@ -52,25 +54,28 @@ public class GatewayVisiteTest {
     @BeforeEach
     void setUp() {
     }
+
     @AfterEach
     void tearDown() {
     }
+
     @Test
     public void insertSchedaVisita() throws SQLException {
         gV.addSchedaVisita(1234567);
     }
 
     @Test
-    public void insertVisitaType() throws SQLException{
-        vG.addVisitaType(1,"visita1", "descrizione1", "tipo1", 1);
+    public void insertVisitaType() throws SQLException {
+        vG.addVisitaType(1, "visita1", "descrizione1", "tipo1", 1);
     }
+
     @Test
-    public void insertVisita() throws SQLException{
+    public void insertVisita() throws SQLException {
         gV.addVisitaUtente(1234567, 1, "dottore", "descrizione", Timestamp.valueOf("2020-10-03 10:10:10"), "da sostenere", 1);
     }
 
     @Test
-    public void getVisiteSostenute() throws SQLException{
+    public void getVisiteSostenute() throws SQLException {
         gV.getVisiteSostenute(1234567);
     }
 }

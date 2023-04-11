@@ -1,8 +1,5 @@
 package Accessi;
 
-import Account.Utente;
-import Luoghi.Dipartimento;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -39,7 +36,7 @@ public class AccessoDipartimentoAbilitato extends Accesso {
         return idDipartimento;
     }
 
-    public ArrayList<Integer> getDipartimentiFrequentati(int idUtente) throws SQLException{
+    public ArrayList<Integer> getDipartimentiFrequentati(int idUtente) throws SQLException {
         return gatewayDb.getDipartimentiFrequentati(idUtente);
     }
 }

@@ -1,15 +1,15 @@
 package AsyncIPCEventBus.PublishSubscribe;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Subscriber implements Runnable {
-    protected List<Message> subscriberMessages=new ArrayList <Message>();
+    protected List<Message> subscriberMessages = new ArrayList<Message>();
 
     protected EventBusService service;
 
     protected Object response;
+
     public List<Message> getSubscriberMessages() {
         return subscriberMessages;
     }
@@ -18,6 +18,7 @@ public abstract class Subscriber implements Runnable {
         synchronized (subscriberMessages) {
             this.subscriberMessages = subscriberMessages;
             subscriberMessages.notifyAll();
+            System.out.println("setSubscriberMessages");
         }
     }
 
@@ -33,14 +34,14 @@ public abstract class Subscriber implements Runnable {
         service.getMessagesForTopicSuscriber(topic, this);
     }
 
-    public void receiveMessage(Message m, EventBusService s)  {
+    public void receiveMessage(Message m, EventBusService s) {
     }
 
     public void addMessage(Message message) {
         subscriberMessages.add(message);
     }
 
-    public Object getResponse(){
+    public Object getResponse() {
         return response;
     }
 
@@ -54,7 +55,7 @@ public abstract class Subscriber implements Runnable {
                     while (subscriberMessages.isEmpty()) {
                         subscriberMessages.wait();
                     }
-                    receiveMessage(subscriberMessages.remove(0),service);
+                    receiveMessage(subscriberMessages.remove(0), service);
                 }
             }
         } catch (InterruptedException e) {

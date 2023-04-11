@@ -5,14 +5,13 @@ import AsyncIPCEventBus.PublishSubscribe.*;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
+public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable {
 
-public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
-
-    Object response=null;
+    Object response = null;
     EventBusService service;
+
     public CorsiSicurezzaSubscriber(/*String topic,*/ EventBusService service) {
-        this.service=service;
+        this.service = service;
         addSubscriber("CorsiSicurezza", service);
     }
 
@@ -30,22 +29,24 @@ public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
 
     @Override
     public void setSubscriberMessages(List<Message> subscriberMessages) {
-        synchronized (subscriberMessages){
+        synchronized (subscriberMessages) {
             super.setSubscriberMessages(subscriberMessages);
             subscriberMessages.notifyAll();
         }
     }
-/*
-    @Override
-    public void addMessage(Message message) {
-        synchronized (subscriberMessages) {
-            super.addMessage(message);
-            subscriberMessages.notifyAll();
-        }
-    }*/
-    public Object getResponse(){
+
+    /*
+        @Override
+        public void addMessage(Message message) {
+            synchronized (subscriberMessages) {
+                super.addMessage(message);
+                subscriberMessages.notifyAll();
+            }
+        }*/
+    public Object getResponse() {
         return response;
     }
+
     public void receiveMessage(Message message, EventBusService service) {
         System.out.println("SubscriberCorsi received message: " + message.getMessage());
         try {
@@ -62,18 +63,17 @@ public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
                         i++;
                     }
                     method = obj.getClass().getMethod(message.getMessage(), cls);
-                    returnObj=method.invoke(obj, parameters.toArray());
+                    returnObj = method.invoke(obj, parameters.toArray());
                 } else {
                     method = obj.getClass().getMethod(message.getMessage());
-                    returnObj=method.invoke(obj);
+                    returnObj = method.invoke(obj);
                 }
-                if(message.getReturnAddress()!=null){
-                    Publisher pub=new PublisherConcr();
-                    pub.publish(new Message(message.getReturnAddress(),"response",returnObj,null),service);
+                if (message.getReturnAddress() != null) {
+                    Publisher pub = new PublisherConcr();
+                    pub.publish(new Message(message.getReturnAddress(), "response", returnObj, null), service);
                 }
-            }
-            else {
-                response=message.getData();
+            } else {
+                response = message.getData();
             }
             /*switch (message.getMessage()){
             case "insertUtente":
@@ -133,7 +133,7 @@ public class CorsiSicurezzaSubscriber extends Subscriber implements Runnable{
                     while (subscriberMessages.isEmpty()) {
                         subscriberMessages.wait();
                     }
-                    receiveMessage(subscriberMessages.remove(0),service);
+                    receiveMessage(subscriberMessages.remove(0), service);
                 }
             }
         } catch (InterruptedException e) {

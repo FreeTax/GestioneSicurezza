@@ -5,11 +5,8 @@ import AsyncIPCEventBus.PublishSubscribe.*;
 import Luoghi.Dipartimento;
 import Luoghi.Luogo;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Thread.sleep;
 
 public class AccountSubscriber extends Subscriber {
     public AccountSubscriber(/*String topic,*/ EventBusService service) {
@@ -17,33 +14,11 @@ public class AccountSubscriber extends Subscriber {
         addSubscriber("Account", service);
     }
 
-    /*@Override
-    public void addMessage(Message message) {
-        synchronized (subscriberMessages) {
-            super.addMessage(message);
-            subscriberMessages.notifyAll();
-        }
-    }*/
-/*
-    public synchronized void executeMessage(){
-
-        Message message=getSubscriberMessages().remove(0);
-        receiveMessage(message,service);
-    }*/
     public Object getResponse() {
         return response;
     }
 
     public synchronized void receiveMessage(Message message, EventBusService service) {
-        // Message message=getSubscriberMessages().remove(0);
-        /*while (getSubscriberMessages().isEmpty()){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Message message=getSubscriberMessages().remove(0);*/
         System.out.println("SubscriberAccount received message: " + message.getMessage());
         try {
             switch (message.getMessage()) {
@@ -97,46 +72,45 @@ public class AccountSubscriber extends Subscriber {
 
                 case "getCFUdaSostenere":
                     int idUtente2 = (int) message.getParameters().get(0);
-                    ArrayList<RichiestaLuogo> richiesteLuogo=null;
-                    ArrayList<RichiestaDipartimento> richiesteDipartimento=null;
+                    ArrayList<RichiestaLuogo> richiesteLuogo = null;
+                    ArrayList<RichiestaDipartimento> richiesteDipartimento = null;
                     ArrayList<CreditoFormativo> cfuUtente;
 
-                    if(new UtenteInterno(idUtente2).getNome()!=null){
-                        UtenteInterno ui2=new UtenteInterno(idUtente2);
+                    if (new UtenteInterno(idUtente2).getNome() != null) {
+                        UtenteInterno ui2 = new UtenteInterno(idUtente2);
                         richiesteLuogo = ui2.getRichiesteLuogo();
-                        richiesteDipartimento =ui2.getRichiesteDipartimento();
-                        cfuUtente=ui2.getCfuSostenuti();
-                    }
-                    else {
-                        UtenteEsterno ue=new UtenteEsterno(idUtente2);
-                        richiesteLuogo =ue.getRichiesteLuogo();
-                        richiesteDipartimento =ue.getRichiesteDipartimento();
-                        cfuUtente=ue.getCfuSostenuti();
+                        richiesteDipartimento = ui2.getRichiesteDipartimento();
+                        cfuUtente = ui2.getCfuSostenuti();
+                    } else {
+                        UtenteEsterno ue = new UtenteEsterno(idUtente2);
+                        richiesteLuogo = ue.getRichiesteLuogo();
+                        richiesteDipartimento = ue.getRichiesteDipartimento();
+                        cfuUtente = ue.getCfuSostenuti();
                     }
 
                     ArrayList<Integer> rischi = new ArrayList<>();
 
-                    for(RichiestaLuogo rl2 : richiesteLuogo){
-                        Luogo l=new Luogo(rl2.getIdLuogo());
+                    for (RichiestaLuogo rl2 : richiesteLuogo) {
+                        Luogo l = new Luogo(rl2.getIdLuogo());
                         ArrayList<Integer> rischiLuogo = l.getRischi();
-                        for(Integer i : rischiLuogo){
-                            if(!rischi.contains(i))
+                        for (Integer i : rischiLuogo) {
+                            if (!rischi.contains(i))
                                 rischi.add(i);
                         }
                     }
 
-                    for(RichiestaDipartimento rd2 : richiesteDipartimento){
-                        Dipartimento d=new Dipartimento(rd2.getIdDipartimento());
+                    for (RichiestaDipartimento rd2 : richiesteDipartimento) {
+                        Dipartimento d = new Dipartimento(rd2.getIdDipartimento());
                         ArrayList<Integer> rischiDipartimento = d.getRischi();
-                        for(Integer i : rischiDipartimento){
-                            if(!rischi.contains(i))
+                        for (Integer i : rischiDipartimento) {
+                            if (!rischi.contains(i))
                                 rischi.add(i);
                         }
                     }
 
                     ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
-                    cfuUtente.forEach(cfu ->cfuUtenteId.add(cfu.getIdRischio()));
+                    cfuUtente.forEach(cfu -> cfuUtenteId.add(cfu.getIdRischio()));
 
                     rischi.removeAll(cfuUtenteId);
 

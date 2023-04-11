@@ -13,7 +13,7 @@ public class AccessoLuogoAbilitato extends Accesso {
 
     @Override
     public void insertAccesso() throws SQLException {
-        gatewayDb.insertAccessoLuogo(idUtente,luogo);
+        gatewayDb.insertAccessoLuogo(idUtente, luogo);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AccessoLuogoAbilitato extends Accesso {
         gatewayDb.deleteAccessoLuogo(idUtente, luogo);
     }
 
-    public ArrayList<Integer> getLuoghiFrequentati(int idUtente) throws SQLException{
+    public ArrayList<Integer> getLuoghiFrequentati(int idUtente) throws SQLException {
         return gatewayDb.getLuoghiFrequentati(idUtente);
     }
 }

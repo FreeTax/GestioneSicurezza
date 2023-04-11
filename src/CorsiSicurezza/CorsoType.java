@@ -1,7 +1,5 @@
 package CorsiSicurezza;
 
-import Rischi.Rischio;
-
 import CorsiSicurezzaGateway.CorsiSicurezzaGatewayDb;
 
 import java.sql.SQLException;
@@ -18,7 +16,7 @@ public class CorsoType {
         this.nome = nome;
         this.descrizione = descrizione;
         this.idRischioAssociato = rischioAssociato;
-        db=new CorsiSicurezzaGatewayDb();
+        db = new CorsiSicurezzaGatewayDb();
     }
 
     public void saveToDB() throws SQLException {

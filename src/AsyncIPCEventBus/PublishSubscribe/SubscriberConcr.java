@@ -1,13 +1,13 @@
 package AsyncIPCEventBus.PublishSubscribe;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 public class SubscriberConcr extends Subscriber {
 
-    Object response=null;
+    Object response = null;
+
     public SubscriberConcr(String topic, EventBusService service) {
         addSubscriber(topic, service);
     }
@@ -26,7 +26,7 @@ public class SubscriberConcr extends Subscriber {
 
     @Override
     public void setSubscriberMessages(List<Message> subscriberMessages) {
-        synchronized (subscriberMessages){
+        synchronized (subscriberMessages) {
             super.setSubscriberMessages(subscriberMessages);
             subscriberMessages.notifyAll();
         }
@@ -39,9 +39,11 @@ public class SubscriberConcr extends Subscriber {
             subscriberMessages.notifyAll();
         }
     }
-    public Object getResponse(){
+
+    public Object getResponse() {
         return response;
     }
+
     public void receiveMessage(Message message, EventBusService service) {
         try {
             sleep(1000);
@@ -78,7 +80,7 @@ public class SubscriberConcr extends Subscriber {
                 response=message.getData();
             }
             */
-            switch (message.getMessage()){
+            switch (message.getMessage()) {
                 /*
             case "insertUtente":
                 data = message.getData();
@@ -119,13 +121,13 @@ public class SubscriberConcr extends Subscriber {
                 Utente ui=(UtenteInterno)param.get(3);
                 ui.sostieniCredito(idUtente,codice,certificato);
                 break;*/
-            case "response":
-               response=message.getData();
-               break;
+                case "response":
+                    response = message.getData();
+                    break;
 
-            default:
-                System.out.println("Message not recognized");
-        }
+                default:
+                    System.out.println("Message not recognized");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
