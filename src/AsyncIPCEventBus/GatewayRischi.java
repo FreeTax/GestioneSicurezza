@@ -6,7 +6,9 @@ import Rischi.RischioGenerico;
 import Rischi.RischioSpecifico;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class GatewayRischi {
     private Rischio r;
@@ -46,13 +48,41 @@ public class GatewayRischi {
         }).join();
     }
 
-    public RischioGenerico getRischioGenerico(int codice) throws SQLException {
-        r = new RischioGenerico(codice);
-        return (RischioGenerico) r;
+    public CompletableFuture<RischioGenerico> getRischioGenerico(int codice) throws SQLException {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+               // r = new RischioGenerico(codice);
+                //return (RischioGenerico) r;
+                SubscriberConcr subscriber = new SubscriberConcr("RischioGenerico" + codice, eventBusService);
+                pub.publish(new Message("Rischi", "getRischioGenerico", null, Arrays.asList(codice), "RischioGenerico" + codice), eventBusService);
+
+                CompletableFuture<RischioGenerico> getRischioGenerico = CompletableFuture
+                        .supplyAsync(() -> (RischioGenerico) subscriber.getSubscriberMessages().get(0).getData(), CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS))
+                        .completeOnTimeout(null, 3, TimeUnit.SECONDS);
+                RischioGenerico res = getRischioGenerico.join();
+                return res;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    public RischioSpecifico getRischioSpecifico(int codice) throws SQLException {
-        r = new RischioSpecifico(codice);
-        return (RischioSpecifico) r;
+    public CompletableFuture<RischioSpecifico> getRischioSpecifico(int codice) throws SQLException {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                //r = new RischioSpecifico(codice);
+                //return (RischioSpecifico) r;
+                SubscriberConcr subscriber = new SubscriberConcr("RischioSpecifico" + codice, eventBusService);
+                pub.publish(new Message("Rischi", "getRischioSpecifico", null, Arrays.asList(codice), "RischioSpecifico" + codice), eventBusService);
+
+                CompletableFuture<RischioSpecifico> getRischioSpecifico = CompletableFuture
+                        .supplyAsync(() -> (RischioSpecifico) subscriber.getSubscriberMessages().get(0).getData(), CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS))
+                        .completeOnTimeout(null, 3, TimeUnit.SECONDS);
+                RischioSpecifico res = getRischioSpecifico.join();
+                return res;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

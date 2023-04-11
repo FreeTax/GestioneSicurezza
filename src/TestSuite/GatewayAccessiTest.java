@@ -64,9 +64,11 @@ public class GatewayAccessiTest {
     public void _00init() throws SQLException, InterruptedException {
         gl.addDipartimento(3, "nomeDipartimento", 1);
         gl.addDipartimento(4, "nome", 1);
+        sleep(500);
         gl.insertRischioDipartimento(4, 1);
         gl.addLuogo(3, "nome", "aula", 1234567, 1);
         gl.addLuogo(4, "nome", "aula", 1234567, 1);
+        sleep(500);
         gl.insertRischioLuogo(4, 3);
         sleep(6000);
     }

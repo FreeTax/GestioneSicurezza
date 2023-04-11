@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Main {
     public static final String RESET = "\033[0m";  // Text Reset
 
@@ -48,9 +50,10 @@ public class Main {
 
             gV.addVisitaType(1, "visita oculistica", " ", "2 anno", 2);
             gV.addSchedaVisita(1);
-
+            sleep(800);
             gV.addVisitaUtente(1, 1, "dott.Mario Rossi", "visita oculistica", Timestamp.valueOf(LocalDateTime.now()), "da sostenere", 1);
             gV.addVisitaUtente(1, 2, "dott.Mario Rossi", "visita controllo", Timestamp.valueOf(LocalDateTime.now()), "da sostenere", 1);
+            sleep(800);
             gV.sostieniVisita(1, "superata", 1);
             gL.insertRischioLuogo(1, 1);
             gL.insertRischioLuogo(1, 2);
@@ -134,7 +137,7 @@ public class Main {
 
     public static void test2(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, EventBusService eventBusService) throws SQLException {
         try {
-            if (gU.loginInterno(1, "password")) {
+            if (gU.loginInterno(1, "password").join()) {
                 gU.sostieniCredito(1, 1, "");
                 gU.sostieniCredito(1, 2, "");
                 gU.sostieniCredito(1, 3, "certificazione");
@@ -143,7 +146,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
         try {
-            if (gU.loginEsterno(4, "password")) {
+            if (gU.loginEsterno(4, "password").join()) {
                 gU.sostieniCredito(4, 1, "");
                 gU.sostieniCredito(4, 3, "certificazione");
             }
@@ -151,7 +154,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
         try {
-            if (gU.loginInterno(2, "password")) { //login utente supervisore
+            if (gU.loginInterno(2, "password").join()) { //login utente supervisore
                /* ArrayList<String> CFUsostenuti=gU.getCFUSostenuti(2, 1);
                 System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);*/
                 /*CompletableFuture.supplyAsync(() -> {

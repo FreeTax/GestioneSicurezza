@@ -52,19 +52,20 @@ public class GatewayLuoghiTest {
     }
 
     @Test
-    public void _01addDipartimento() throws SQLException {
+    public void _01addDipartimento() throws SQLException, InterruptedException {
         gL.addDipartimento(1, "nomeDipartimento", 1);
+        sleep(500);
     }
 
     @Test
-    public void _02addLuogo() throws SQLException {
+    public void _02addLuogo() throws SQLException, InterruptedException {
         gL.addLuogo(1, "nome", "aula", 1234567, 1);
+        sleep(500);
     }
 
     @Test
     public void _03getResponsabileLuogo() throws SQLException {
-        Luogo l = new Luogo(1);
-        UtenteInterno u = gL.getResponsabileLuogo(l);
+        UtenteInterno u = gL.getResponsabileLuogo(new Luogo(1)).join();
         assertEquals(1, u.getCodice());
     }
 

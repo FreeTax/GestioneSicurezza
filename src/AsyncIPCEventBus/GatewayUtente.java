@@ -89,14 +89,49 @@ public class GatewayUtente {
     }
 
     /*login utente interno e esterno*/
-    public boolean loginInterno(int matricola, String password) throws SQLException {
-        UtenteInterno u = new UtenteInterno(matricola);
-        return u.loginInterno(matricola, password);
+    public CompletableFuture<Boolean> loginInterno(int matricola, String password) throws SQLException {
+        return CompletableFuture.supplyAsync(()-> {
+            try {
+                //UtenteInterno u = new UtenteInterno(matricola);
+
+                SubscriberConcr subscriber = new SubscriberConcr("loginInterno" + matricola, eventBusService);
+                pub.publish(new Message("Account", "loginInternoReq", null, Arrays.asList(matricola,password), "loginInterno" + matricola), eventBusService);
+
+                CompletableFuture<Boolean> login = CompletableFuture
+                        .supplyAsync(() -> (Boolean) subscriber.getSubscriberMessages().get(0).getData(), CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS))
+                        .completeOnTimeout(false, 3, TimeUnit.SECONDS);
+                Boolean res = login.join();
+
+                subscriber.unSubscribe("loginInterno" + matricola, eventBusService);
+
+                return res;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false;
+        });
     }
 
-    public boolean loginEsterno(int idEsterno, String password) throws SQLException {
-        UtenteEsterno u = new UtenteEsterno(idEsterno);
-        return u.loginEsterno(idEsterno, password);
+    public CompletableFuture<Boolean> loginEsterno(int idEsterno, String password) throws SQLException {
+        return CompletableFuture.supplyAsync(()-> {
+            try {
+                //UtenteEsterno u = new UtenteEsterno(idEsterno);
+                SubscriberConcr subscriber = new SubscriberConcr("loginEsterno" + idEsterno, eventBusService);
+                pub.publish(new Message("Account", "loginEsternoReq", null, Arrays.asList(idEsterno,password), "loginEsterno" + idEsterno), eventBusService);
+
+                CompletableFuture<Boolean> login = CompletableFuture
+                        .supplyAsync(() -> (Boolean) subscriber.getSubscriberMessages().get(0).getData(), CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS))
+                        .completeOnTimeout(false, 3, TimeUnit.SECONDS);
+                Boolean res = login.join();
+
+                subscriber.unSubscribe("loginInterno" + idEsterno, eventBusService);
+                return res;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return false;
+        });
+
     }
 
     /* inserimento richiesta accesso a luogo e dipartimento*/

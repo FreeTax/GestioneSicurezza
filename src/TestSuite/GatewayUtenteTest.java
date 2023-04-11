@@ -92,22 +92,22 @@ public class GatewayUtenteTest {
 
     @Test
     public void _04loginInterno() throws SQLException, InterruptedException {
-        assertTrue(gU.loginInterno(1234567, "passwordinterno"));
+        assertTrue(gU.loginInterno(1234567, "passwordinterno").join());
     }
 
     @Test
     public void _05loginInternoFalse() throws SQLException {
-        assertTrue(!gU.loginInterno(1234567, "errata"));
+        assertTrue(!gU.loginInterno(1234567, "errata").join());
     }
 
     @Test
     public void _06loginEsterno() throws SQLException, InterruptedException {
-        assertTrue(gU.loginEsterno(19029420, "passwordesterno"));
+        assertTrue(gU.loginEsterno(19029420, "passwordesterno").join());
     }
 
     @Test
     public void _07loginEsternoFalse() throws SQLException {
-        assertTrue(!gU.loginEsterno(19029420, "errata"));
+        assertTrue(!gU.loginEsterno(19029420, "errata").join());
     }
 
     @Test
