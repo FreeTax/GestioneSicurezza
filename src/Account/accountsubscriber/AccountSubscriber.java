@@ -116,6 +116,7 @@ public class AccountSubscriber extends Subscriber {
 
                     Publisher pub11 = new PublisherConcr();
                     pub11.publish(new Message(message.getReturnAddress(), "response", rischi, null), service);
+                    break;
 
                 case "getRichiesteLuogoUtenti":
                     int idUtente3 = (int) message.getParameters().get(0);

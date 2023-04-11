@@ -120,14 +120,15 @@ public class GatewayUtente {
     public ArrayList<String> getCFUSostenuti(int idAutorizzato, int idUtente) throws SQLException {
         Utente u = new UtenteInterno();//FIXME not good
         if (checkSupervisore(idAutorizzato) || checkAvanzato(idAutorizzato)) {
-            SubscriberConcr subscriber = new SubscriberConcr("CFUsostenuti", eventBusService);
-            pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(idUtente), "CFUsostenuti"), eventBusService);
+            SubscriberConcr subscriber = new SubscriberConcr("CFUsostenuti"+idUtente, eventBusService);
+            pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(idUtente), "CFUsostenuti"+idUtente), eventBusService);
 
             CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
                     .supplyAsync(() -> (ArrayList<CreditoFormativo>) subscriber.getSubscriberMessages().get(0).getData(), CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS))
                     .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
             ArrayList<CreditoFormativo> cfus = getCFU.join();
 
+            subscriber.unSubscribe("CFUsostenuti", eventBusService);
             ArrayList<String> cfuSostenuti = new ArrayList<>();
 
             for (CreditoFormativo cfu : cfus) {
@@ -159,6 +160,8 @@ public class GatewayUtente {
 
             ArrayList<RichiestaLuogo> richiesteLuogo = getRichiesteLuogo.join();
             ArrayList<String> richiesteLuogoString = new ArrayList<>();
+
+            subscriber.unSubscribe("richiesteLuogoUtenti", eventBusService);
             richiesteLuogo.forEach(rl -> richiesteLuogoString.add(rl.toString()));
             return richiesteLuogoString;
         } else {
@@ -178,6 +181,8 @@ public class GatewayUtente {
 
             ArrayList<RichiestaDipartimento> richiesteDipartimento = getRichiesteDipartimento.join();
             ArrayList<String> richiesteDipartimentoString = new ArrayList<>();
+
+            subscriber.unSubscribe("richiesteDipartimentoUtenti", eventBusService);
             richiesteDipartimento.forEach(rd -> richiesteDipartimentoString.add(rd.toString()));
             return richiesteDipartimentoString;
         } else {
@@ -187,14 +192,16 @@ public class GatewayUtente {
 
     public ArrayList<String> getCFUdaSostenere(int idUtente) throws SQLException {
         ArrayList<Integer> rischi;
-        SubscriberConcr subscriber = new SubscriberConcr("rischi", eventBusService);
-        pub.publish(new Message("Account", "getCFUdaSostenere", null, Arrays.asList(idUtente), "rischi"), eventBusService);
+        SubscriberConcr subscriber = new SubscriberConcr("CFUdaSostenere"+idUtente, eventBusService);
+        pub.publish(new Message("Account", "getCFUdaSostenere", null, Arrays.asList(idUtente), "CFUdaSostenere"+idUtente), eventBusService);
             CompletableFuture<ArrayList<Integer>> getRischi = CompletableFuture
                     .supplyAsync(() -> (ArrayList<Integer>) subscriber.getSubscriberMessages().get(0).getData(), CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS))
-                    .completeOnTimeout(new ArrayList<>(), 6, TimeUnit.SECONDS);
+                    .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
             rischi = getRischi.join();
             System.out.println("dimensioni richi: " + rischi.size());
             ArrayList<String> rischiString = new ArrayList<>();
+
+            subscriber.unSubscribe("CFUdaSostenere"+idUtente, eventBusService);
             for (Integer rischio : rischi) {
                 String nomeRischio;
                 if (new RischioGenerico(rischio).getNome() != null) {

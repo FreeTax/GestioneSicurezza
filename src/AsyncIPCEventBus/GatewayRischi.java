@@ -15,7 +15,7 @@ public class GatewayRischi {
 
     public GatewayRischi(EventBusService service) {
         eventBusService = service;
-        sub = new SubscriberConcr("Rischi", service);
+        //sub = new SubscriberConcr("Rischi", service);
         pub = new PublisherConcr();
     }
 

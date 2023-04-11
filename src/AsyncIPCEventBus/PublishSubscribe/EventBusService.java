@@ -24,7 +24,7 @@ public class EventBusService implements Runnable {
         synchronized (MessageQueue) {
             MessageQueue.add(message);
             MessageQueue.notifyAll();
-            System.out.println("addMessage");
+            //System.out.println("addMessage");
         }
         //MessageQueue.add(message);
         //sendMessage(message);
@@ -56,7 +56,7 @@ public class EventBusService implements Runnable {
 
     public void broadcast() throws SQLException {
         synchronized (MessageQueue) {
-            System.out.println("i'm inside brodcast");
+            //System.out.println("i'm inside brodcast");
             while (!MessageQueue.isEmpty()) {
                 Message message = MessageQueue.remove();
                 if (TopicSubscribers.containsKey(message.getTopic())) {

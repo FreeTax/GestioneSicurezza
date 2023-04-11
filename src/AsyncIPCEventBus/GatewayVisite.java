@@ -23,7 +23,7 @@ public class GatewayVisite {
 
     public GatewayVisite(EventBusService service) {
         eventBusService = service;
-        sub = new SubscriberConcr("Visite", service);
+        //sub = new SubscriberConcr("Visite", service);
         pub = new PublisherConcr();
     }
 
@@ -48,28 +48,32 @@ public class GatewayVisite {
 
     public ArrayList<Visita> getVisiteSostenute(int idUtente) throws SQLException {
         SchedaVisita sv = new SchedaVisita(idUtente);
-        SubscriberConcr subscriber = new SubscriberConcr("VisiteSostenute", eventBusService);
-        pub.publish(new Message("Visite", "getVisiteSostenute", sv, null, "VisiteSostenute"), eventBusService);
+        SubscriberConcr subscriber = new SubscriberConcr("VisiteSostenute"+idUtente, eventBusService);
+        pub.publish(new Message("Visite", "getVisiteSostenute", sv, null, "VisiteSostenute"+idUtente), eventBusService);
 
         CompletableFuture<ArrayList<Visita>> getVisiteSostenute = CompletableFuture
                 .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                 .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
 
         ArrayList<Visita> visite = getVisiteSostenute.join();
+
+        subscriber.unSubscribe("VisiteSostenute"+idUtente, eventBusService);
         return visite;
     }
 
     public ArrayList<Visita> getVisiteDaSostentere(int idUtente) throws SQLException {
         SchedaVisita sv = new SchedaVisita(idUtente);
 
-        SubscriberConcr subscriber = new SubscriberConcr("VisiteDaSostenere", eventBusService);
-        pub.publish(new Message("Visite", "getVisiteDaSostenere", sv, null, "VisiteDaSostenere"), eventBusService);
+        SubscriberConcr subscriber = new SubscriberConcr("VisiteDaSostenere"+idUtente, eventBusService);
+        pub.publish(new Message("Visite", "getVisiteDaSostenere", sv, null, "VisiteDaSostenere"+idUtente), eventBusService);
 
         CompletableFuture<ArrayList<Visita>> getVisiteDaSostenere = CompletableFuture
                 .supplyAsync(() -> (ArrayList<Visita>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                 .completeOnTimeout(new ArrayList<>(), 3, TimeUnit.SECONDS);
 
         ArrayList<Visita> visite = getVisiteDaSostenere.join();
+
+        subscriber.unSubscribe("VisiteDaSostenere"+idUtente, eventBusService);
         return visite;
     }
 

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 public class GatewayCorsiSicurezza {
     public GatewayCorsiSicurezza(EventBusService service) {
-        Subscriber subscriber = new SubscriberConcr("CorsiSicurezza", service);
+        //Subscriber subscriber = new SubscriberConcr("CorsiSicurezza", service);
     }
 
     public void addCorsoType(int id, String nome, String descrizione, int rischioAssociato, int authorizerUser) throws SQLException {

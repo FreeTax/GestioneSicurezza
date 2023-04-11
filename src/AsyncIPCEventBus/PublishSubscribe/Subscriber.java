@@ -18,7 +18,7 @@ public abstract class Subscriber implements Runnable {
         synchronized (subscriberMessages) {
             this.subscriberMessages = subscriberMessages;
             subscriberMessages.notifyAll();
-            System.out.println("setSubscriberMessages");
+            //System.out.println("setSubscriberMessages");
         }
     }
 

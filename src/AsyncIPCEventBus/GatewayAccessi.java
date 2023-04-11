@@ -27,7 +27,7 @@ public class GatewayAccessi {
 
     public GatewayAccessi(EventBusService service) {
         eventBusService = service;
-        sub = new SubscriberConcr("Accessi", service);
+        //sub = new SubscriberConcr("Accessi", service);
         pub = new PublisherConcr();
     }
 
@@ -38,15 +38,17 @@ public class GatewayAccessi {
             AccessoDipartimentoAbilitato a = new AccessoDipartimentoAbilitato(utente, dipartimento);
             Dipartimento d = new Dipartimento(dipartimento);
 
-            SubscriberConcr sub = new SubscriberConcr("rischiDipartimento", eventBusService);
-            pub.publish(new Message("Luoghi", "getRischiDipartimento", d, null, "rischiDipartimento"), eventBusService);
+            SubscriberConcr sub = new SubscriberConcr("rischiDipartimento"+dipartimento, eventBusService);
+            pub.publish(new Message("Luoghi", "getRischiDipartimento", d, null, "rischiDipartimento"+dipartimento), eventBusService);
             CompletableFuture<ArrayList<Integer>> getRischiLuogo = CompletableFuture
                     .supplyAsync(() -> (ArrayList<Integer>) sub.getSubscriberMessages().get(0).getData(), deleyed)
                     .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS);
             ArrayList<Integer> rischiDipartimento = getRischiLuogo.join();
 
-            SubscriberConcr subscriber2 = new SubscriberConcr("CFUsostenuti", eventBusService);
-            pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(utente), "CFUsostenuti"), eventBusService);
+            sub.unSubscribe("rischiDipartimento"+dipartimento, eventBusService);
+
+            SubscriberConcr subscriber2 = new SubscriberConcr("CFUsostenuti"+utente, eventBusService);
+            pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(utente), "CFUsostenuti"+utente), eventBusService);
 
             CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
                     .supplyAsync(() -> (ArrayList<CreditoFormativo>) subscriber2.getSubscriberMessages().get(0).getData(), deleyed)
@@ -54,6 +56,8 @@ public class GatewayAccessi {
                     .exceptionally(e -> new ArrayList<>());
 
             ArrayList<CreditoFormativo> cfuUtente = getCFU.join();
+
+            subscriber2.unSubscribe("CFUsostenuti"+utente, eventBusService);
 
             ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
@@ -77,16 +81,18 @@ public class GatewayAccessi {
             AccessoLuogoAbilitato a = new AccessoLuogoAbilitato(utente, luogo);
             Luogo l = new Luogo(luogo);
 
-            SubscriberConcr subscriber = new SubscriberConcr("RischiLuogo", eventBusService);
-            pub.publish(new Message("Luoghi", "getRischiLuogo", l, null, "RischiLuogo"), eventBusService);
+            SubscriberConcr subscriber = new SubscriberConcr("RischiLuogo"+luogo, eventBusService);
+            pub.publish(new Message("Luoghi", "getRischiLuogo", l, null, "RischiLuogo"+luogo), eventBusService);
             CompletableFuture<ArrayList<Integer>> getRischiLuogo = CompletableFuture
                     .supplyAsync(() -> (ArrayList<Integer>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                     .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS);
 
             ArrayList<Integer> rischiLuogo = getRischiLuogo.join();
 
-            SubscriberConcr subscriber2 = new SubscriberConcr("CFUsostenuti", eventBusService);
-            pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(utente), "CFUsostenuti"), eventBusService);
+            subscriber.unSubscribe("RischiLuogo"+luogo, eventBusService);
+
+            SubscriberConcr subscriber2 = new SubscriberConcr("CFUsostenuti"+utente, eventBusService);
+            pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(utente), "CFUsostenuti"+utente), eventBusService);
 
             CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
                     .supplyAsync(() -> (ArrayList<CreditoFormativo>) subscriber2.getSubscriberMessages().get(0).getData(), deleyed)
@@ -94,6 +100,8 @@ public class GatewayAccessi {
                     .exceptionally(e -> new ArrayList<>());
 
             ArrayList<CreditoFormativo> cfuUtente = getCFU.join();
+
+            subscriber2.unSubscribe("CFUsostenuti"+utente, eventBusService);
             ArrayList<Integer> cfuUtenteId = new ArrayList<>();
 
             cfuUtente.forEach(cfu -> cfuUtenteId.add(cfu.getIdRischio()));
@@ -138,26 +146,32 @@ public class GatewayAccessi {
     }
 
     public ArrayList<Integer> getLuoghiFrequentati(int idUtente) throws SQLException {
-        SubscriberConcr subscriber = new SubscriberConcr("LuoghiFrequentati" + idUtente, eventBusService);
+        SubscriberConcr subscriber = new SubscriberConcr("LuoghiFrequentati"+idUtente, eventBusService);
         AccessoLuogoAbilitato a = new AccessoLuogoAbilitato(idUtente, 0);
-        pub.publish(new Message("Accessi", "getLuoghiFrequentati", a, Arrays.asList(idUtente), "LuoghiFrequentati" + idUtente), eventBusService);
+        pub.publish(new Message("Accessi", "getLuoghiFrequentati", a, Arrays.asList(idUtente), "LuoghiFrequentati"+idUtente), eventBusService);
 
         CompletableFuture<ArrayList<Integer>> getLuoghiFreq = CompletableFuture
                 .supplyAsync(() -> (ArrayList<Integer>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                 .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS);
 
-        return getLuoghiFreq.join();
+        ArrayList<Integer> luoghiFreq = getLuoghiFreq.join();
+
+        subscriber.unSubscribe("LuoghiFrequentati"+idUtente, eventBusService);
+
+        return luoghiFreq;
     }
 
     public ArrayList<Integer> getDipartimentiFrequentati(int idUtente) throws SQLException {
-        SubscriberConcr subscriber = new SubscriberConcr("DipartimentiFrequentati", eventBusService);
-        pub.publish(new Message("Accessi", "getDipartimentiFrequentati", null, Arrays.asList(idUtente), "DipartimentiFrequentati"), eventBusService);
+        SubscriberConcr subscriber = new SubscriberConcr("DipartimentiFrequentati"+idUtente, eventBusService);
+        pub.publish(new Message("Accessi", "getDipartimentiFrequentati", null, Arrays.asList(idUtente), "DipartimentiFrequentati"+idUtente), eventBusService);
 
         CompletableFuture<ArrayList<Integer>> getDipartimentiFreq = CompletableFuture
                 .supplyAsync(() -> (ArrayList<Integer>) subscriber.getSubscriberMessages().get(0).getData(), deleyed)
                 .completeOnTimeout(new ArrayList<>(), 4, TimeUnit.SECONDS);
+        ArrayList<Integer> dipartimentiFreq = getDipartimentiFreq.join();
+        subscriber.unSubscribe("DipartimentiFrequentati"+idUtente, eventBusService);
 
-        return getDipartimentiFreq.join();
+        return dipartimentiFreq;
     }
 
 }
