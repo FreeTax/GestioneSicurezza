@@ -243,7 +243,7 @@ public class Main {
         System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);*/
         gU.getDashboard(3).thenAcceptAsync((dashboard) -> {
             for (String s : dashboard) {
-                System.out.println(s);
+                System.out.println(PURPLE+s+RESET);
             }
         }).join();
         /*for(String s: gU.getDashboard(3)){
