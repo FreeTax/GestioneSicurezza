@@ -414,8 +414,14 @@ public class UtenteGatewayDb {
     }
 
     public void removeRichiesta(int id) throws SQLException {
-        String sql = "DELETE FROM Richiesta WHERE idRichiesta ="+id;
-        stmt.executeUpdate(sql);
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
+            stmt = con.createStatement();
+            String sql = "DELETE FROM Richiesta WHERE idRichiesta =" + id;
+            stmt.executeUpdate(sql);
+        } finally {
+            con.close();
+        }
     }
-    }
+}
 
