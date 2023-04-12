@@ -30,7 +30,7 @@ public class Main {
     public static final String WHITE = "\033[0;37m";   // WHITE
 
     //TODO: test cross department and role update, getCrediti da sostenere,
-    //TODO: gestire eliminazione nei db e accettazione richieste->eliminazione richiesta (entrambi i branch) -- forze fatto ma sistemare con marco
+    //TODO: gestire eliminazione annidata
     //TODO: tracciare output colori anche tra vari test
     // dashboard: crediti da soostenre, crediti sostenuti, visite da effettuare, visite effettuate,luoghi frequentati
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS) {
@@ -103,7 +103,7 @@ public class Main {
         }*/
         gA.insertAccessoDipartimento(4, 2, u3.getMatricola()).thenAcceptAsync((accesso) -> {
             if (accesso)
-                System.out.println("utente" + u3.getCodice() + " ha accesso al dipartimento 2");
+                System.out.println(YELLOW+"utente" + u3.getCodice() + " ha accesso al dipartimento 2"+RESET);
         }).exceptionally((e) -> {
             System.out.println(e.getMessage());
             return null;
@@ -111,7 +111,7 @@ public class Main {
 
         gA.insertAccessoLuogo(1, 1, u2.getMatricola()).thenAcceptAsync((accesso) -> {
             if (accesso)
-                System.out.println("utente" + u2.getCodice() + " ha accesso al luogo 1");
+                System.out.println(YELLOW+"utente" + u2.getCodice() + " ha accesso al luogo 1"+RESET);
         }).exceptionally((e) -> {
             System.out.println(e.getMessage());
             return null;
@@ -119,7 +119,7 @@ public class Main {
 
         gA.insertAccessoDipartimento(4, 1, u2.getMatricola()).thenAcceptAsync((accesso) -> {
             if (accesso)
-                System.out.println("utente" + u2.getCodice() + " ha accesso al dipartimento 2");
+                System.out.println(YELLOW+"utente" + u2.getCodice() + " ha accesso al dipartimento 2"+RESET);
         }).exceptionally((e) -> {
             System.out.println(e.getMessage());
             return null;
@@ -127,7 +127,7 @@ public class Main {
 
         gA.insertAccessoLuogo(4, 1, u1.getMatricola()).thenAcceptAsync((accesso) -> {
             if (accesso)
-                System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
+                System.out.println(YELLOW+"utente" + u1.getCodice() + " ha accesso al luogo 1"+RESET);
         }).exceptionally((e) -> {
             System.out.println(e.getMessage());
             return null;
@@ -168,12 +168,12 @@ public class Main {
                     System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
                 });*/
                 gU.getCFUSostenuti(2, 1).thenAcceptAsync((CFUsostenuti) -> {
-                    System.out.println("l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti);
+                    System.out.println(BLUE+"l'utente 1 ha sostenuto i seguenti crediti formativi: " + CFUsostenuti+RESET);
                 });
 
                 gA.insertAccessoLuogo(1, 1, 2).thenAcceptAsync((accesso) -> {
                     if (accesso) {
-                        System.out.println("utente con codice 1 ha accesso al luogo 1");
+                        System.out.println(BLUE+"utente con codice 1 ha accesso al luogo 1"+RESET);
                     }
                 }).exceptionally((e) -> {
                     System.out.println(e);
@@ -182,7 +182,7 @@ public class Main {
 
                 gA.insertAccessoLuogo(4, 1, 2).thenAcceptAsync((accesso) -> {
                     if (accesso) {
-                        System.out.println("utente con codice 2 ha accesso al luogo 1");
+                        System.out.println(BLUE+"utente con codice 2 ha accesso al luogo 1"+RESET);
                     }
                 }).exceptionally((e) -> {
                     System.out.println(e);
@@ -207,11 +207,11 @@ public class Main {
         gU.insertRichiestaLuogo(1, 2);
 
         gU.getRichiesteLuogo(2).thenAcceptAsync((richiesteLuoghi) -> {
-            System.out.println("richieste di accesso ai seguenti luoghi: " + richiesteLuoghi);
+            System.out.println(PURPLE+"richieste di accesso ai seguenti luoghi: " + richiesteLuoghi+RESET);
         });
 
         gU.getRichiesteDipartimento(3).thenAcceptAsync((richiesteDipartimenti) -> {
-            System.out.println("richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti);
+            System.out.println(PURPLE+"richieste di accesso ai seguenti dipartimenti: " + richiesteDipartimenti+RESET);
         });
 
         //usando completableFuture il main va avanti mentre la richiesta è eseguita
@@ -283,13 +283,13 @@ public class Main {
         System.out.println(GREEN+"_______________INIT DB_______________"+RESET);
         initData(gA, gR, gV, gU, gL, gCS);
         //sleep(7000);
-        System.out.println(GREEN+"_______________TEST2_______________"+RESET);
+        System.out.println(BLUE+"_______________TEST2_______________"+RESET);
         test2(gA, gR, gV, gU, gL, eventBusService);
         //sleep(3000);
-        System.out.println(GREEN+"_______________TEST1_______________"+RESET);
+        System.out.println(YELLOW+"_______________TEST1_______________"+RESET);
         test(gA, gR, gV, gU, gL);
         //sleep(3000);
-        System.out.println(GREEN+"_______________TEST DASHBOARD_______________"+RESET);
+        System.out.println(PURPLE+"_______________TEST DASHBOARD_______________"+RESET);
         testDashboard(gU, gL);
 
         try {

@@ -69,7 +69,7 @@ public class GatewayAccessi {
                         pub.publish(new Message("Accessi", "insertAccessoDipartimento", a, null), eventBusService);
                         System.out.println("insertAccessoDipartimento creato");
                         //a.insertAccesso();
-                        //pub.publish(new Message("Accessi", "removeRichiesta", utente+dipartimento, null), eventBusService); TODO: controllare con marco
+                        pub.publish(new Message("Accessi", "removeRichiesta", null, Arrays.asList(utente,dipartimento)), eventBusService);
                         return true;
                     } else {
                         throw new RuntimeException("l'utente non ha i crediti formativi necessari per accedere al dipartimento");
