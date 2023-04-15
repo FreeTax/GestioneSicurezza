@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -337,18 +338,18 @@ public class GatewayUtente {
                     String[] utenteSplit = utente.split(" ");
                     int idUtente = Integer.parseInt(utenteSplit[0]);
 
-                    CompletableFuture<ArrayList<String>> cfUdaSostenereCF=getCFUdaSostenere(idUtente);
+                    /*CompletableFuture<ArrayList<String>> cfUdaSostenereCF=getCFUdaSostenere(idUtente);
                     CompletableFuture<ArrayList<String>> cfuSostenutiCF=getCFUSostenuti(idAutorizzato, idUtente);
                     CompletableFuture<ArrayList<Visita>> visiteSostenuteCF=vGateway.getVisiteSostenute(idUtente);
                     CompletableFuture<ArrayList<Visita>> visiteDaSostenereCF=vGateway.getVisiteDaSostentere(idUtente);
                     CompletableFuture<ArrayList<Integer>> luoghiFrequentatiCF=aGateway.getLuoghiFrequentati(idUtente);
                     CompletableFuture<ArrayList<Integer>> dipartimentiFrequentatiCF=aGateway.getDipartimentiFrequentati(idUtente);
 
-                    CompletableFuture<Void> combinedFuture =CompletableFuture.allOf(cfUdaSostenereCF, cfuSostenutiCF, visiteSostenuteCF, visiteDaSostenereCF, luoghiFrequentatiCF, dipartimentiFrequentatiCF);
-                    combinedFuture.join();
+                    CompletableFuture<Void> combinedFuture =CompletableFuture.allOf(cfUdaSostenereCF, cfuSostenutiCF, visiteSostenuteCF, visiteDaSostenereCF, luoghiFrequentatiCF, dipartimentiFrequentatiCF);//FIXME: termina prima di prendere tutti i dati
+                    combinedFuture.get();
+                    */
 
-
-                   /* ArrayList<String> cfuDaSostenere = getCFUdaSostenere(idUtente).join();
+                    ArrayList<String> cfuDaSostenere = getCFUdaSostenere(idUtente).join();
 
                     ArrayList<String> cfuSostenuti = getCFUSostenuti(idAutorizzato, idUtente).join();
 
@@ -358,19 +359,32 @@ public class GatewayUtente {
 
                     ArrayList<Integer> luoghiFrequentati = aGateway.getLuoghiFrequentati(idUtente).join();
 
-                    ArrayList<Integer> dipartimentiFrequentati = aGateway.getDipartimentiFrequentati(idUtente).join();*/
+                    ArrayList<Integer> dipartimentiFrequentati = aGateway.getDipartimentiFrequentati(idUtente).join();
 
-                    ArrayList<String> cfuDaSostenere = cfUdaSostenereCF.join();
+                    /*ArrayList<String> cfuDaSostenere=new ArrayList<>() ;
 
-                    ArrayList<String> cfuSostenuti = cfuSostenutiCF.join();
+                    ArrayList<String> cfuSostenuti=new ArrayList<>();
 
-                    ArrayList<Visita> visiteSostenute = visiteSostenuteCF.join();
+                    ArrayList<Visita> visiteSostenute=new ArrayList<>();
 
-                    ArrayList<Visita> visiteDaSostenere = visiteDaSostenereCF.join();
+                    ArrayList<Visita> visiteDaSostenere=new ArrayList<>();
 
-                    ArrayList<Integer> luoghiFrequentati = luoghiFrequentatiCF.join();
+                    ArrayList<Integer> luoghiFrequentati=new ArrayList<>();
 
-                    ArrayList<Integer> dipartimentiFrequentati = dipartimentiFrequentatiCF.join();
+                    ArrayList<Integer> dipartimentiFrequentati =new ArrayList<>();
+                    if (combinedFuture.isDone()) {
+                        cfuDaSostenere = cfUdaSostenereCF.join();
+
+                        cfuSostenuti = cfuSostenutiCF.join();
+
+                        visiteSostenute = visiteSostenuteCF.join();
+
+                        visiteDaSostenere = visiteDaSostenereCF.join();
+
+                        luoghiFrequentati = luoghiFrequentatiCF.join();
+
+                        dipartimentiFrequentati = dipartimentiFrequentatiCF.join();
+                    }*/
 
                     utente += " CFU da sostenere: ";
 
