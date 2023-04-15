@@ -337,7 +337,18 @@ public class GatewayUtente {
                     String[] utenteSplit = utente.split(" ");
                     int idUtente = Integer.parseInt(utenteSplit[0]);
 
-                    ArrayList<String> cfuDaSostenere = getCFUdaSostenere(idUtente).join();
+                    CompletableFuture<ArrayList<String>> cfUdaSostenereCF=getCFUdaSostenere(idUtente);
+                    CompletableFuture<ArrayList<String>> cfuSostenutiCF=getCFUSostenuti(idAutorizzato, idUtente);
+                    CompletableFuture<ArrayList<Visita>> visiteSostenuteCF=vGateway.getVisiteSostenute(idUtente);
+                    CompletableFuture<ArrayList<Visita>> visiteDaSostenereCF=vGateway.getVisiteDaSostentere(idUtente);
+                    CompletableFuture<ArrayList<Integer>> luoghiFrequentatiCF=aGateway.getLuoghiFrequentati(idUtente);
+                    CompletableFuture<ArrayList<Integer>> dipartimentiFrequentatiCF=aGateway.getDipartimentiFrequentati(idUtente);
+
+                    CompletableFuture<Void> combinedFuture =CompletableFuture.allOf(cfUdaSostenereCF, cfuSostenutiCF, visiteSostenuteCF, visiteDaSostenereCF, luoghiFrequentatiCF, dipartimentiFrequentatiCF);
+                    combinedFuture.join();
+
+
+                   /* ArrayList<String> cfuDaSostenere = getCFUdaSostenere(idUtente).join();
 
                     ArrayList<String> cfuSostenuti = getCFUSostenuti(idAutorizzato, idUtente).join();
 
@@ -347,7 +358,19 @@ public class GatewayUtente {
 
                     ArrayList<Integer> luoghiFrequentati = aGateway.getLuoghiFrequentati(idUtente).join();
 
-                    ArrayList<Integer> dipartimentiFrequentati = aGateway.getDipartimentiFrequentati(idUtente).join();
+                    ArrayList<Integer> dipartimentiFrequentati = aGateway.getDipartimentiFrequentati(idUtente).join();*/
+
+                    ArrayList<String> cfuDaSostenere = cfUdaSostenereCF.join();
+
+                    ArrayList<String> cfuSostenuti = cfuSostenutiCF.join();
+
+                    ArrayList<Visita> visiteSostenute = visiteSostenuteCF.join();
+
+                    ArrayList<Visita> visiteDaSostenere = visiteDaSostenereCF.join();
+
+                    ArrayList<Integer> luoghiFrequentati = luoghiFrequentatiCF.join();
+
+                    ArrayList<Integer> dipartimentiFrequentati = dipartimentiFrequentatiCF.join();
 
                     utente += " CFU da sostenere: ";
 
