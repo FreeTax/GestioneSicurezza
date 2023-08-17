@@ -73,7 +73,7 @@ public class Main {
             System.out.println(e);
         }
         try {
-            if (gA.insertAccessoLuogo(4, 1, u1.getCodice())) //FIXME: non viene eseguito perchè il metodo prima lancia eccezione
+            if (gA.insertAccessoLuogo(4, 1, u1.getCodice()))
                 System.out.println("utente" + u1.getCodice() + " ha accesso al luogo 1");
         } catch (Exception e) {
             System.out.println(e);
