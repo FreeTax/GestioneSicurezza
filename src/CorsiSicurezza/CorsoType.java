@@ -7,11 +7,11 @@ import CorsiSicurezzaGateway.CorsiSicurezzaGatewayDb;
 import java.sql.SQLException;
 
 public class CorsoType {
-    private int id;
-    private String nome;
-    private String descrizione;
-    private int idRischioAssociato; //problema, penso vada fatta una nuova tabella che associa Rischi a CorsoType. Discuterne con Marco
-    private CorsiSicurezzaGatewayDb db;
+    private final int id;
+    private final String nome;
+    private final String descrizione;
+    private final int idRischioAssociato; //problema, penso vada fatta una nuova tabella che associa Rischi a CorsoType. Discuterne con Marco
+    private final CorsiSicurezzaGatewayDb db;
 
     public CorsoType(int id, String nome, String descrizione, int rischioAssociato) throws SQLException {
         this.id = id;

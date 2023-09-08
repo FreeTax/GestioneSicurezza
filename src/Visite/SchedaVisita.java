@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class SchedaVisita {
     private int codice;
-    private String elencoPatologie [];
-    private int idUtente;
+    private String[] elencoPatologie;
+    private final int idUtente;
     private ArrayList<Visita> visiteEffettuate;
     private ArrayList<Visita> visiteDaSostentere;
 
-    private VisiteGatewayDb vGateway;
+    private final VisiteGatewayDb vGateway;
     public SchedaVisita(int codice, int idUtente, String [] elencoPatologie, ArrayList<Visita> visiteEffettuate, ArrayList<Visita> visiteDaSostentere) throws SQLException {
         this.codice = codice;
         this.idUtente = idUtente;

@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CreditoFormativo {
-    private int codice;
-    private int idRischio;
-    private String certificaEsterna;
+    private final int codice;
+    private final int idRischio;
+    private final String certificaEsterna;
 
-    private UtenteGatewayDb uGateway;
+    private final UtenteGatewayDb uGateway;
     public CreditoFormativo(int codice, int idRischio, String certificaEsterna) throws SQLException {
         this.codice = codice;
         this.idRischio = idRischio;

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AccessoDipartimentoAbilitato extends Accesso {
-    private int idDipartimento;
+    private final int idDipartimento;
 
     public AccessoDipartimentoAbilitato(int utente, int dipartimento) throws SQLException {
         super(utente);

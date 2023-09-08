@@ -15,7 +15,7 @@ public class Visita {
     private Timestamp data;
     private int idType;
 
-    private int schedaVisita;
+    private final int schedaVisita;
     public Visita(int id, String dottore, String descrizione, Timestamp data, String stato, String esito, int idType, int schedaVisita) {
         this.id = id;
         this.dottore = dottore;

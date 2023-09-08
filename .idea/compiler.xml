@@ -6,11 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="GestioneSicurezzaJDBC" />
         <module name="GestioneSicurezza" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="GestioneSicurezzaJDBC" target="11" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -6,10 +6,10 @@ import Luoghi.Luogo;
 import java.sql.SQLException;
 
 abstract class Richiesta {
-    private int idUtente;
+    private final int idUtente;
     private int statoRichiesta;
 
-    private UtenteGatewayDb uGateway;
+    private final UtenteGatewayDb uGateway;
     Richiesta(int idUtente, int statoRichiesta) throws SQLException {
         this.idUtente = idUtente;
         this.statoRichiesta = statoRichiesta;

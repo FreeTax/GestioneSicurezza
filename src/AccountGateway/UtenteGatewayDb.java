@@ -36,7 +36,7 @@ public class UtenteGatewayDb {
             int idUtente = 0;
             String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='interno' AND password='"+password+"'";
             ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
-            if(resultSet.next()==false) {
+            if(!resultSet.next()) {
                 InsertUtente(password,nome,cognome,sesso,datanascita,dipartimento,"interno");
                 ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
                 resultSet2.next();
@@ -61,7 +61,7 @@ public class UtenteGatewayDb {
             String getidUtenteSql="SELECT idUtente FROM Utente WHERE nome='"+nome+"' AND cognome='"+cognome+"' AND datanascita='"+datanascita.toString()+"' AND dipartimento='"+dipartimento+"' AND tipologia='esterno' AND password='"+password+"'";
             ResultSet resultSet = stmt.executeQuery(getidUtenteSql);
 
-            if(resultSet.next()==false) {
+            if(!resultSet.next()) {
                 InsertUtente(password,nome,cognome,sesso,datanascita,dipartimento,"esterno");
                 ResultSet resultSet2 = stmt.executeQuery(getidUtenteSql);
                 resultSet2.next();
@@ -175,7 +175,7 @@ public class UtenteGatewayDb {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/AccountDB", "root", "root");
             stmt=con.createStatement();
             String getSql;
-            if(interno==true){
+            if(interno){
                 getSql="SELECT idUtente FROM UtenteInterno WHERE matricola="+riferimento;
             }
             else {
@@ -320,10 +320,7 @@ public class UtenteGatewayDb {
             stmt=con.createStatement();
             String getSql="SELECT * FROM UtenteInterno ui INNER JOIN Utente u on u.idUtente=ui.idUtente WHERE matricola='"+matricola+"' AND password='"+password+"'";
             ResultSet resultSet = stmt.executeQuery(getSql);
-            if(resultSet.next()){
-                return true;
-            }
-            return false;
+            return resultSet.next();
         }finally {
             con.close();
         }
@@ -335,10 +332,7 @@ public class UtenteGatewayDb {
             stmt=con.createStatement();
             String getSql="SELECT * FROM UtenteEsterno ue INNER JOIN Utente u on u.idUtente=ue.idUtente WHERE idEsterno='"+idEsterno+"' AND password='"+password+"'";
             ResultSet resultSet = stmt.executeQuery(getSql);
-            if(resultSet.next()){
-                return true;
-            }
-            return false;
+            return resultSet.next();
         }finally {
             con.close();
         }
@@ -350,10 +344,7 @@ public class UtenteGatewayDb {
             stmt=con.createStatement();
             String getSql="SELECT * FROM UtenteInterno WHERE idUtente="+idUtente+" and tipo='supervisore'";
             ResultSet resultSet = stmt.executeQuery(getSql);
-            if(resultSet.next()){
-                return true;
-            }
-            return false;
+            return resultSet.next();
         }finally {
             con.close();
         }
@@ -366,10 +357,7 @@ public class UtenteGatewayDb {
             stmt=con.createStatement();
             String getSql="SELECT * FROM UtenteInterno WHERE idUtente="+idUtente+" and tipo='avanzato'";
             ResultSet resultSet = stmt.executeQuery(getSql);
-            if(resultSet.next()){
-                return true;
-            }
-            return false;
+            return resultSet.next();
         } finally {
             con.close();
         }

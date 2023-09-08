@@ -5,7 +5,7 @@ import Luoghi.Luogo;
 import java.sql.SQLException;
 
 public class RichiestaLuogo extends Richiesta {
-    private int idLuogo;
+    private final int idLuogo;
 
     public RichiestaLuogo(int idUtente, int statoRichiesta, int idLuogo) throws SQLException {
         super( idUtente, statoRichiesta);

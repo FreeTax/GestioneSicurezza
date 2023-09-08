@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 //FIX ME: Responsabile should be of type Utente
 public class Dipartimento {
-    private int codice;
-    private String nome;
-    private int responsabile;
+    private final int codice;
+    private final String nome;
+    private final int responsabile;
     private ArrayList<Integer> luoghi=new ArrayList<>();
     private ArrayList<Integer> rischi=new ArrayList<Integer>();
-    private LuoghiGatewayDB luoghiGatewayDB;
+    private final LuoghiGatewayDB luoghiGatewayDB;
     public Dipartimento(int codice, String nome, int responsabile, ArrayList<Integer> luoghi, ArrayList<Integer> rischi) throws SQLException {
         luoghiGatewayDB=new LuoghiGatewayDB();
         this.codice = codice;

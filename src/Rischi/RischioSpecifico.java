@@ -6,7 +6,7 @@ import RischiGatewayDb.RischioGatewayDb;
 import java.sql.SQLException;
 
 public class RischioSpecifico extends Rischio {
-    private RischioGatewayDb rischioGatewayDb;
+    private final RischioGatewayDb rischioGatewayDb;
     public RischioSpecifico(int codice, String nome, String descrizione/*, String tipologia /*, Corso corso, Visita visita*/) throws SQLException { //wating that Corso and Visita classes are implemented
         super(codice, nome, descrizione/*, tipologia*/);
         rischioGatewayDb = new RischioGatewayDb();

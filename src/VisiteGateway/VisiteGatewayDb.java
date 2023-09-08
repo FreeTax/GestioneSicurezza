@@ -26,7 +26,7 @@ public class VisiteGatewayDb {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
             stmt = con.createStatement();
             ResultSet resultSet = stmt.executeQuery("SELECT * FROM SchedaVisita WHERE idUtente=" + idUtente);
-            if (resultSet.next() == false) {
+            if (!resultSet.next()) {
                 String insertSql = "INSERT INTO SchedaVisita(idUtente)"
                         + " VALUES(" + idUtente + ")";
                 stmt.executeUpdate(insertSql);
@@ -141,7 +141,7 @@ public class VisiteGatewayDb {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/VisiteDB", "root", "root");
             stmt = con.createStatement();
             ResultSet resultSet = stmt.executeQuery("SELECT * FROM SchedaVisita_has_Patologia WHERE idSchedaVisita=" + idSchedaVisite);
-            if (resultSet.next() == false) {
+            if (!resultSet.next()) {
                 return null;
             } else {
                 ArrayList<String> patologie = new ArrayList<>();

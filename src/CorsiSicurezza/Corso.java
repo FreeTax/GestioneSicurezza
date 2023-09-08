@@ -7,13 +7,13 @@ import java.time.LocalDate;
 
 public class Corso {
     private int codice;
-    private String nome;
-    private String descrizione;
-    private LocalDate inizio;
-    private LocalDate fine;
-    private int type;
+    private final String nome;
+    private final String descrizione;
+    private final LocalDate inizio;
+    private final LocalDate fine;
+    private final int type;
 
-    private CorsiSicurezzaGatewayDb db;
+    private final CorsiSicurezzaGatewayDb db;
     public Corso(int codice, String nome, String descrizione, int type, LocalDate inizio, LocalDate fine) throws SQLException {
         this.codice = codice;
         this.nome = nome;

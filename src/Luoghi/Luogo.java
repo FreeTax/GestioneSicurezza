@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 public class Luogo{
     //FIX ME: dipartiento and referente should be of type Dipartimento and Utente
-    private LuoghiGatewayDB gateway;
-    private int codice;
-    private String nome;
-    private String tipo;
-    private int referente;
+    private final LuoghiGatewayDB gateway;
+    private final int codice;
+    private final String nome;
+    private final String tipo;
+    private final int referente;
     private ArrayList<Integer> rischi=new ArrayList<>();
-    private int dipartimento;
+    private final int dipartimento;
     public Luogo(int codice, String nome, String tipo, int referente, ArrayList<Integer>rischi, int dipartimento) throws SQLException {
         this.codice = codice;
         this.nome = nome;

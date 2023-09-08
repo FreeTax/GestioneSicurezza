@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class AccessoLuogoAbilitato extends Accesso {
-    private int luogo;
+    private final int luogo;
 
     public AccessoLuogoAbilitato(int utente, int luogo) throws SQLException {
         super(utente);

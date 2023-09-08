@@ -10,7 +10,7 @@ public class VisitaType {
     private String descrizione;
     private String frequenza;
 
-    private int rischioAssociato;
+    private final int rischioAssociato;
 
     public VisitaType(int id, String nome, String descrizione, String frequenza, int rischioAssociato){
         this.id = id;

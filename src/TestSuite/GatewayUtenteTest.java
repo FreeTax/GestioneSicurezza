@@ -14,8 +14,7 @@ import org.junit.runners.MethodSorters;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GatewayUtenteTest {
@@ -53,7 +52,7 @@ public class GatewayUtenteTest {
 
     @Test
     public void _05loginInternoFalse() throws SQLException {
-        assertTrue(!gU.loginInterno(1234567, "errata"));
+        assertFalse(gU.loginInterno(1234567, "errata"));
     }
 
     @Test
@@ -63,7 +62,7 @@ public class GatewayUtenteTest {
 
     @Test
     public void _07loginEsternoFalse() throws SQLException {
-        assertTrue(!gU.loginEsterno(19029420, "errata"));
+        assertFalse(gU.loginEsterno(19029420, "errata"));
     }
 
     @Test
