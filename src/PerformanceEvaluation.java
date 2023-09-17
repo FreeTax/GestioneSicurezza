@@ -173,12 +173,14 @@ public class PerformanceEvaluation {
         }
     }
 
+
+
     public static void test1( Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
         Object[][] data = new Object[1][2];
         data[0][0]=" ";
         data[0][1]=" ";
         insertToExcel(data,"data.xlsx");
-        data[0][0]="New Test " + new Date();
+        data[0][0]="test ritardo in utente interno con utente interno aggiunto da utenti abilitiati " + new Date();
         data[0][1]="";
         insertToExcel(data,"data.xlsx");
         long InsertAccessoDipartimento=0;
@@ -188,8 +190,8 @@ public class PerformanceEvaluation {
         Delay.setDelay(delay);
         int count=0;
 
-
         Delay.addName("UtenteInterno");
+
         ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
         ArrayList<String> element = new ArrayList<String>();
         element.add("Delay");
@@ -223,8 +225,106 @@ public class PerformanceEvaluation {
         }
     }
 
+    public static void test2(Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
+            Object[][] data = new Object[1][2];
+            data[0][0]=" ";
+            data[0][1]=" ";
+            insertToExcel(data,"data.xlsx");
+            data[0][0]="test ritardo in utente interno con utente interno aggiunto da utenti non abilitatio";
+            data[0][1]="";
+            insertToExcel(data,"data.xlsx");
+            long InsertAccessoDipartimento=0;
+            long InsertAccessoLuoogo=0;
+
+            Delay.setProbability(probability);
+            Delay.setDelay(delay);
+            int count=0;
+
+            Delay.addName("UtenteInterno");
+
+            ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
+            ArrayList<String> element = new ArrayList<String>();
+            element.add("Delay");
+            element.add("Probability");
+            element.add("Dipartimenti");
+            element.add("Luoghi");
+            input.add(element);
+            saveData(input);
+            element.clear();
+            input.clear();
+            while(count<=iterations){
+                for(int i=0;i<cycles;i++){
+                    InsertAccessoDipartimento+=evaluateInsertAccessoDipartimento(u1,gA,u4);
+                    InsertAccessoLuoogo+=evaluateInsertAccessoLuoogo(u1, gA, u4);
+                    initData(gA, gR, gV, gU, gL,gCS);
+                }
+                InsertAccessoDipartimento=InsertAccessoDipartimento/cycles;
+                InsertAccessoLuoogo=InsertAccessoLuoogo/cycles;
+                element.add(String.valueOf(delay));
+                element.add(String.valueOf(Delay.getProbability()));
+                element.add(String.valueOf(InsertAccessoDipartimento));
+                element.add(String.valueOf(InsertAccessoLuoogo));
+                input.add(element);
+                saveData(input);
+                Delay.increaseDelay(delayIncrease);
+                Delay.increaseProbability(probIncrease);
+                element.add(String.valueOf( delay));
+                input.clear();
+                element.clear();
+                count++;
+            }
+    }
 
 
+    public static void test3(Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
+        Object[][] data = new Object[1][2];
+        data[0][0]=" ";
+        data[0][1]=" ";
+        insertToExcel(data,"data.xlsx");
+        data[0][0]="test ritardo in utente esterno";
+        data[0][1]="";
+        insertToExcel(data,"data.xlsx");
+        long InsertAccessoDipartimento=0;
+        long InsertAccessoLuoogo=0;
+
+        Delay.setProbability(probability);
+        Delay.setDelay(delay);
+        int count=0;
+
+        Delay.addName("UteneteEsterno");
+
+        ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
+        ArrayList<String> element = new ArrayList<String>();
+        element.add("Delay");
+        element.add("Probability");
+        element.add("Dipartimenti");
+        element.add("Luoghi");
+        input.add(element);
+        saveData(input);
+        element.clear();
+        input.clear();
+        while(count<=iterations){
+            for(int i=0;i<cycles;i++){
+                InsertAccessoDipartimento+=evaluateInsertAccessoDipartimento(u4,gA,u3);
+                InsertAccessoLuoogo+=evaluateInsertAccessoLuoogo(u4, gA, u2);
+                initData(gA, gR, gV, gU, gL,gCS);
+            }
+            InsertAccessoDipartimento=InsertAccessoDipartimento/cycles;
+            InsertAccessoLuoogo=InsertAccessoLuoogo/cycles;
+            element.add(String.valueOf(delay));
+            element.add(String.valueOf(Delay.getProbability()));
+            element.add(String.valueOf(InsertAccessoDipartimento));
+            element.add(String.valueOf(InsertAccessoLuoogo));
+            input.add(element);
+            saveData(input);
+            Delay.increaseDelay(delayIncrease);
+            Delay.increaseProbability(probIncrease);
+            element.add(String.valueOf( delay));
+            input.clear();
+            element.clear();
+            count++;
+        }
+    }
     public static void main(String[] args) throws SQLException {
         GatewayUtente gU = new GatewayUtente();
         GatewayLuoghi gL = new GatewayLuoghi();
@@ -238,6 +338,21 @@ public class PerformanceEvaluation {
         Utente u3= new UtenteInterno(3); //avanzato
         Utente u4= new UtenteEsterno(4);//esterno
 
-        test1(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, 5, 500, 5, 5, 100, 5);
+
+        Object[][] data = new Object[1][2];
+        data[0][0]="Test Sincrono ";
+        data[0][1]= new Date();
+        insertToExcel(data,"data.xlsx");
+        int probability=5;
+        int delay=500;
+        int cycles=5;
+        int probIncrease=5;
+        int delayIncrease=5;
+        int iterations=100;
+
+        test1(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
+        test2(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
+        test3(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
+
     }
 }
