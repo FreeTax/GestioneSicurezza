@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GestioneSicurezza.iml" filepath="$PROJECT_DIR$/GestioneSicurezza.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GestioneSicurezzaJDBC.iml" filepath="$PROJECT_DIR$/GestioneSicurezzaJDBC.iml" />
     </modules>
   </component>
 </project>

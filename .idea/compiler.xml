@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="GestioneSicurezza" target="11" />
+      <module name="GestioneSicurezzaJDBC" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
