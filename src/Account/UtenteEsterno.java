@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import static Delay.Delay.delayWithProbability;
+
 public class UtenteEsterno extends Utente{
     private int idEsterno;
 
@@ -20,6 +22,7 @@ public class UtenteEsterno extends Utente{
     }
 
     public UtenteEsterno(int idesterno) throws SQLException {
+        delayWithProbability("UtenteEsterno");
        UtenteEsterno ue=uGateway.GetUtenteEsterno(idesterno);
        if(ue!=null){
            this.idEsterno=ue.idEsterno;

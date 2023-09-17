@@ -1,8 +1,23 @@
 package Delay;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Delay {
+    private static ArrayList<String> names= new ArrayList<String>();
+
+    public static void addName(String name){
+        names.add(name);
+    }
+
+    public static void celanNames(){
+        names.clear();
+    }
+
+    public static void removeName(String name){
+        names.remove(name);
+    }
+
     private static final Random random = new Random();
     private static int delayTimeMillis = 1000; // Ritardo iniziale di 1 secondo (1000 millisecondi)
     private static int delayPercentage = 5;     // Percentuale di ritardo iniziale del 5%
@@ -31,7 +46,10 @@ public class Delay {
         return delayPercentage;
     }
 
-    public static void delayWithProbability() {
+    public static void delayWithProbability(String name) {
+        if(!names.contains(name)){
+            return;
+        }
         // Genera un numero casuale tra 0 e 99.
         int randomValue = random.nextInt(100);
 

@@ -1,5 +1,6 @@
 package Account;
 
+import Delay.Delay;
 import Visite.SchedaVisita;
 
 import java.sql.Date;
@@ -22,6 +23,7 @@ public class UtenteInterno extends Utente{
     }
 
     public UtenteInterno(int matricola) throws SQLException {
+        Delay.delayWithProbability("UtenteInterno");
             UtenteInterno ui=uGateway.GetUtenteInterno(matricola);
             if(ui!=null){
                 this.matricola=ui.matricola;

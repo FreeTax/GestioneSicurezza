@@ -21,7 +21,7 @@ public class GatewayAccessi {
     public boolean insertAccessoDipartimento(int utente, int dipartimento, int authorizerUser) throws RuntimeException, SQLException {
             if(!GatewayUtente.checkAvanzato(authorizerUser)) throw new  RuntimeException("la persona che tenta di abilitare l'utente non è un utente avanzato");
             else {
-                Delay.delayWithProbability();
+
                 Accesso a = new AccessoDipartimentoAbilitato(utente, dipartimento);
                 Dipartimento d=new Dipartimento(dipartimento);
                 ArrayList<Integer> rischiDipartimento = d.getRischi();
@@ -43,7 +43,7 @@ public class GatewayAccessi {
     public boolean insertAccessoLuogo(int utente, int luogo, int authorizerUser) throws RuntimeException, SQLException {
             if(!GatewayUtente.checkSupervisore(authorizerUser)) throw new RuntimeException("la persona che tenta di abilitare l'utente non è un utente avanzato o un supervisore");
             else {
-                Delay.delayWithProbability();
+
                 Accesso a = new AccessoLuogoAbilitato(utente, luogo);
                 Luogo l=new Luogo(luogo);
                 ArrayList<Integer> rischiLuogo = l.getRischi();

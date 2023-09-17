@@ -18,7 +18,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+
 
 
 public class PerformanceEvaluation {
@@ -161,31 +163,14 @@ public class PerformanceEvaluation {
         }
     }
 
-    public static void saveData(long insertAccessoDipartimento, long insertAccessoLuogoSenzaCreditoFormativo, long sostieniCreditoUtenteInterno, long sostieniCreditoUtenteEsterno, long insertAccessoLuogoConCreditoFormativo, int probaility, int delay, int cycles){
-        Object[][] data = new Object[1][2];
-        data[0][0]="Probaility";
-        data[0][1]=probaility;
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="Delay";
-        data[0][1]=delay;
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="Cycles";
-        data[0][1]=cycles;
-        data[0][0]="InsertAccessoDipartimento";
-        data[0][1]=insertAccessoDipartimento;
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="InsertAccessoLuogoSenzaCreditoFormativo";
-        data[0][1]=insertAccessoLuogoSenzaCreditoFormativo;
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="SostieniCreditoUtenteInterno";
-        data[0][1]=sostieniCreditoUtenteInterno;
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="SostieniCreditoUtenteEsterno";
-        data[0][1]=sostieniCreditoUtenteEsterno;
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="InsertAccessoLuogoConCreditoFormativo";
-        data[0][1]=insertAccessoLuogoConCreditoFormativo;
-        insertToExcel(data,"data.xlsx");
+    public static void saveData(ArrayList<ArrayList<String>> input){
+        for(ArrayList<String> element:input){
+            Object[][] data = new Object[1][element.size()];
+            for( int i=0; i<element.size();i++){
+                data[0][i]=element.get(i);
+            }
+            insertToExcel(data,"data.xlsx");
+        }
     }
 
     public static void test1( Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
@@ -197,34 +182,48 @@ public class PerformanceEvaluation {
         data[0][1]="";
         insertToExcel(data,"data.xlsx");
         long InsertAccessoDipartimento=0;
-        long InsertAccessoLuogoSenzaCreditoFormativo=0;
-        long SostieniCreditoUtenteInterno=0;
-        long SostieniCreditoUtenteEsterno=0;
-        long InsertAccessoLuogoConCreditoFormativo=0;
+        long InsertAccessoLuoogo=0;
+
         Delay.setProbability(probability);
         Delay.setDelay(delay);
         int count=0;
+
+
+        Delay.addName("UtenteInterno");
+        ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
+        ArrayList<String> element = new ArrayList<String>();
+        element.add("Delay");
+        element.add("Probability");
+        element.add("Dipartimenti");
+        element.add("Luoghi");
+        input.add(element);
+        saveData(input);
+        element.clear();
+        input.clear();
         while(count<=iterations){
             for(int i=0;i<cycles;i++){
                 InsertAccessoDipartimento+=evaluateInsertAccessoDipartimento(u1,gA,u3);
-                InsertAccessoLuogoSenzaCreditoFormativo+=evaluateInsertAccessoLuoogo(u1,gA,u3);
-                SostieniCreditoUtenteInterno+=evaluateSostineiCreditoUtenteInterno(u1,gU);
-                SostieniCreditoUtenteEsterno+=evaluateSostineiCreditoUtenteEsterno(u4,gU);
-                InsertAccessoLuogoConCreditoFormativo+=evaluateInsertAccessoLuoogo(u1,gA,u2);
+                InsertAccessoLuoogo+=evaluateInsertAccessoLuoogo(u1, gA, u2);
                 initData(gA, gR, gV, gU, gL,gCS);
             }
             InsertAccessoDipartimento=InsertAccessoDipartimento/cycles;
-            InsertAccessoLuogoSenzaCreditoFormativo=InsertAccessoLuogoSenzaCreditoFormativo/cycles;
-            SostieniCreditoUtenteInterno=SostieniCreditoUtenteInterno/cycles;
-            SostieniCreditoUtenteEsterno=SostieniCreditoUtenteEsterno/cycles;
-            InsertAccessoLuogoConCreditoFormativo=InsertAccessoLuogoConCreditoFormativo/cycles;
-            saveData(InsertAccessoDipartimento,InsertAccessoLuogoSenzaCreditoFormativo,SostieniCreditoUtenteInterno,SostieniCreditoUtenteEsterno,InsertAccessoLuogoConCreditoFormativo,Delay.getProbability(),Delay.getDelay(),cycles);
+            InsertAccessoLuoogo=InsertAccessoLuoogo/cycles;
+            element.add(String.valueOf(delay));
+            element.add(String.valueOf(Delay.getProbability()));
+            element.add(String.valueOf(InsertAccessoDipartimento));
+            element.add(String.valueOf(InsertAccessoLuoogo));
+            input.add(element);
+            saveData(input);
             Delay.increaseDelay(delayIncrease);
             Delay.increaseProbability(probIncrease);
+            element.add(String.valueOf( delay));
+            input.clear();
+            element.clear();
             count++;
         }
-
     }
+
+
 
     public static void main(String[] args) throws SQLException {
         GatewayUtente gU = new GatewayUtente();
@@ -239,6 +238,6 @@ public class PerformanceEvaluation {
         Utente u3= new UtenteInterno(3); //avanzato
         Utente u4= new UtenteEsterno(4);//esterno
 
-        test1(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, 5, 500, 5, 5, 100, 15);
+        test1(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, 5, 500, 5, 5, 100, 5);
     }
 }
