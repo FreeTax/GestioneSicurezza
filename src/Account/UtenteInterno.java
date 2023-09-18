@@ -1,5 +1,7 @@
 package Account;
 
+import Delay.Delay;
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class UtenteInterno extends Utente {
     }
 
     public ArrayList<CreditoFormativo> getCfuSostenuti(Integer idUtente) throws SQLException {
+        Delay.delayWithProbability("UtenteInterno");
         return super.getCfuSostenuti(idUtente);
     }
 

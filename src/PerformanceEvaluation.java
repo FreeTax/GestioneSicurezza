@@ -34,6 +34,7 @@ public class PerformanceEvaluation {
 
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
+        InitDB.initDB();
         try {
             gU.insertUtenteInterno(1, "password", "nome", "cognome", "sesso", "1999-01-01", "1", "base");
             gU.insertUtenteInterno(2, "password", "nome2", "cognome2", "sesso", "1999-01-01", "1", "supervisore");
@@ -46,6 +47,8 @@ public class PerformanceEvaluation {
             gU.insertCreditoFormativo(1, 1);
             gU.insertCreditoFormativo(2, 2);
             gU.insertCreditoFormativo(3, 3);
+            gU.insertCreditoFormativo(1,2);
+            gU.insertCreditoFormativo(1,3);
 
             gV.addVisitaType(1, "visita oculistica", " ", "2 anno", 2);
             gV.addSchedaVisita(1);
@@ -109,9 +112,9 @@ public class PerformanceEvaluation {
 
     public static long evaluateSostineiCreditoUtenteEsterno(Utente u, GatewayUtente gU) throws SQLException {
         long startTime = System.nanoTime();
-            try{
+        try{
             gU.sostieniCredito(u.getCodice(),1, "");
-                return (System.nanoTime() - startTime);
+            return (System.nanoTime() - startTime);
         }
         catch (Exception e){
             System.out.println(e);
@@ -182,12 +185,13 @@ public class PerformanceEvaluation {
 
 
 
-    public static void test1( Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
+    public static void test1( Utente u1, Utente u2, Utente u3, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations, String testType) throws SQLException {
+        //Test di inserimento accesso luogo e dipartimento
         Object[][] data = new Object[1][2];
         data[0][0]=" ";
         data[0][1]=" ";
         insertToExcel(data,"data.xlsx");
-        data[0][0]="test ritardo in utente interno con utente interno aggiunto da utenti abilitiati " + new Date();
+        data[0][0]=testType+ " " + new Date();
         data[0][1]="";
         insertToExcel(data,"data.xlsx");
         long InsertAccessoDipartimento=0;
@@ -196,8 +200,6 @@ public class PerformanceEvaluation {
         Delay.setProbability(probability);
         Delay.setDelay(delay);
         int count=0;
-
-        Delay.addName("UtenteInterno");
 
         ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
         ArrayList<String> element = new ArrayList<String>();
@@ -232,112 +234,8 @@ public class PerformanceEvaluation {
         }
     }
 
-    public static void test2(Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
-            Object[][] data = new Object[1][2];
-            data[0][0]=" ";
-            data[0][1]=" ";
-            insertToExcel(data,"data.xlsx");
-            data[0][0]="test ritardo in utente interno con utente interno aggiunto da utenti non abilitatio";
-            data[0][1]="";
-            insertToExcel(data,"data.xlsx");
-            long InsertAccessoDipartimento=0;
-            long InsertAccessoLuoogo=0;
 
-            Delay.setProbability(probability);
-            Delay.setDelay(delay);
-            int count=0;
-
-            Delay.addName("UtenteInterno");
-
-            ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
-            ArrayList<String> element = new ArrayList<String>();
-            element.add("Delay");
-            element.add("Probability");
-            element.add("Dipartimenti");
-            element.add("Luoghi");
-            input.add(element);
-            saveData(input);
-            element.clear();
-            input.clear();
-            while(count<=iterations){
-                for(int i=0;i<cycles;i++){
-                    InsertAccessoDipartimento+=evaluateInsertAccessoDipartimento(u1,gA,u4);
-                    InsertAccessoLuoogo+=evaluateInsertAccessoLuoogo(u1, gA, u4);
-                    initData(gA, gR, gV, gU, gL,gCS);
-                }
-                InsertAccessoDipartimento=InsertAccessoDipartimento/cycles;
-                InsertAccessoLuoogo=InsertAccessoLuoogo/cycles;
-                element.add(String.valueOf(delay));
-                element.add(String.valueOf(Delay.getProbability()));
-                element.add(String.valueOf(InsertAccessoDipartimento));
-                element.add(String.valueOf(InsertAccessoLuoogo));
-                input.add(element);
-                saveData(input);
-                Delay.increaseDelay(delayIncrease);
-                Delay.increaseProbability(probIncrease);
-                element.add(String.valueOf( delay));
-                input.clear();
-                element.clear();
-                count++;
-            }
-    }
-
-
-    public static void test3(Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
-        Object[][] data = new Object[1][2];
-        data[0][0]=" ";
-        data[0][1]=" ";
-        insertToExcel(data,"data.xlsx");
-        data[0][0]="test ritardo in utente esterno";
-        data[0][1]="";
-        insertToExcel(data,"data.xlsx");
-        long InsertAccessoDipartimento=0;
-        long InsertAccessoLuoogo=0;
-
-        Delay.setProbability(probability);
-        Delay.setDelay(delay);
-        int count=0;
-
-        Delay.addName("UteneteEsterno");
-
-        ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
-        ArrayList<String> element = new ArrayList<String>();
-        element.add("Delay");
-        element.add("Probability");
-        element.add("Dipartimenti");
-        element.add("Luoghi");
-        input.add(element);
-        saveData(input);
-        element.clear();
-        input.clear();
-        while(count<=iterations){
-            for(int i=0;i<cycles;i++){
-                InsertAccessoDipartimento+=evaluateInsertAccessoDipartimento(u4,gA,u3);
-                InsertAccessoLuoogo+=evaluateInsertAccessoLuoogo(u4, gA, u2);
-                initData(gA, gR, gV, gU, gL,gCS);
-            }
-            InsertAccessoDipartimento=InsertAccessoDipartimento/cycles;
-            InsertAccessoLuoogo=InsertAccessoLuoogo/cycles;
-            element.add(String.valueOf(delay));
-            element.add(String.valueOf(Delay.getProbability()));
-            element.add(String.valueOf(InsertAccessoDipartimento));
-            element.add(String.valueOf(InsertAccessoLuoogo));
-            input.add(element);
-            saveData(input);
-            Delay.increaseDelay(delayIncrease);
-            Delay.increaseProbability(probIncrease);
-            element.add(String.valueOf( delay));
-            input.clear();
-            element.clear();
-            count++;
-        }
-    }
     public static void main(String[] args) throws SQLException {
-        UtenteInterno u1 = new UtenteInterno(1);//base
-        UtenteInterno u2 = new UtenteInterno(2);//supervisore
-        UtenteInterno u3 = new UtenteInterno(3); //avanzato
-        UtenteEsterno u4 = new UtenteEsterno(4);//esterno
-
         InitDB.initDB();
         EventBusService eventBusService = new EventBusService();
         AccountSubscriber accountSubscriber = new AccountSubscriber(eventBusService);
@@ -347,14 +245,7 @@ public class PerformanceEvaluation {
         GatewayAccessi gA = new GatewayAccessi(eventBusService);
         GatewayVisite gV = new GatewayVisite(eventBusService);
         GatewayCorsiSicurezza gCS = new GatewayCorsiSicurezza(eventBusService);
-       /*
-        CompletableFuture.runAsync(()->eventBusService.run());
-        CompletableFuture.runAsync(()->accountSubscriber.run());
-        CompletableFuture.runAsync(()->new AccessiSubscriber(eventBusService).run());
-        CompletableFuture.runAsync(()->new LuoghiSubscriber(eventBusService).run());
-        CompletableFuture.runAsync(()->new RischiSubscriber(eventBusService).run());
-        CompletableFuture.runAsync(()->new VisiteSubscriber(eventBusService).run());*/
-
+        initData(gA, gR, gV, gU, gL,gCS);
         ArrayList<Thread> threads = new ArrayList<Thread>();
         threads.add(new Thread(eventBusService));
         threads.add(new Thread(accountSubscriber));
@@ -365,8 +256,10 @@ public class PerformanceEvaluation {
         for (Thread t : threads) {
             t.start();
         }
-        initData(gA, gR, gV, gU, gL, gCS);
-
+        Utente u1= new UtenteInterno(1);//base
+        Utente u2= new UtenteInterno(2);//supervisore
+        Utente u3= new UtenteInterno(3); //avanzato
+        Utente u4= new UtenteEsterno(4);//esterno
 
 
         Object[][] data = new Object[1][2];
@@ -378,11 +271,23 @@ public class PerformanceEvaluation {
         int cycles=5;
         int probIncrease=5;
         int delayIncrease=5;
-        int iterations=100;
+        int iterations=10;
 
-        test1(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
-        test2(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
-        test3(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
+        Delay.addName("UtenteInterno");
+        test1(u1,u2,u3,gA,gU,gL,gR,gV,gCS,probability,delay,cycles,probIncrease,delayIncrease,iterations,"Test inseirmento accesso luogo e dipartimento con ritardo in utente interno e senza lancio di eccezioni");
 
+        Delay.celanNames();
+        Delay.addName("AccessoDipartimentoAbilitato");
+        Delay.addName("AccessoLuogoAbilitato");
+        test1(u1,u2,u3,gA,gU,gL,gR,gV,gCS,probability,delay,cycles,probIncrease,delayIncrease,iterations,"Test inseirmento accesso luogo e dipartimento con ritardo in accesso e senza lancio di eccezioni");
+
+        try {
+            for (Thread t : threads) {
+                t.interrupt();
+                t.join();
+            }
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
     }
 }
