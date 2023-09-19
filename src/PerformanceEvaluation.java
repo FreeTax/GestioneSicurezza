@@ -37,8 +37,11 @@ public class PerformanceEvaluation {
             gL.addLuogo(1,"luogo1", "laboratorio", 1,1);
             gL.addLuogo(2,"luogo2", "ufficio", 2,2);
             gU.insertCreditoFormativo(1,1);
-            gU.insertCreditoFormativo(2,2);
-            gU.insertCreditoFormativo(3,3);
+            gU.insertCreditoFormativo(1,2);
+            gU.insertCreditoFormativo(1,3);
+            gU.sostieniCredito(1,1, "");
+            gU.sostieniCredito(1,2, "");
+            gU.sostieniCredito(1,3, "");
             gCS.addCorsoType(1,"sicurezza","  ",1,3);
             gCS.addCorso("corsoSicurezza1"," ",1, LocalDate.now(),LocalDate.now(),3);
             gV.addVisitaType(1,"visita oculistica", " ", "2 anno",2);
@@ -48,8 +51,6 @@ public class PerformanceEvaluation {
             gV.addVisitaUtente(1,2,"dott.Mario Rossi","visita controllo",Timestamp.valueOf(LocalDateTime.now()),"da sostenere",1);
             gV.sostieniVisita(1, "superata",1);
             gL.insertRischioLuogo(1,1);
-            gL.insertRischioLuogo(1,2);
-            gL.insertRischioLuogo(1,3);
             gR.insertRischioSpecifico(1,"chimico","hhjljhl");
             gR.insertRischioSpecifico(2,"computer","hhjljhl");
             gR.insertRischioSpecifico(3,"laser","hhjljhl");
@@ -175,12 +176,13 @@ public class PerformanceEvaluation {
 
 
 
-    public static void test1( Utente u1, Utente u2, Utente u3, Utente u4, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations) throws SQLException {
+    public static void test1( Utente u1, Utente u2, Utente u3, GatewayAccessi gA, GatewayUtente gU, GatewayLuoghi gL, GatewayRischi gR, GatewayVisite gV, GatewayCorsiSicurezza gCS, int probability, int delay, int cycles, int probIncrease, int delayIncrease, int iterations, String testType) throws SQLException {
+        //Test di inserimento accesso luogo e dipartimento
         Object[][] data = new Object[1][2];
         data[0][0]=" ";
         data[0][1]=" ";
         insertToExcel(data,"data.xlsx");
-        data[0][0]="test ritardo in utente interno con utente interno aggiunto da utenti abilitiati " + new Date();
+        data[0][0]=testType+ " " + new Date();
         data[0][1]="";
         insertToExcel(data,"data.xlsx");
         long InsertAccessoDipartimento=0;
@@ -189,8 +191,6 @@ public class PerformanceEvaluation {
         Delay.setProbability(probability);
         Delay.setDelay(delay);
         int count=0;
-
-        Delay.addName("UtenteInterno");
 
         ArrayList<ArrayList<String>> input = new ArrayList<ArrayList<String>>();
         ArrayList<String> element = new ArrayList<String>();
@@ -344,15 +344,19 @@ public class PerformanceEvaluation {
         data[0][1]= new Date();
         insertToExcel(data,"data.xlsx");
         int probability=5;
-        int delay=500;
-        int cycles=5;
+        int delay=100;
+        int cycles=100;
         int probIncrease=5;
-        int delayIncrease=5;
-        int iterations=100;
+        int delayIncrease=50;
+        int iterations=10;
 
-        test1(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
-        test2(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
-        test3(u1,u2,u3,u4,gA,gU,gL,gR,gV,gCS, probability, delay, cycles, probIncrease, delayIncrease, iterations);
+        Delay.addName("UtenteInterno");
+        test1(u1,u2,u3,gA,gU,gL,gR,gV,gCS,probability,delay,cycles,probIncrease,delayIncrease,iterations,"Test inseirmento accesso luogo e dipartimento con ritardo in utente interno e senza lancio di eccezioni");
+
+        Delay.celanNames();
+        Delay.addName("Dipartimento");
+        Delay.addName("Luogo");
+        test1(u1,u2,u3,gA,gU,gL,gR,gV,gCS,probability,delay,cycles,probIncrease,delayIncrease,iterations,"Test inseirmento accesso luogo e dipartimento con ritardo in accesso e senza lancio di eccezioni");
 
     }
 }

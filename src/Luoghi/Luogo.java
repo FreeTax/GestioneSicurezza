@@ -1,6 +1,7 @@
 package Luoghi;
 
 import Account.Utente;
+import Delay.Delay;
 import LuoghiGatewayDb.LuoghiGatewayDB;
 import Rischi.Rischio;
 import Rischi.RischioSpecifico;
@@ -89,6 +90,7 @@ public class Luogo{
     }
 
     public ArrayList<Integer> getRischi() {
+        Delay.delayWithProbability("Luogo");
         return rischi;
     }
 

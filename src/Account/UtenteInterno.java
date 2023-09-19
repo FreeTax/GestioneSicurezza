@@ -23,7 +23,6 @@ public class UtenteInterno extends Utente{
     }
 
     public UtenteInterno(int matricola) throws SQLException {
-        Delay.delayWithProbability("UtenteInterno");
             UtenteInterno ui=uGateway.GetUtenteInterno(matricola);
             if(ui!=null){
                 this.matricola=ui.matricola;
@@ -63,6 +62,7 @@ public class UtenteInterno extends Utente{
         uGateway.updateUtenteInterno(matricola,nome,cognome,sesso, String.valueOf(dataNascita),dipartimento,tipo);
     }
     public ArrayList<CreditoFormativo> getCfuSostenuti(int idUtente) throws SQLException {
+        Delay.delayWithProbability("UtenteInterno");
         return super.getCfuSostenuti(idUtente);
     }
 
