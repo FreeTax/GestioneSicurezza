@@ -1,5 +1,6 @@
 package Luoghi;
 
+import Delay.Delay;
 import LuoghiGatewayDb.LuoghiGatewayDB;
 
 import java.sql.SQLException;
@@ -77,6 +78,7 @@ public class Dipartimento {
     }
 
     public ArrayList<Integer> getRischi() {
+        Delay.delayWithProbability("Dipartimento");
         return rischi;
     }
 

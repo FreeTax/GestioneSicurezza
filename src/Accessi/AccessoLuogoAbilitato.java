@@ -15,7 +15,6 @@ public class AccessoLuogoAbilitato extends Accesso {
 
     @Override
     public void insertAccesso() throws SQLException {
-        Delay.delayWithProbability("AccessoLuogoAbilitato");
         gatewayDb.insertAccessoLuogo(idUtente, luogo);
     }
 

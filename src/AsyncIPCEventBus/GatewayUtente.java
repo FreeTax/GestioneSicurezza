@@ -44,6 +44,8 @@ public class GatewayUtente {
 
     public static boolean checkAvanzato(int matricola) throws SQLException {
         UtenteInterno u = new UtenteInterno(matricola);
+        System.out.println("Matricola: " + matricola);
+        System.out.println("Matricola2: " + u.getMatricola());
         if (u.getType() == null) {
             return false;
         } else {

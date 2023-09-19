@@ -34,7 +34,6 @@ public class PerformanceEvaluation {
 
     public static void initData(GatewayAccessi gA, GatewayRischi gR, GatewayVisite gV, GatewayUtente gU, GatewayLuoghi gL, GatewayCorsiSicurezza gCS){
         InitDB.initDB();
-        InitDB.initDB();
         try {
             gU.insertUtenteInterno(1, "password", "nome", "cognome", "sesso", "1999-01-01", "1", "base");
             gU.insertUtenteInterno(2, "password", "nome2", "cognome2", "sesso", "1999-01-01", "1", "supervisore");
@@ -49,13 +48,16 @@ public class PerformanceEvaluation {
             gU.insertCreditoFormativo(3, 3);
             gU.insertCreditoFormativo(1,2);
             gU.insertCreditoFormativo(1,3);
+            gU.sostieniCredito(1,1, "");
+            gU.sostieniCredito(1,2, "");
+            gU.sostieniCredito(1,3, "");
 
             gV.addVisitaType(1, "visita oculistica", " ", "2 anno", 2);
             gV.addSchedaVisita(1);
             sleep(800);
             gV.addVisitaUtente(1, 1, "dott.Mario Rossi", "visita oculistica", Timestamp.valueOf(LocalDateTime.now()), "da sostenere", 1);
             gV.addVisitaUtente(1, 2, "dott.Mario Rossi", "visita controllo", Timestamp.valueOf(LocalDateTime.now()), "da sostenere", 1);
-            sleep(800);
+            sleep(1800);
             gV.sostieniVisita(1, "superata", 1);
             gL.insertRischioLuogo(1, 1);
             gL.insertRischioLuogo(1, 2);
@@ -64,7 +66,6 @@ public class PerformanceEvaluation {
             gR.insertRischioSpecifico(2, "computer", "hhjljhl");
             gR.insertRischioSpecifico(3, "laser", "hhjljhl");
             gR.insertRischioSpecifico(4, "ustione", "hhjljhl");
-            //sleep(3000);
             gCS.addCorsoType(1, "sicurezza", "  ", 1, 3);
             gCS.addCorso("corsoSicurezza1", " ", 1, LocalDate.now(), LocalDate.now(), 3);
         } catch (Exception e) {
@@ -75,8 +76,10 @@ public class PerformanceEvaluation {
     public static long evaluateInsertAccessoDipartimento(Utente u, GatewayAccessi gA, Utente u2){
         long startTime = System.nanoTime();
         try{
-            gA.insertAccessoDipartimento(u.getCodice(),1, u2.getCodice());
-            return (System.nanoTime() - startTime);
+            System.out.println("utente che tenta di autorizzare"+" "+u2.getCodice());
+            gA.insertAccessoDipartimento(u.getCodice(),1, u2.getCodice()).join();
+                return (System.nanoTime() - startTime);
+
         }
         catch (Exception e){
             System.out.println(e);
@@ -88,7 +91,7 @@ public class PerformanceEvaluation {
     public static long evaluateInsertAccessoLuoogo(Utente u, GatewayAccessi gA, Utente u2){
         long startTime = System.nanoTime();
         try{
-            gA.insertAccessoLuogo(u.getCodice(),1, u2.getCodice());
+            gA.insertAccessoLuogo(u.getCodice(),1, u2.getCodice()).join();
             return (System.nanoTime() - startTime);
         }
         catch (Exception e){
@@ -235,8 +238,8 @@ public class PerformanceEvaluation {
     }
 
 
-    public static void main(String[] args) throws SQLException {
-        InitDB.initDB();
+    public static void main(String[] args) throws SQLException, InterruptedException {
+
         EventBusService eventBusService = new EventBusService();
         AccountSubscriber accountSubscriber = new AccountSubscriber(eventBusService);
         GatewayUtente gU = new GatewayUtente(eventBusService);
@@ -256,6 +259,7 @@ public class PerformanceEvaluation {
         for (Thread t : threads) {
             t.start();
         }
+        sleep(1000);
         Utente u1= new UtenteInterno(1);//base
         Utente u2= new UtenteInterno(2);//supervisore
         Utente u3= new UtenteInterno(3); //avanzato
@@ -277,8 +281,8 @@ public class PerformanceEvaluation {
         test1(u1,u2,u3,gA,gU,gL,gR,gV,gCS,probability,delay,cycles,probIncrease,delayIncrease,iterations,"Test inseirmento accesso luogo e dipartimento con ritardo in utente interno e senza lancio di eccezioni");
 
         Delay.celanNames();
-        Delay.addName("AccessoDipartimentoAbilitato");
-        Delay.addName("AccessoLuogoAbilitato");
+        Delay.addName("Dipartimento");
+        Delay.addName("Luogo");
         test1(u1,u2,u3,gA,gU,gL,gR,gV,gCS,probability,delay,cycles,probIncrease,delayIncrease,iterations,"Test inseirmento accesso luogo e dipartimento con ritardo in accesso e senza lancio di eccezioni");
 
         try {

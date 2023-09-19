@@ -34,9 +34,11 @@ public class GatewayAccessi {
     public CompletableFuture<Boolean> insertAccessoDipartimento(int utente, int dipartimento, int authorizerUser) throws RuntimeException, SQLException {
         return CompletableFuture.supplyAsync(() -> {
             try {
+                System.out.println("utente che tenta di abilitare è " + authorizerUser);
                 if (!GatewayUtente.checkAvanzato(authorizerUser))
                     throw new RuntimeException("la persona che tenta di abilitare l'utente non è un utente avanzato");
                 else {
+                    System.out.println("utente che tenta di abilitare è abilitato");
                     AccessoDipartimentoAbilitato a = new AccessoDipartimentoAbilitato(utente, dipartimento);
                     Dipartimento d = new Dipartimento(dipartimento);
 
@@ -50,6 +52,7 @@ public class GatewayAccessi {
                     sub.unSubscribe("rischiDipartimento"+dipartimento, eventBusService);
 
                     SubscriberConcr subscriber2 = new SubscriberConcr("CFUsostenuti"+utente, eventBusService);
+
                     pub.publish(new Message("Account", "getCfuSostenuti", null, Arrays.asList(utente), "CFUsostenuti"+utente), eventBusService);
 
                     CompletableFuture<ArrayList<CreditoFormativo>> getCFU = CompletableFuture
@@ -76,6 +79,7 @@ public class GatewayAccessi {
                     }
                 }
             } catch (Exception e) {
+                System.out.println("Errore !!!!!!!!!!!!!!" + e.getMessage());
                 throw new RuntimeException(e.getMessage());
             }
         });

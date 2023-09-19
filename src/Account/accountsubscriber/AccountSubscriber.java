@@ -62,6 +62,7 @@ public class AccountSubscriber extends Subscriber {
                     break;
 
                 case "getCfuSostenuti":
+                    System.out.println("getCfuSostenuti");
                     List<Object> param1 = message.getParameters();
                     int idUtente1 = (int) param1.get(0);
                     //boolean interno=(boolean)param1.get(1);

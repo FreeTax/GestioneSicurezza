@@ -10,15 +10,12 @@ public class AccessoDipartimentoAbilitato extends Accesso {
 
     public AccessoDipartimentoAbilitato(int utente, int dipartimento) throws SQLException {
         super(utente);
-        Delay.delayWithProbability("AccessoDipartimentoAbilitato");
-        System.out.println("Delay");
         this.idDipartimento = dipartimento;
     }
 
 
     @Override
     public void insertAccesso() throws SQLException {
-        Delay.delayWithProbability("AccessoDipartimentoAbilitato");
         System.out.println("Delay");
         gatewayDb.inserAccessoDipartimento(idUtente, idDipartimento);
     }

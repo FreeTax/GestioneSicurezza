@@ -33,6 +33,8 @@ public class UtenteInterno extends Utente {
             this.dataNascita = ui.dataNascita;
             this.tipo = ui.tipo;
             this.cfuSostenuti = uGateway.GetCFUSostenuti(this.codice);
+            System.out.println("Matricola: " + matricola);
+            System.out.println("Tipo: " + tipo);
         } else {
             new UtenteInterno();
         }
@@ -48,7 +50,9 @@ public class UtenteInterno extends Utente {
 
     @Override
     public String getType() {
-        return tipo;
+        System.out.println("Matricola: " + matricola);
+        System.out.println("Tipo: " + this.tipo);
+        return this.tipo;
     }
 
     public void setType(String type) {
