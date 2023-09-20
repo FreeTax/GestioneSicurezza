@@ -56,7 +56,7 @@ public class Delay {
         // Impone il ritardo solo in base alla percentuale specificata.
         if (randomValue < delayPercentage) {
             try {
-                System.out.println("Long Delay");
+                System.out.println("Long Delay" + delayTimeMillis);
                 // Introduce il ritardo specificato.
                 Thread.sleep(delayTimeMillis);
             } catch (InterruptedException e) {
