@@ -31,7 +31,7 @@ public class Delay {
     }
 
     public static void increaseDelay(int timeMillis) {
-        delayTimeMillis += timeMillis;
+        delayTimeMillis = delayTimeMillis+ timeMillis;
     }
 
     public static void increaseProbability(int percentage) {
@@ -57,6 +57,7 @@ public class Delay {
         if (randomValue < delayPercentage) {
             try {
                 // Introduce il ritardo specificato.
+                System.out.println("Long Delay" + delayTimeMillis);
                 Thread.sleep(delayTimeMillis);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
